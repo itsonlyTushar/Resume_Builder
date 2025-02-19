@@ -1,0 +1,120 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* custom selection  */
+
+::selection {
+    background: black;
+    color : white;
+}
+
+* {
+    font-family: "Geist", sans-serif;
+}
+
+/* small dots svg image in landing page  */
+.landing_page {
+    background-color: #FBFCFD;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="13" height="15"><circle cx="5" cy="5" r="0.3" fill="%23cccccc" /></svg>');    
+}
+
+/* Custom scrollbar  */
+
+body::-webkit-scrollbar {
+    width: 4px;
+    margin-right: 8px;
+}
+
+body::-webkit-scrollbar {
+    width: 4px;
+    margin-right: 8px;
+}
+
+body::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 50px;
+    margin: 8px 0;
+}
+
+body::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 3px;
+}
+
+body::-webkit-scrollbar-thumb:hover {
+    background: #9c9999;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+    width: 4px;
+    margin-right: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 50px;
+    margin: 8px 0;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #9c9999;
+}
+
+/* custom loader spinner  */
+
+.spin {
+    display: inline-block;
+    animation: spin 1.5s linear infinite;
+  }
+  
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  
+/* Browser View transtion css for transtions  */
+
+  @layer animations {
+    ::view-transition-old(root),
+    ::view-transition-new(root) {
+      animation-duration: 0.5s;
+    }
+  
+    ::view-transition-old(root) {
+      opacity: 1;
+      animation: fadeOut 0.5s forwards;
+    }
+  
+    ::view-transition-new(root) {
+      opacity: 0;
+      animation: fadeIn 0.5s forwards;
+    }
+  
+    @keyframes fadeOut {
+      to {
+        opacity: 0;
+      }
+    }
+  
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+  }
+  
+
+
