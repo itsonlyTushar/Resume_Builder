@@ -38,7 +38,7 @@ function OtherDetails() {
   return (
     <>{/* skill section */}
 
-      <h1 className="mb-7 text-3xl font-semibold ml-2 mt-3">Skills Details</h1>
+      <h1 className="mb-7 text-4xl font-semibold ml-2 mt-3">Skills Details</h1>
       {skills.map((detail, index) => (
         <div key={detail.id}>
           <div className="grid grid-cols-2 sm:grid-cols-1">
@@ -50,7 +50,7 @@ function OtherDetails() {
                 Skill
               </label>
               <input
-                className="outline-none mt-1 p-3 flex items-center border w-full rounded-xl text-gray-700"
+                className="outline-none mt-1 p-3 flex items-center border-none shadow-md w-full rounded-xl text-gray-700"
                 name={`skills.${index}.skillName`}
                 type="text"
                 placeholder="Enter skill..."

@@ -40,7 +40,7 @@ function PersonalDetails() {
                 First Name
               </label>
               <input
-                className="outline-none mt-1 p-3 flex items-center border w-min rounded-xl text-gray-700"
+                className="outline-none mt-1 p-3 flex items-center border-none shadow-md w-min rounded-xl text-gray-700"
                 name={`personalDetails.${index}.firstName`}
                 type="text"
                 placeholder="Enter first name..."
@@ -75,7 +75,7 @@ function PersonalDetails() {
                 Last Name
               </label>
               <input
-                className="outline-none mt-1 p-3 flex items-center border w-min rounded-xl text-gray-700"
+                className="outline-none mt-1 p-3 flex items-center border-none shadow-md w-min rounded-xl text-gray-700"
                 name={`personalDetails.${index}.lastName`}
                 type="text"
                 placeholder="Enter last name..."
@@ -111,7 +111,7 @@ function PersonalDetails() {
                 Email
               </label>
               <input
-                className="outline-none mt-1 p-3 flex items-center border w-min rounded-xl text-gray-700"
+                className="outline-none mt-1 p-3 flex items-center border-none shadow-md w-min rounded-xl text-gray-700"
                 name={`personalDetails.${index}.email`}
                 type="email"
                 placeholder="email..."
@@ -161,7 +161,7 @@ function PersonalDetails() {
                 Phone Number
               </label>
               <input
-                className="outline-none mt-1 p-3 flex items-center border w-min rounded-xl text-gray-700"
+                className="outline-none mt-1 p-3 flex items-center border-none shadow-md w-min rounded-xl text-gray-700"
                 name={`personalDetails.${index}.phoneNumber`}
                 type="text"
                 placeholder="number..."
@@ -197,7 +197,7 @@ function PersonalDetails() {
                 Linkedin
               </label>
               <input
-                className="outline-none mt-1 p-3 flex items-center border w-min rounded-xl text-gray-700"
+                className="outline-none mt-1 p-3 flex items-center border-none shadow-md w-min rounded-xl text-gray-700"
                 name={`personalDetails.${index}.linkedin`}
                 type="url"
                 placeholder="Enter url..."
@@ -233,7 +233,7 @@ function PersonalDetails() {
                 About
               </label>
               <textarea
-                className="outline-none mt-1 p-3 flex items-center border w-min rounded-xl text-gray-700"
+                className="outline-none mt-1 p-3 flex items-center border-none shadow-md w-min rounded-xl text-gray-700"
                 name={`personalDetails.${index}.about`}
                 type="text"
                 placeholder="Something about yourself.."

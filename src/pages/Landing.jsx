@@ -16,6 +16,7 @@ function Landing() {
       duration:1000,
       once:true
     })
+
   },[])
   
 

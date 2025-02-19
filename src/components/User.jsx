@@ -30,7 +30,7 @@ export const handleSignOut = async (dispatch, navigate,resetForm) => {
     // Deley for smooth transition
     await new Promise((resolve) => setTimeout(resolve, 1500));
 
-    await signOut(auth); // Ensure user is signed out
+    await signOut(auth);
 
     dispatch({ type: "RESET_STORE" });
 
@@ -262,7 +262,7 @@ function User() {
           <Toaster />
 
           <div className="p-5">
-            <div className="border-none rounded-2xl flex-wrap overflow-hidden w-full sm:w-full bg-gray-100 border shadow-md">
+            <div className="border-none rounded-3xl p-5 flex justify-center items-center flex-wrap overflow-hidden w-[350px] sm:w-full bg-gray-100 border shadow-md">
               <div className="grid grid-cols-1 sm:grid-cols-3">
                 <div className="z-10">
                   <Popover.Root>
@@ -306,7 +306,7 @@ function User() {
                   </Popover.Root>
                 </div>
                 <div className="flex justify-center items-center">
-                  <h1 className="text-4xl  font-semibold">{displayName}</h1>
+                  <h1 className="text-4xl mt-4 font-semibold">{displayName}</h1>
                 </div>
                 <div className="flex sm:flex-col justify-center items-center mx-auto text-center gap-2 z-10 mb-6 mt-6">
                   <button
@@ -329,9 +329,9 @@ function User() {
                 </div>
               </div>
             </div>
-            <div className="bg-[#EEEFEF] rounded-2xl">
+            <div className="bg-[#EEEFEF] rounded-3xl sm:h-[60vh] h-[550px]">
               <div className="mt-10">
-                <h1 className="text-3xl font-semibold mt-5 mb-10 ml-3 p-5">
+                <h1 className="text-4xl font-semibold mt-5 mb-10 ml-3 p-5">
                   My Resumes
                 </h1>
               </div>

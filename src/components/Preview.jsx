@@ -7,46 +7,85 @@ import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { auth } from "../auth/firebase";
 import { uploadResume, downloadResume } from "../state_templates/resumeOperations";
+import * as pdfjsLib from 'pdfjs-dist';
 import Loader from "../pages/Loader";
+pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
 
 function Preview() {
-  const [pdfUrl, setPdfUrl] = useState(null);
+  const [pdfImages, setPdfImages] = useState([]);
   const [pdfDoc, setPdfDoc] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
   const navigate = useNavigate();
   const user = auth.currentUser;
 
   const formData = useSelector((state) => state.resumeBuilder.form_data);
 
-  useEffect(() => {
+  // Function to convert PDF to images
+  const convertPdfToImages = async (pdfData) => {
+    try {
+      // Load the PDF data
+      const pdf = await pdfjsLib.getDocument({ data: pdfData }).promise;
+      const images = [];
 
-    const generatePreview = async () => {
-      if (pdfUrl) {
-        URL.revokeObjectURL(pdfUrl);
+      // Convert each page to an image
+      for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+        const page = await pdf.getPage(pageNum);
+        const viewport = page.getViewport({ scale: 2.0 }); 
+
+        // Create canvas
+        const canvas = document.createElement('canvas');
+        const context = canvas.getContext('2d');
+        canvas.height = viewport.height;
+        canvas.width = viewport.width;
+
+        // Render PDF page to canvas
+        await page.render({
+          canvasContext: context,
+          viewport: viewport
+        }).promise;
+
+        // Convert canvas to image URL
+        images.push(canvas.toDataURL('image/jpeg', 0.95));
       }
 
+      return images;
+    } catch (error) {
+      console.error('Error converting PDF to images:', error);
+      throw error;
+    }
+  };
+
+  useEffect(() => {
+    const generatePreview = async () => {
       try {
+        setIsLoading(true);
+        
+        // Generate PDF
         const doc = generatePDF({ formData });
         setPdfDoc(doc);
-        const pdfBlob = doc.output("blob");
-        const newPdfUrl = URL.createObjectURL(pdfBlob);
-        setPdfUrl(newPdfUrl);
+
+        // Get PDF as array buffer
+        const pdfData = doc.output('arraybuffer');
+        
+        // Convert PDF to images
+        const images = await convertPdfToImages(pdfData);
+        setPdfImages(images);
+        
       } catch (err) {
         console.error("Error generating PDF:", err);
         new Promise(resolve => setTimeout(resolve, 2000));
           toast.error('Please select the template first to see preview');
         new Promise(resolve => setTimeout(resolve, 1000));
         navigate('/select_template');
+      } finally {
+        setIsLoading(false);
       }
     };
 
-    generatePreview();
-
-    return () => {
-      if (pdfUrl) {
-        URL.revokeObjectURL(pdfUrl);
-      }
-    };
+    if (formData?.selected_template) {
+      generatePreview();
+    }
   }, [formData]);
 
   const handleBack = () => {
@@ -54,53 +93,45 @@ function Preview() {
   };
 
   const handleDownload = async () => {
-    if (!user) {
-      toast.error('Please login to download and save your resume');
-      return;
-    }
-
-    if (!pdfDoc) {
-      toast.error('PDF not generated yet. Please try again');
-      return;
-    }
 
     setIsLoading(true);
     const loadingToast = toast.loading('Processing...');
 
     try {
-    
       const uploadResult = await uploadResume(pdfDoc, user.uid);
       
       if (!uploadResult) {
-        toast.error('Failed to save resume', { id: loadingToast });
-        return;
+        throw new Error('Failed to save resume');
       }
 
-  
       const downloadUrl = await downloadResume(uploadResult.documentId, uploadResult.fileId);
       if (!downloadUrl) {
-        toast.error('Failed to download resume', { id: loadingToast });
-        return;
+        throw new Error('Failed to get download URL');
       }
 
-  
-      window.open(downloadUrl, '_blank');
+      // For mobile compatibility
+      const link = document.createElement('a');
+      link.href = downloadUrl;
+      link.download = 'resume.pdf';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
       
       toast.success('Resume saved and downloaded successfully', { id: loadingToast });
     } catch (error) {
       console.error('Download error:', error);
-      toast.error('Failed to save resume. Please try again', { id: loadingToast });
+      toast.error(error.message || 'Failed to save resume. Please try again', { id: loadingToast });
     } finally {
       setIsLoading(false);
     }
   };
 
-  if(!formData?.selected_template) {
+  if (!formData?.selected_template) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <p>Checking template....</p>
+        <p>Checking template...</p>
       </div>
-    )
+    );
   }
 
   return (
@@ -113,15 +144,42 @@ function Preview() {
       <div className="container mx-auto px-4 mb-10">
         <div className="flex flex-col lg:flex-row gap-6 items-center">
           <div className="w-full lg:w-2/3">
-            {pdfUrl ? (
-              <iframe
-                src={`${pdfUrl}#toolbar=0&view=FitH`}
-                className="w-full h-[37rem] border-4 border-solid border-[#000000] rounded-2xl shadow-xl"
-                title="Resume Preview"
-              />
+            {isLoading ? (
+              <div className="w-full h-[37rem] flex items-center justify-center">
+                <Loader />
+              </div>
+            ) : pdfImages.length > 0 ? (
+              <div className="w-full border-4 border-solid border-[#000000] rounded-2xl shadow-xl overflow-hidden">
+                <img 
+                  src={pdfImages[currentPage - 1]} 
+                  alt={`Resume page ${currentPage}`}
+                  className="w-full h-auto"
+                />
+                {pdfImages.length > 1 && (
+                  <div className="flex justify-center gap-4 p-4 bg-gray-100">
+                    <button
+                      onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                      disabled={currentPage === 1}
+                      className="px-4 py-2 bg-black text-white rounded-lg disabled:opacity-50"
+                    >
+                      Previous
+                    </button>
+                    <span className="flex items-center">
+                      Page {currentPage} of {pdfImages.length}
+                    </span>
+                    <button
+                      onClick={() => setCurrentPage(prev => Math.min(pdfImages.length, prev + 1))}
+                      disabled={currentPage === pdfImages.length}
+                      className="px-4 py-2 bg-black text-white rounded-lg disabled:opacity-50"
+                    >
+                      Next
+                    </button>
+                  </div>
+                )}
+              </div>
             ) : (
               <div className="w-full h-[37rem] flex items-center justify-center">
-                <p>Loading preview....</p>
+                <p>No preview available</p>
               </div>
             )}
           </div>

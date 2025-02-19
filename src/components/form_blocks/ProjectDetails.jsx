@@ -55,7 +55,7 @@ function ProjectDetails() {
                 Project Name
               </label>
               <input
-                className="outline-none mt-1 p-3 flex items-center border w-min rounded-xl text-gray-700"
+                className="outline-none mt-1 p-3 flex items-center border-none shadow-md w-min rounded-xl text-gray-700"
                 name={`projectDetails.${index}.projectName`}
                 type="text"
                 placeholder="Enter name..."
@@ -92,7 +92,7 @@ function ProjectDetails() {
               <input
               
                 data-testid="tech-stack"
-                className="outline-none mt-1 p-3 flex items-center border w-min rounded-xl text-gray-700"
+                className="outline-none mt-1 p-3 flex items-center border-none shadow-md w-min rounded-xl text-gray-700"
                 name={`projectDetails.${index}.techStack`}
                 type="text"
                 placeholder="Javscript,Redux,React"
@@ -128,7 +128,7 @@ function ProjectDetails() {
                 Project Link
               </label>
               <input
-                className="outline-none mt-1 p-3 flex items-center border w-min rounded-xl text-gray-700"
+                className="outline-none mt-1 p-3 flex items-center border-none shadow-md w-min rounded-xl text-gray-700"
                 name={`projectDetails.${index}.projectLink`}
                 type="text"
                 placeholder="Add Link..."
@@ -162,7 +162,7 @@ function ProjectDetails() {
                 Year
               </label>
               <input
-                className="outline-none mt-1 p-3 flex items-center border w-min rounded-xl text-gray-700"
+                className="outline-none mt-1 p-3 flex items-center border-none shadow-md w-min rounded-xl text-gray-700"
                 name={`projectDetails.${index}.year`}
                 type="text"
                 placeholder="Mar-2024"

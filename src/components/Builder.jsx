@@ -21,27 +21,10 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
-import { auth } from "../auth/firebase";
 
-// Custom hook to track responiveness
-
-const useIsMobile = () => {
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const checkScreenSize = () => {
-      setIsMobile(window.innerWidth < 640);
-    };
-    checkScreenSize();
-
-    window.addEventListener("resize", checkScreenSize);
-
-    return () => window.removeEventListener("resize", checkScreenSize);
-  }, []);
-
-  return isMobile;
-};
 
 function Builder() {
   const formData = useSelector((state) => state.resumeBuilder.form_data);
@@ -68,7 +51,7 @@ function Builder() {
 
   const [loading, setIsLoading] = useState(true);
   const [activeStep, setActiveStep] = useState(0);
-  const isMobile = useIsMobile();
+  
   const navigate = useNavigate();
   const steps = [
     "Personal Details",
@@ -77,7 +60,9 @@ function Builder() {
     "Project Details",
     "Other Details",
   ];
+  const theme = useTheme();
   const dispatch = useDispatch();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   const handleNext = () => {
     setActiveStep((prev) => Math.min(prev + 1, steps.length));
@@ -95,7 +80,6 @@ function Builder() {
     setOpenDialog(false);
   };
 
-  const user = auth.currentUser
   const onSubmit = async () => {
     const loadingToast = toast.loading('Generating resume...');
     try {
@@ -180,23 +164,23 @@ function Builder() {
   return (
     <>
       <Navbar />
-      <div className="flex flex-col md:flex sm:flex-row justify-center items-center px-0 z-10 mb-32">
+      <div className="flex flex-col md:flex sm:flex-row justify-center items-center px-0 z-10 mb-32 mt-6">
         <div className="p-5">
-          <div className="border-none rounded-3xl flex-wrap overflow-hidden bg-gray-100 py-6 sm:px-10  sm:py-20 shadow-sm">
+          <div className="border-none rounded-3xl flex-wrap overflow-hidden bg-gray-100 py-6 sm:px-10  sm:py-28 shadow-sm">
             <Stepper
               activeStep={activeStep}
               orientation={isMobile ? "horizontal" : "vertical"}
               sx={{
                 "& .MuiStepLabel-label": {
                   color: "#fffff",
-                  fontSize: isMobile ? "12px" : "16px",
+                  fontSize: isMobile ? "12px" : "18px",
                 },
                 "& .MuiStepIcon-root.Mui-active": {
                   color: "black",
                 },
                 "& .MuiStepIcon-root": {
                   color: "#AE445A",
-                  fontSize: isMobile ? "0px" : "23px",
+                  fontSize: isMobile ? "0px" : "26px",
                 },
                 "& .MuiStepIcon-root.Mui-completed": {
                   color: "black",
@@ -221,7 +205,7 @@ function Builder() {
         <div className="p-5">
           <FormProvider {...methods}> 
             <form onSubmit={(e) => e.preventDefault()}>
-              <div className="bg-[#EEEFEF] min-h-scren rounded-3xl p-11 mx-2 h-[450px]  sm:w-[55vw] overflow-y-auto custom-scrollbar">
+              <div className="bg-[#EEEEEE] min-h-scren rounded-3xl p-10 mx-2 sm:w-[55vw] overflow-y-auto custom-scrollbar">
                 {loading ? <Loader /> : handleFormChange(activeStep)}
                 <div className="flex gap-4 items-center mt-8">
                   <Tooltip title="Reset Complete Form">

@@ -51,7 +51,7 @@ function EducationDetails() {
                 College Name
               </label>
               <input
-                className="outline-none mt-1 p-3 flex items-center border w-min rounded-xl text-gray-700"
+                className="outline-none mt-1 p-3 flex items-center border-none shadow-md w-min rounded-xl text-gray-700"
                 name={`educationDetails.${index}.collegeName`}
                 type="text"
                 placeholder="Enter college..."
@@ -84,7 +84,7 @@ function EducationDetails() {
                 Course
               </label>
               <input
-                className="outline-none mt-1 p-3 flex items-center border w-min rounded-xl text-gray-700"
+                className="outline-none mt-1 p-3 flex items-center border-none shadow-md w-min rounded-xl text-gray-700"
                 name={`educationDetails.${index}.course`}
                 type="text"
                 placeholder="Enter course name..."
@@ -118,7 +118,7 @@ function EducationDetails() {
                 Location
               </label>
               <input
-                className="outline-none mt-1 p-3 flex items-center border w-min rounded-xl text-gray-700"
+                className="outline-none mt-1 p-3 flex items-center border-none shadow-md w-min rounded-xl text-gray-700"
                 name={`educationDetails.${index}.location`}
                 type="text"
                 placeholder="Enter location..."
@@ -150,7 +150,7 @@ function EducationDetails() {
                 Year
               </label>
               <input
-                className="outline-none mt-1 p-3 flex items-center border w-min rounded-xl text-gray-700"
+                className="outline-none mt-1 p-3 flex items-center border-none shadow-md w-min rounded-xl text-gray-700"
                 name={`educationDetails.${index}.year`}
                 type="text"
                 placeholder="2023-2025"
@@ -179,7 +179,7 @@ function EducationDetails() {
             <button
               type="button"
               onClick={() => handleDelete(detail.id, "educationDetails")}
-              className="transition-all hover:shadow-lg shadow-xl ease-in-out delay-50 hover:-translate-y-0 hover:scale-110 border mx-2 mt-5 bg-red-500 py-1 px-2 text-white rounded-md"
+              className="transition-all hover:shadow-lg shadow-xl ease-in-out delay-50 hover:-translate-y-0 hover:scale-110 mx-2 mt-5 bg-red-500 py-1 px-2 text-white rounded-md"
             >
               <i class="ri-delete-bin-6-line"></i>
             </button>
@@ -190,7 +190,7 @@ function EducationDetails() {
       <button
         type="button"
         onClick={() => handleAddField("educationDetails")}
-        className="transition-all hover:shadow-lg shadow-xl ease-in-out delay-50 hover:-translate-y-0 hover:scale-110 border mx-2 mt-5 bg-black py-1 px-2 text-white text-md rounded-xl"
+        className="transition-all hover:shadow-lg shadow-xl ease-in-out delay-50 hover:-translate-y-0 hover:scale-110 mx-2 mt-5 bg-black py-1 px-2 text-white text-md rounded-xl"
       >
         + Add field
       </button>

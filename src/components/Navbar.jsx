@@ -13,15 +13,30 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import Logo from "../pages/Logo";
 import { Link, useNavigate } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
-import { List, ListItem, ListItemText } from "@mui/material";
+import {
+  List,
+  ListItem,
+  ListItemText,
+  useTheme,
+  useMediaQuery,
+} from "@mui/material";
 import { handleSignOut } from "./User";
 import { useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
 
 function Navbar() {
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
-  const [notificationAnchorEl, setNotificationAnchorEl] = useState(null);
+  const [accountMenuAnchor, setAccountMenuAnchor] = useState(null);
+  const [mobileMenuAnchor, setMobileMenuAnchor] = useState(null);
+  const [notificationMenuAnchor, setNotificationMenuAnchor] = useState(null);
+
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+
+  const dispatch = useDispatch();
+  const { reset } = useForm();
+  const navigate = useNavigate();
+
+  // Sample notifications (you can replace with your actual notifications)
   const notifications = [
     { id: 1, message: "Check new features", isRead: false },
     {
@@ -33,137 +48,111 @@ function Navbar() {
   ];
   const unreadCount = notifications.filter((n) => !n.isRead).length;
 
-  const dispatch = useDispatch();
-  const { reset } = useForm();
-  const navigate = useNavigate();
+  // Menu open states
+  const isAccountMenuOpen = Boolean(accountMenuAnchor);
+  const isMobileMenuOpen = Boolean(mobileMenuAnchor);
+  const isNotificationMenuOpen = Boolean(notificationMenuAnchor);
 
-  const isMenuOpen = Boolean(anchorEl);
-  const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
-  const isNotificationOpen = Boolean(notificationAnchorEl);
-
-  const handleNotificationsMenuOpen = (event) => {
-    setNotificationAnchorEl(event.currentTarget);
+  // Handle menu openings
+  const handleNotificationsOpen = (event) => {
+    setNotificationMenuAnchor(event.currentTarget);
+    if (isMobile) {
+      setMobileMenuAnchor(null); 
+    }
   };
 
-  const handleProfileMenuOpen = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleMobileMenuClose = () => {
-    setMobileMoreAnchorEl(null);
-  };
-
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-    setNotificationAnchorEl(null);
-    handleMobileMenuClose();
+  const handleAccountMenuOpen = (event) => {
+    setAccountMenuAnchor(event.currentTarget);
+    if (isMobile) {
+      setMobileMenuAnchor(null); // Close mobile menu when opening account menu
+    }
   };
 
   const handleMobileMenuOpen = (event) => {
-    setMobileMoreAnchorEl(event.currentTarget);
+    setMobileMenuAnchor(event.currentTarget);
   };
 
-  const menuId = "primary-search-account-menu";
-  const renderMenu = (
+  // Handle menu closings
+  const handleMenuClose = () => {
+    setAccountMenuAnchor(null);
+    setNotificationMenuAnchor(null);
+    setMobileMenuAnchor(null);
+  };
+
+  // Account menu component
+  const accountMenu = (
     <Menu
-      anchorEl={anchorEl}
-      anchorOrigin={{
-        vertical: "top",
-        horizontal: "right",
-      }}
-      id={menuId}
-      keepMounted
-      transformOrigin={{
-        vertical: "top",
-        horizontal: "right",
-      }}
-      open={isMenuOpen}
+      anchorEl={accountMenuAnchor}
+      anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      transformOrigin={{ vertical: "top", horizontal: "right" }}
+      open={isAccountMenuOpen}
       onClose={handleMenuClose}
+      sx={{ marginTop: isMobile ? "-60px" : "-5px" }}
     >
       <MenuItem onClick={handleMenuClose}>
-        <Link to={"/user"}>
-          <i className="fa-solid fa-user text-md mr-2"></i>My Account
+        <Link to="/user" className="flex items-center">
+          <i className="fa-solid fa-user text-md mr-2"></i>
+          My Account
         </Link>
       </MenuItem>
-      <MenuItem onClick={() => handleSignOut(dispatch,navigate,reset)}>
+      <MenuItem
+        onClick={() => {
+          handleSignOut(dispatch, navigate, reset);
+          handleMenuClose();
+        }}
+      >
         <i className="fa-solid fa-arrow-right-from-bracket text-md mr-2"></i>
         Sign Out
       </MenuItem>
     </Menu>
   );
 
-  const mobileMenuId = "primary-search-account-menu-mobile";
-  const renderMobileMenu = (
+  // Mobile menu component
+  const mobileMenu = (
     <Menu
-      anchorEl={anchorEl}
-      anchorOrigin={{
-        vertical: "top",
-        horizontal: "right",
-      }}
-      id={mobileMenuId}
-      keepMounted
-      transformOrigin={{
-        vertical: "top",
-        horizontal: "right",
-      }}
+      anchorEl={mobileMenuAnchor}
+      anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+      transformOrigin={{ vertical: "top", horizontal: "right" }}
       open={isMobileMenuOpen}
-      onClose={handleMobileMenuClose}
+      onClose={handleMenuClose}
     >
-      <Toaster />
-      <MenuItem onClick={handleNotificationsMenuOpen}>
-        <IconButton
-          size="large"
-          aria-label="show 17 new notifications"
-          color="inherit"
-        >
+      <MenuItem onClick={handleNotificationsOpen}>
+        <IconButton size="large" color="inherit">
           <Badge badgeContent={unreadCount} color="error">
             <NotificationsIcon />
           </Badge>
         </IconButton>
-        <p>Notifications</p>
+        <p className="ml-2">Notifications</p>
       </MenuItem>
-      <MenuItem onClick={handleProfileMenuOpen}>
-        <IconButton
-          size="large"
-          aria-label="account of current user"
-          aria-controls="primary-search-account-menu"
-          aria-haspopup="true"
-          color="inherit"
-        >
+      <MenuItem onClick={handleAccountMenuOpen}>
+        <IconButton size="large" color="inherit">
           <AccountCircle />
         </IconButton>
-        <p>My Account</p>
+        <p className="ml-2">My Account</p>
       </MenuItem>
     </Menu>
   );
 
-  const renderNotifications = (
+  // Notifications menu component
+  const notificationsMenu = (
     <Menu
-      anchorEl={notificationAnchorEl}
-      anchorOrigin={{
-        vertical: "top",
-        horizontal: "right",
-      }}
-      id="notifications-menu"
-      keepMounted
-      transformOrigin={{
-        vertical: "top",
-        horizontal: "right",
-      }}
-      open={isNotificationOpen}
+      anchorEl={notificationMenuAnchor}
+      anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+      transformOrigin={{ vertical: "top", horizontal: "right" }}
+      open={isNotificationMenuOpen}
       onClose={handleMenuClose}
+      sx={{ marginTop: isMobile ? "-60px" : "-5px" }}
     >
-      <MenuItem onClick={handleMenuClose}>
-        <List>
-          {notifications.map((not) => (
-            <ListItem key={not.id}>
-              <ListItemText>
-                <i className="ri-arrow-drop-right-fill"></i> {not.message}
-              </ListItemText>
-            </ListItem>
-          ))}
-        </List>
-      </MenuItem>
+      <List sx={{ width: "250px", maxWidth: "100vw" }}>
+        {notifications.map((notification) => (
+          <ListItem key={notification.id} sx={{ py: 1 }}>
+            <ListItemText>
+              <i className="ri-arrow-drop-right-fill"></i>
+              {notification.message}
+            </ListItemText>
+          </ListItem>
+        ))}
+      </List>
     </Menu>
   );
 
@@ -183,47 +172,48 @@ function Navbar() {
         <Toolbar>
           <Logo />
           <Box sx={{ flexGrow: 1 }} />
-          <Box sx={{ display: { xs: "none", md: "flex" } }}>
+
+          {/* Desktop Navigation */}
+          {!isMobile && (
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              <IconButton
+                size="large"
+                color="inherit"
+                onClick={handleNotificationsOpen}
+              >
+                <Badge badgeContent={unreadCount} color="error">
+                  <NotificationsIcon />
+                </Badge>
+              </IconButton>
+              <IconButton
+                size="large"
+                color="inherit"
+                onClick={handleAccountMenuOpen}
+              >
+                <AccountCircle />
+              </IconButton>
+            </Box>
+          )}
+
+          {/* Mobile Navigation */}
+          {isMobile && (
             <IconButton
               size="large"
-              aria-label="show 17 new notifications"
               color="inherit"
-              onClick={handleNotificationsMenuOpen}
-            >
-              <Badge badgeContent={unreadCount} color="error">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton>
-            <IconButton
-              size="large"
-              edge="end"
-              aria-label="account of current user"
-              aria-controls={menuId}
-              aria-haspopup="true"
-              onClick={handleProfileMenuOpen}
-              color="inherit"
-            >
-              <AccountCircle />
-            </IconButton>
-          </Box>
-          <Box sx={{ display: { xs: "flex", md: "none" } }}>
-            <IconButton
-              size="large"
-              aria-label="show more"
-              aria-controls={mobileMenuId}
-              aria-haspopup="true"
               onClick={handleMobileMenuOpen}
-              color="inherit"
             >
               <MenuIcon />
             </IconButton>
-          </Box>
+          )}
         </Toolbar>
       </AppBar>
-      {renderNotifications}
-      {renderMobileMenu}
-      {renderMenu}
+
+      <Toaster />
+      {notificationsMenu}
+      {mobileMenu}
+      {accountMenu}
     </Box>
   );
 }
+
 export default Navbar;
