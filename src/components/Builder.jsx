@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Step, StepLabel, Stepper } from "@mui/material";
-import { AuroraBackground } from "./AuroraBackground";
 import { FormProvider, useForm } from "react-hook-form";
 import PersonalDetails from "./form_blocks/PersonalDetails";
 import EducationDetails from "./form_blocks/EducationDetails";
@@ -183,7 +182,7 @@ function Builder() {
       <Navbar />
       <div className="flex flex-col md:flex sm:flex-row justify-center items-center px-0 z-10 mb-32">
         <div className="p-5">
-          <AuroraBackground className="border-none rounded-2xl flex-wrap overflow-hidden h-[80px] w-[90vw] sm:w-[15rem] sm:h-[450px] ">
+          <div className="border-none rounded-3xl flex-wrap overflow-hidden bg-gray-100 py-6 sm:px-10  sm:py-20 shadow-sm">
             <Stepper
               activeStep={activeStep}
               orientation={isMobile ? "horizontal" : "vertical"}
@@ -217,7 +216,7 @@ function Builder() {
                 </Step>
               ))}
             </Stepper>
-          </AuroraBackground>
+          </div>
         </div>
         <div className="p-5">
           <FormProvider {...methods}> 

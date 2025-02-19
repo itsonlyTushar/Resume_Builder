@@ -22,7 +22,7 @@ Resumate is a powerful and user-friendly resume builder designed to help users c
 
 ## Tech Stack
 
-- **Framework & Library :** React, Redux, TailwindCSS, Material UI, Aceternity UI
+- **Framework & Library :** React, Redux, TailwindCSS, Material UI
 - **Authentication :** Firebase
 - **Backend as a Service :** Appwrite
 - **Icons:** FontAwsome, RemixIcons

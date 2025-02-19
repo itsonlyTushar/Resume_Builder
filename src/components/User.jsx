@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { AuroraBackground } from "./AuroraBackground";
 import place_holder from "../assets/placeholder-male.jpg";
 import { auth } from "../auth/firebase";
 import { deleteUser, signOut } from "firebase/auth";
@@ -263,7 +262,7 @@ function User() {
           <Toaster />
 
           <div className="p-5">
-            <AuroraBackground className="border-none rounded-2xl flex-wrap overflow-hidden h-full w-full sm:w-full sm:h-full ">
+            <div className="border-none rounded-2xl flex-wrap overflow-hidden w-full sm:w-full bg-gray-100 border shadow-md">
               <div className="grid grid-cols-1 sm:grid-cols-3">
                 <div className="z-10">
                   <Popover.Root>
@@ -329,7 +328,7 @@ function User() {
                   </button>
                 </div>
               </div>
-            </AuroraBackground>
+            </div>
             <div className="bg-[#EEEFEF] rounded-2xl">
               <div className="mt-10">
                 <h1 className="text-3xl font-semibold mt-5 mb-10 ml-3 p-5">
