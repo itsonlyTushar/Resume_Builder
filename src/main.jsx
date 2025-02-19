@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
-import { BrowserRouter as Router, Routes, Route, Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Outlet } from 'react-router-dom';
 import store from './store/store.js';
 import './index.css';
 import { AuthProvider } from './auth/AuthContext.jsx';
@@ -16,6 +16,7 @@ import Contact from './pages/Contact.jsx';
 import Preview from './components/Preview.jsx';
 import NotFound from './pages/404/NotFound.jsx';
 import About from './pages/About.jsx';
+import { Analytics } from "@vercel/analytics/react"
 
 
 const ProtectedRoutesWrapper = () => (
@@ -27,6 +28,7 @@ const ProtectedRoutesWrapper = () => (
 createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <Provider store={store}>
+     
       <AuthProvider>
         <Router>
           <Routes>
@@ -51,5 +53,6 @@ createRoot(document.getElementById('root')).render(
         </Router>
       </AuthProvider>
     </Provider>
+    <Analytics />
   </React.StrictMode>
 );
