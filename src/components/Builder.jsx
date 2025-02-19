@@ -205,7 +205,7 @@ function Builder() {
         <div className="p-5">
           <FormProvider {...methods}> 
             <form onSubmit={(e) => e.preventDefault()}>
-              <div className="bg-[#EEEEEE] min-h-scren rounded-3xl p-10 mx-2 sm:w-[55vw] overflow-y-auto custom-scrollbar">
+              <div className="bg-[#EEEEEE] min-h-scren rounded-3xl p-10 sm:w-[55vw] overflow-y-auto custom-scrollbar">
                 {loading ? <Loader /> : handleFormChange(activeStep)}
                 <div className="flex gap-4 items-center mt-8">
                   <Tooltip title="Reset Complete Form">

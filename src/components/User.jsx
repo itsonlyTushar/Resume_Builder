@@ -319,7 +319,7 @@ function User() {
                     onClick={() => {
                       handleOpenDialog({
                         title: "Delete Account",
-                        message: `Are you sure you want delete you account ?`,
+                        message: "Are you sure you want delete you account ?",
                       });
                     }}
                     className=" border transition-all hover:shadow-lg shadow-sm ease-in-out delay-100 hover:-translate-y-0 hover:scale-110 font-semibold rounded-2xl cursor-pointer text-lg text-white bg-[#E10400] py-2 px-2"
@@ -363,11 +363,11 @@ function User() {
           }}
         >
           <DialogTitle id="alert-dialog-title">
-            'Are you sure you want to do this?'
+            Are you sure you want to do this?
           </DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
-              'Your Account will be deleted permanently'
+              Your Account will be deleted permanently
             </DialogContentText>
           </DialogContent>
           <DialogActions>
