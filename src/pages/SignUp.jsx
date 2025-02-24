@@ -5,12 +5,11 @@ import { auth } from "../auth/firebase";
 import { useForm } from "react-hook-form";
 import toast, { Toaster } from "react-hot-toast";
 import GoogleAuth from "../auth/GoogleAuth";
-import Logo from "./Logo";
-import Contact from "./Contact";
 import Navigation from "./Navigation";
 
 function SignUp() {
   const [loading, setLoading] = useState(false);
+  const [isHidden,setIsHidden] = useState(true);
   const navigate = useNavigate();
   const {
     register,
@@ -63,21 +62,27 @@ function SignUp() {
             {errors.password && (
               <p className="text-red-500 text-sm">{errors.password.message}</p>
             )}
+            <div className="relative">
             <input
+            type={isHidden ? "password" : "text"}
             className="mt-2 block py-2 border-slate-200 shadow-sm rounded-md w-full focus:border-black focus:ring-0 focus:outline-none"
               {...register("confirmPassword", {
                 required: "Please Confirm Your Password",
+
                 validate: (value) =>
                   value === watch("password") || "Passwords do not match",
               })}
               placeholder="Confirm Password"
             />
+            <button onClick={() => setIsHidden(!isHidden)} className="absolute right-3 top-1/2 transform -translate-y-1/2">{isHidden ? <i className="ri-eye-off-line"></i> : <i class="ri-eye-line"></i>}</button>
+            </div>
+
             {errors.confirmPassword && (
               <p className="text-red-500 text-sm">
                 {errors.confirmPassword.message}
               </p>
             )}
-
+            
             <button
               type="submit"
               className="block bg-black text-white w-full py-2 rounded-md mt-3 text-md"
