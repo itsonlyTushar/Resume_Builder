@@ -134,11 +134,11 @@ function ResumeList({ resumes, onResumeClick, onDelete }) {
         }}
       >
         <DialogTitle id="alert-dialog-title">
-          'Are you sure you want to do this?'
+          Are you sure you want to do this?
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            'Your resume will be deleted permanently'
+            Your resume will be deleted permanently
           </DialogContentText>
         </DialogContent>
         <DialogActions>
