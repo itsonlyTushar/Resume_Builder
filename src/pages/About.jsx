@@ -18,6 +18,8 @@ function About() {
     })
   },[])
 
+  
+
 
   const reviews = [
     {
@@ -198,7 +200,6 @@ function About() {
                   position: "relative",
                   borderRadius: "20px",
                   m: 2,
-                  zIndex:-10,
                   "&:hover .hover-box": { opacity: 1 },
                 }}
               >

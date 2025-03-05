@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
-import { BrowserRouter as Router, Routes, Route, Outlet } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Outlet, useLocation } from 'react-router-dom';
 import store from './store/store.js';
 import './index.css';
 import { AuthProvider } from './auth/AuthContext.jsx';
@@ -17,6 +17,14 @@ import Preview from './components/Preview.jsx';
 import NotFound from './pages/404/NotFound.jsx';
 import About from './pages/About.jsx';
 import { Analytics } from "@vercel/analytics/react"
+
+const ScrollTop = () => {
+  const path = useLocation()
+
+  useEffect(()=>{
+    window.scrollTo(0,0);
+  },[path])
+}
 
 
 const ProtectedRoutesWrapper = () => (
@@ -50,6 +58,7 @@ createRoot(document.getElementById('root')).render(
             {/* 404 Route */}
             <Route path="*" element={<NotFound />} />
           </Routes>
+        <ScrollTop />
         </Router>
       </AuthProvider>
     </Provider>

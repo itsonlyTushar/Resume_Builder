@@ -246,7 +246,8 @@ export const Template101 = ({ formData }) => {
             }
     
             if (hasContent(project.projectLink)) {
-              doc.setFont("Playfair", "bold");
+              doc.setFont("Playfair", "normal");
+      
               yPosition += 5;
               doc.text(`Link: ${project.projectLink}`, leftMargin, yPosition);
             }
@@ -366,7 +367,7 @@ export const Template102 = ({ formData }) => {
       doc.setFontSize(10);
       const summary = doc.splitTextToSize(details.about, contentWidth);
       doc.text(summary, leftMargin, yPosition);
-      yPosition += summary.length * 5 + 8;
+      yPosition += summary.length * 5 + 5;
     }
 
     // Core Competencies/Skills Section - Only display if skills exist and have names
@@ -589,8 +590,8 @@ export const Template103 = ({ formData }) => {
     // Contact Information - Only display if any contact information exists
     const contactFields = [
       details.email,
-      details.linkedin,
-      details.portfolio
+      details.phoneNumber,
+      details.linkedin
     ].filter(hasContent);
 
     if (contactFields.length > 0) {
@@ -737,22 +738,13 @@ export const Template103 = ({ formData }) => {
           });
         }
 
-        // Description - Only display if it exists
-        if (hasContent(project.description)) {
-          yPosition += 5;
-          doc.setFont("merium_reg");
-          doc.setTextColor(60, 60, 60);
-          const description = doc.splitTextToSize(
-            project.description,
-            pageWidth - 2 * leftMargin
-          );
-          doc.text(description, leftMargin, yPosition);
-          yPosition += description.length * 5;
-        }
+       
 
         // Project Link - Only display if it exists
         if (hasContent(project.projectLink)) {
           const clickText = "~ Link";
+          yPosition += 5;
+          doc.setFontSize(8)
           doc.setFont("merium_bol");
           doc.text(clickText, leftMargin, yPosition);
           doc.link(leftMargin, yPosition - 3, doc.getTextWidth(clickText), 5, {
@@ -764,6 +756,8 @@ export const Template103 = ({ formData }) => {
         if (hasContent(project.techStack)) {
           yPosition += 5;
           doc.setFont("merium_reg");
+          doc.setFontSize(10);
+          doc.setTextColor(80,80,80)
           const techStack = doc.splitTextToSize(
             `Tools & Technologies: ${project.techStack}`,
             pageWidth - 2 * leftMargin
@@ -1009,7 +1003,7 @@ export const Template104 = ({ formData }) => {
 
       formData.projectDetails.forEach((pro) => {
         if (hasContent(pro.projectName) || hasContent(pro.year)) {
-          yPosition += 8;
+          yPosition += 10;
           doc.setFont("Inter_bol");
           doc.setFontSize(12);
           
@@ -1023,10 +1017,11 @@ export const Template104 = ({ formData }) => {
 
           if (hasContent(pro.projectLink)) {
             const clickText = "  -  Link";
-            doc.text(clickText, leftMargin + 45, yPosition);
+            doc.setFontSize(8)
+            doc.text(clickText, leftMargin - 2, yPosition + 5);
             doc.link(
-              leftMargin + 45,
-              yPosition - 3,
+              leftMargin - 2,
+              yPosition + 3,
               doc.getTextWidth(clickText),
               5,
               { url: pro.projectLink }
@@ -1041,6 +1036,7 @@ export const Template104 = ({ formData }) => {
           }
         }
       });
+      yPosition += 3
       addSectionDivider();
     }
 

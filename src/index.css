@@ -39,32 +39,35 @@ body::-webkit-scrollbar-track {
 
 body::-webkit-scrollbar-thumb {
     background: #888;
-    border-radius: 3px;
+    border-radius: 10px;
 }
 
 body::-webkit-scrollbar-thumb:hover {
     background: #9c9999;
 }
 
-.custom-scrollbar::-webkit-scrollbar {
-    width: 4px;
-    margin-right: 8px;
+.custom-scrollbar {
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: #888 #f1f1f1;
+  max-height: 600px !important;
+  overflow-y: auto !important;
 }
 
-.custom-scrollbar::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 50px;
-    margin: 8px 0;
+/* Webkit Browsers */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-    background: #888;
-    border-radius: 3px;
+  background: #888;
+  border-radius: 3px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    background: #9c9999;
+  background: #555;
 }
+
+
 
 /* custom loader spinner  */
 

@@ -167,7 +167,7 @@ function PersonalDetails() {
                 placeholder="number..."
                 {...register(`personalDetails.${index}.phoneNumber`, {
                   required: true,
-                  maxLength: 10,
+                  
                   validate: (value) =>
                     value.trim().length > 0 || "phone number cannot be empty",
                   onChange: (e) =>

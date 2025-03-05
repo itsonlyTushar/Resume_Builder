@@ -61,7 +61,7 @@ function ProjectDetails() {
                 placeholder="Enter name..."
                 {...register(`projectDetails.${index}.projectName`, {
                   required: false,
-                  maxLength: 30,
+              
                   validate: (value) => {
                     if (value === "") return true;
                     return value.trim().length > 0 || "Enter a valid input";

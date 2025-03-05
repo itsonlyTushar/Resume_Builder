@@ -66,7 +66,6 @@ function ExperinceDetails() {
                     if (value === "") return true;
                     return value.trim().length > 0;
                   },
-                  maxLength: 30,
                   onChange: (e) =>
                     handleInputChange(
                       index,

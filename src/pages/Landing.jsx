@@ -5,6 +5,7 @@ import Footer from './Footer'
 import Contact from './Contact'
 import { useViewTransition } from './useViewTranstion'
 import AOS from 'aos'
+import ProductHunt from './ProductHunt'
 
 
 function Landing() {
@@ -48,7 +49,12 @@ function Landing() {
             </ul>
         </div>
       </nav>
-      <div className='h-screen flex flex-col justify-center items-center pt-48'>
+      <div className='pt-24 p-2 sm:block hidden'>
+
+      <ProductHunt />
+      </div>
+      <div className='h-screen flex flex-col justify-center items-center'>
+        
         <p className='border-none rounded-3xl text-[#717985] px-10 py-2 font-mono text-[1rem] font-bold bg-[#EEEFEF]'> 
               Make Resume in Minutes
         </p>
@@ -147,7 +153,9 @@ function Landing() {
             </div>             
           </div>
         </div>
+       
       </section>
+    
       <Footer/>
     </div>
     </>

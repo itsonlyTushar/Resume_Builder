@@ -9,7 +9,7 @@ function Navigation() {
   const location = useLocation();
 
   return (
-    <nav className="fixed backdrop-blur-md bg-opacity-30 bg-white/45 w-full border-white border shadow-sm h-16 py-2 px-3 mb-5">
+    <nav className="fixed backdrop-blur-md bg-opacity-30 bg-white/45 w-full border-white border shadow-sm h-16 py-2 px-3 mb-5 z-20">
     <div className="flex justify-between">
         <Logo />
       <ul className="flex justify-center items-center">

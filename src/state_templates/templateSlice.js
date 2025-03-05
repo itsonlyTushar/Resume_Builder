@@ -6,11 +6,29 @@ import { nanoid } from "@reduxjs/toolkit";
 const initialState = 
     {
         form_data : { 
-            personalDetails : [{firstName:'', lastName:'', email:'', phoneNumber:'', linkedin:'',about:``,id:1}],
-            educationDetails:[{collegeName:'', course:'', location:'', year:'',id:1}],
-            experienceDetails: [{companyName:'', role:'', location:'', year:'', description:``,id:1}],
-            projectDetails: [{projectName:'', techStack:'',year:'', projectLink:'',id:1}],
-            skills: [{skillName:'' ,id:1}], 
+            personalDetails : [{firstName:'Tushar', lastName:'Soni', email:'tushargsoni@outlook.com', phoneNumber:'9327584894', linkedin:'https://www.linkedin.com/in/tushar-soni-b0426022b',about:`Driven Front-End Developer passionate about crafting seamless, high-performance web experiences. I specialize in React, JavaScript, and modern UI frameworks like MUI, with a keen interest in real-time features and AI-powered enhancements.Always learning, optimizing, and pushing the boundaries of front-end development to create user-centric solutions that stand out.`,id:1}],
+            educationDetails:[{collegeName:'Woolf', course:'Master in Computer Science', location:'USA', year:'2024-2026',id:1},
+                {collegeName:'VNSGU', course:'Bachelor of Commerce', location:'Surat', year:'2020-2024',id:2}
+            ],
+            experienceDetails: [{companyName:'Jay Air Systems Pvt. Ltd.', role:'Data Entry Operator', location:'Surat', year:'2022-2025', description:`Maintaining and updating the company's CRM system by promptly commissioning machines and ensuring accurate record-keeping.Generating daily sales and service reports to provide real-time insights to respective departments.Developed a VBA module with ChatGPT that automates reporting tasks, saving approximately 1 hour of daily manual work.Implementing data visualization techniques to enhance report clarity and decision-making.`,id:1}],
+            projectDetails: [{projectName:'ResuMate - Professional resume builder', techStack:'React,Redux,React Hook Form',year:'Feb-2025', projectLink:'https://resume-builder-delta-peach.vercel.app',id:1},
+                {projectName:'Portfolio Site - Personal portfolio site', techStack:'HTML,CSS,JavaScript,React',year:'Aug-2024', projectLink:'https://portfolio-site-six-navy.vercel.app',id:2}
+            ],
+            skills: [
+
+                {skillName:'HTML' ,id:1},
+                {skillName:'CSS' ,id:2},
+                {skillName:'JavaScript' ,id:3},
+                {skillName:'React' ,id:4},
+                {skillName:'Redux' ,id:5},
+                {skillName:'React Router' ,id:6},
+                {skillName:'Tailwind Css' ,id:7},
+                {skillName:'Material UI' ,id:7},
+
+
+
+
+            ], 
             selected_template: 1,
         }   
     }
