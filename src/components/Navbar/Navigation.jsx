@@ -1,8 +1,8 @@
 import React from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import Tooltip from "./Tooltip";
-import Logo from "./Logo";
-import Contact from "./Contact";
+import Tooltip from "../UI/Tooltip";
+import Logo from "../../pages/Logo";
+import Contact from "../../pages/Contact";
 
 function Navigation() {
 

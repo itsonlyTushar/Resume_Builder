@@ -10,7 +10,7 @@ import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import NotificationsIcon from "@mui/icons-material/Notifications";
-import Logo from "../pages/Logo";
+import Logo from "../../pages/Logo";
 import { Link, useNavigate } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import {
@@ -20,7 +20,7 @@ import {
   useTheme,
   useMediaQuery,
 } from "@mui/material";
-import { handleSignOut } from "./User";
+import { handleSignOut } from "../UserPage/User";
 import { useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
 
@@ -36,7 +36,6 @@ function Navbar() {
   const { reset } = useForm();
   const navigate = useNavigate();
 
-  // Sample notifications (you can replace with your actual notifications)
   const notifications = [
     { id: 1, message: "Check new features", isRead: false },
     {

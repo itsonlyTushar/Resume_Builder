@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
-import place_holder from "../assets/placeholder-male.jpg";
-import { auth } from "../auth/firebase";
+import place_holder from "../../assets/placeholder-male.jpg";
+import { auth } from "../../auth/firebase";
 import { deleteUser, signOut } from "firebase/auth";
 import toast, { Toaster } from "react-hot-toast";
 import { useNavigate } from "react-router";
 import * as Popover from "@radix-ui/react-popover";
-import Navbar from "./Navbar";
-import Footer from "../pages/Footer";
-import { COLLECTION_ID, DATABASE_ID, databases, storage, STORAGE_BUCKET } from "../backend/appwrite";
+import Navbar from "../Navbar/Navbar";
+import Footer from "../Footer/Footer.jsx";
+import { COLLECTION_ID, DATABASE_ID, databases, storage, STORAGE_BUCKET } from "../../backend/appwrite";
 import { ID, Query } from "appwrite";
 import ResumeList from "./ResumeList";
-import { fetchUserResumes } from "../state_templates/resumeOperations";
+import { fetchUserResumes } from "../../utils/resumeOperations.js";
 import { useDispatch } from "react-redux";
 import {
   Button,
@@ -21,7 +21,7 @@ import {
   DialogTitle,
 } from "@mui/material";
 import { useForm } from "react-hook-form";
-import Loader from "../pages/Loader";
+import Loader from "../UI/Loader.jsx";
 
 export const handleSignOut = async (dispatch, navigate,resetForm) => {
   const loading = toast.loading("Signing you out...");

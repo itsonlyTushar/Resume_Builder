@@ -6,7 +6,6 @@ import { Box, Button, Modal } from "@mui/material";
 import Logo from "./Logo";
 import { auth } from "../auth/firebase";
 
-
 const Contact = () => {
   const [open, setopen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -60,7 +59,6 @@ const Contact = () => {
       <div onClick={handleOpen}>Contact Us</div>
 
       <Modal open={open} onClose={handleClose}>
-    
         <Box
           sx={{
             position: "absolute",
@@ -96,7 +94,6 @@ const Contact = () => {
             />
             {errors.name && (
               <span className="text-red-600 text-md ml-2">
-            
                 <i className="ri-error-warning-line"></i>Enter Name
               </span>
             )}
@@ -114,12 +111,11 @@ const Contact = () => {
             />
             {errors.subject && (
               <span className="text-red-600 text-md ml-2">
-        
                 <i className="ri-error-warning-line"></i>Enter Subject
               </span>
             )}
 
-<label className="block mb-2 text-md" htmlFor="subject">
+            <label className="block mb-2 text-md" htmlFor="subject">
               Email
             </label>
             <input
@@ -133,7 +129,6 @@ const Contact = () => {
             />
             {errors.email && (
               <span className="text-red-600 text-md ml-2">
-        
                 <i className="ri-error-warning-line"></i>Enter email
               </span>
             )}

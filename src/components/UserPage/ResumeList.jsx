@@ -1,5 +1,5 @@
 import React from "react";
-import { deleteResume } from "../state_templates/resumeOperations";
+import { deleteResume } from "../../utils/resumeOperations";
 import toast from "react-hot-toast";
 import {
   Button,

@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useFormContext } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import {
   updateFields,
-} from "../../state_templates/templateSlice";
+} from "../../features/templateSlice";
 
 function PersonalDetails() {
   const dispatch = useDispatch();
@@ -19,9 +19,6 @@ function PersonalDetails() {
     dispatch(updateFields({ index, field, value, arrState }));
   };
 
-  useEffect(() => {
-    console.log(personalDetails);
-  }, [personalDetails]);
 
   return (
     <>

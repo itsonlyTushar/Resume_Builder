@@ -1,11 +1,11 @@
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { auth } from "../auth/firebase";
+import { auth } from "./firebase";
 import { useForm } from "react-hook-form";
 import toast, { Toaster } from "react-hot-toast";
-import GoogleAuth from "../auth/GoogleAuth";
-import Navigation from "./Navigation";
+import GoogleAuth from "./GoogleAuth";
+import Navigation from "../components/Navbar/Navigation";
 
 function SignUp() {
   const [loading, setLoading] = useState(false);

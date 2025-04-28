@@ -1,11 +1,11 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useFormContext } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addFields,
   removeFields,
   updateFields,
-} from "../../state_templates/templateSlice";
+} from "../../features/templateSlice";
 
 function ProjectDetails() {
   const {
@@ -33,9 +33,7 @@ function ProjectDetails() {
     setValue(`${arrState}.${index}.${field}`, value);
   };
 
-  useEffect(() => {
-    console.log(projectDetails);
-  }, [projectDetails]);
+
 
   const handleDelete = (id, arrState) => {
     dispatch(removeFields({ id, arrState }));

@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { auth } from "../auth/firebase";
+import { auth } from "./firebase";
 import {
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import toast, { Toaster } from "react-hot-toast";
-import GoogleAuth from "../auth/GoogleAuth";
-import Navigation from "./Navigation";
+import GoogleAuth from "./GoogleAuth";
+import Navigation from "../components/Navbar/Navigation";
 
 
 function SignIn() {

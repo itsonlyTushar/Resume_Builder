@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { Step, StepLabel, Stepper } from "@mui/material";
 import { FormProvider, useForm } from "react-hook-form";
-import PersonalDetails from "./form_blocks/PersonalDetails";
-import EducationDetails from "./form_blocks/EducationDetails";
-import ExperinceDetails from "./form_blocks/ExperinceDetails";
-import OtherDetails from "./form_blocks/OtherDetails";
-import ProjectDetails from "./form_blocks/ProjectDetails";
-import Loader from "../pages/Loader";
-import Navbar from "./Navbar";
-import Footer from "../pages/Footer";
+import PersonalDetails from "../form_blocks/PersonalDetails";
+import EducationDetails from "../form_blocks/EducationDetails";
+import ExperinceDetails from "../form_blocks/ExperinceDetails";
+import OtherDetails from "../form_blocks/OtherDetails";
+import ProjectDetails from "../form_blocks/ProjectDetails";
+import Loader from "../UI/Loader";
+import Navbar from "../Navbar/Navbar";
+import Footer from "../Footer/Footer";
 import { useNavigate } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";
-import { resetFormData } from "../state_templates/templateSlice";
-import Tooltip from "../pages/Tooltip";
+import { resetFormData } from "../../features/templateSlice";
+import Tooltip from "../UI/Tooltip";
 import {
   Button,
   Dialog,

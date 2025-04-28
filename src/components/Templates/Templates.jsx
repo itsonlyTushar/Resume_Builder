@@ -8,21 +8,21 @@ import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import { Box } from "@mui/material";
 import Grid2 from "@mui/material/Grid2";
-import img1 from "../assets/template_imgs/1.jpg";
-import img2 from '../assets/template_imgs/2.jpg';
-import img3 from "../assets/template_imgs/3.jpg";
-import img4 from "../assets/template_imgs/4.jpg";
-import img5 from "../assets/template_imgs/5.jpg";
-import img6 from "../assets/template_imgs/6.jpg";
-import img7 from "../assets/template_imgs/7.jpg";
-import img8 from "../assets/template_imgs/8.jpg";
-import cooming_soon from "../assets/cooming_soon.png"
+import img1 from "../../assets/template_imgs/1.jpg";
+import img2 from '../../assets/template_imgs/2.jpg';
+import img3 from "../../assets/template_imgs/3.jpg";
+import img4 from "../../assets/template_imgs/4.jpg";
+import img5 from "../../assets/template_imgs/5.jpg";
+import img6 from "../../assets/template_imgs/6.jpg";
+import img7 from "../../assets/template_imgs/7.jpg";
+import img8 from "../../assets/template_imgs/8.jpg";
+import cooming_soon from "../../assets/cooming_soon.png"
 import { useDispatch } from "react-redux";
-import { catch_template } from "../state_templates/templateSlice";
-import Loader from '../pages/Loader';
+import { catch_template } from "../../features/templateSlice";
+import Loader from '../UI/Loader';
 import { useNavigate } from "react-router";
-import Navbar from "./Navbar";
-import Footer from '../pages/Footer';
+import Navbar from "../Navbar/Navbar";
+import Footer from '../Footer/Footer';
 
 function Templates() {
   const temp_imgs = [

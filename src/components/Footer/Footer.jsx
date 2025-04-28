@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import Logo from './Logo'
+import Logo from '../../pages/Logo'
 import toast, { Toaster } from "react-hot-toast";
 import { useForm } from "react-hook-form";
-import Contact from "./Contact";
-import { useViewTransition } from "./useViewTranstion";
+import Contact from "../../pages/Contact";
+import { useViewTransition } from "../../utils/useViewTranstion";
 
 function Footer() {
   const [clicked, setClicked] = useState(false);

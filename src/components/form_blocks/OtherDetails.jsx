@@ -5,7 +5,7 @@ import {
   addFields,
   removeFields,
   updateFields,
-} from "../../state_templates/templateSlice";
+} from "../../features/templateSlice";
 
 function OtherDetails() {
   const {

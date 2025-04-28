@@ -3,10 +3,10 @@ import about_us from "../assets/about_us.jpg";
 import { Avatar, Box, Card, CardMedia, Rating } from "@mui/material";
 import myImg from "../assets/team_photos/201.jpg";
 import { Pagination } from "@mui/material";
-import Footer from './Footer'
-import FabScroll from './Fab'
+import Footer from '../components/Footer/Footer'
+import FabScroll from '../components/UI/Fab'
 import AOS from 'aos';
-import Navigation from "./Navigation";
+import Navigation from "../components/Navbar/Navigation";
 
 
 function About() {

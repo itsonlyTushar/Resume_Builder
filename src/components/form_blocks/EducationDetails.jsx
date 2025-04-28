@@ -5,7 +5,7 @@ import {
   addFields,
   removeFields,
   updateFields,
-} from "../../state_templates/templateSlice";
+} from "../../features/templateSlice";
 
 function EducationDetails() {
   const {
@@ -13,9 +13,11 @@ function EducationDetails() {
     setValue,
     formState: { errors },
   } = useFormContext();
+
   const educationDetails = useSelector(
     (state) => state.resumeBuilder.form_data.educationDetails
   );
+  
   const dispatch = useDispatch();
 
   // after several attempts to updating redux state this method of conntecting redux and react-hook-form implemented

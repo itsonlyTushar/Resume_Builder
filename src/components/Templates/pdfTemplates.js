@@ -1,16 +1,16 @@
 import jsPDF from "jspdf";
-import Playflair from "../assets/fonts/PlayfairDisplay-VariableFont_wght.ttf";
-import Inter_reg from "../assets/fonts/inter/InterTight_Regular.ttf";
-import Inter_bol from "../assets/fonts/inter/InterTight_Bold.ttf";
-import merium_bol from "../assets/fonts/merrium/Merriweather_Bold.ttf";
-import merium_reg from "../assets/fonts/merrium/Merriweather_Regular.ttf";
-import roboto_reg from "../assets/fonts/roboto/Roboto_Regular.ttf";
-import roboto_bol from "../assets/fonts/roboto/Roboto_Medium.ttf";
-import oxam from "../assets/fonts/poppins/Oxanium_SemiBold.ttf";
-import Poppins_reg from "../assets/fonts/poppins/Poppins_Regular.ttf";
-import Poppins_bol from "../assets/fonts/poppins/Poppins_SemiBold.ttf";
-import Arvo_reg from "../assets/fonts/arvo/Arvo_Regular.ttf"
-import Arvo_bol from "../assets/fonts/arvo/Arvo_Bold.ttf"
+import Playflair from "../../assets/fonts/PlayfairDisplay-VariableFont_wght.ttf";
+import Inter_reg from "../../assets/fonts/inter/InterTight_Regular.ttf";
+import Inter_bol from "../../assets/fonts/inter/InterTight_Bold.ttf";
+import merium_bol from "../../assets/fonts/merrium/Merriweather_Bold.ttf";
+import merium_reg from "../../assets/fonts/merrium/Merriweather_Regular.ttf";
+import roboto_reg from "../../assets/fonts/roboto/Roboto_Regular.ttf";
+import roboto_bol from "../../assets/fonts/roboto/Roboto_Medium.ttf";
+import oxam from "../../assets/fonts/poppins/Oxanium_SemiBold.ttf";
+import Poppins_reg from "../../assets/fonts/poppins/Poppins_Regular.ttf";
+import Poppins_bol from "../../assets/fonts/poppins/Poppins_SemiBold.ttf";
+import Arvo_reg from "../../assets/fonts/arvo/Arvo_Regular.ttf"
+import Arvo_bol from "../../assets/fonts/arvo/Arvo_Bold.ttf"
 
 
 export const Template101 = ({ formData }) => {
