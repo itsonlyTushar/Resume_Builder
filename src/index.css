@@ -16,7 +16,7 @@
 /* small dots svg image in landing page  */
 .landing_page {
     background-color: #FBFCFD;
-    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="13" height="15"><circle cx="5" cy="5" r="0.3" fill="%23cccccc" /></svg>');    
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="13" height="15"><circle cx="5" cy="5" r="0.7" fill="%23cccccc" /></svg>');    
 }
 
 /* Custom scrollbar  */

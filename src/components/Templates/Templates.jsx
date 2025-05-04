@@ -8,34 +8,15 @@ import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import { Box } from "@mui/material";
 import Grid2 from "@mui/material/Grid2";
-import img1 from "../../assets/template_imgs/1.jpg";
-import img2 from '../../assets/template_imgs/2.jpg';
-import img3 from "../../assets/template_imgs/3.jpg";
-import img4 from "../../assets/template_imgs/4.jpg";
-import img5 from "../../assets/template_imgs/5.jpg";
-import img6 from "../../assets/template_imgs/6.jpg";
-import img7 from "../../assets/template_imgs/7.jpg";
-import img8 from "../../assets/template_imgs/8.jpg";
-import cooming_soon from "../../assets/cooming_soon.png"
 import { useDispatch } from "react-redux";
 import { catch_template } from "../../features/templateSlice";
 import Loader from '../UI/Loader';
 import { useNavigate } from "react-router";
 import Navbar from "../Navbar/Navbar";
 import Footer from '../Footer/Footer';
+import { templateImgs } from "../../constants/constant";
 
 function Templates() {
-  const temp_imgs = [
-    { id: 101, image: img1 },
-    { id: 102, image: img2 },
-    { id: 103, image: img3 },
-    { id: 104, image: img4 },
-    { id: 105, image: img5 },
-    { id: 106, image: img6 },
-    { id: 107, image: img7 },
-    { id: 108, image: img8 },
-    { id: 109, image: cooming_soon },
-  ];
 
   const [loading, setLoading] = useState(true);
   const [selectedTemplate, setSelectedTemplate] = useState(null);
@@ -70,7 +51,7 @@ function Templates() {
       ) : (
         <div className="p-4 mt-5 mb-24">
           <Grid2 container spacing={3} justifyContent="center">
-            {temp_imgs.map((template) => (
+            {templateImgs.map((template) => (
               <Grid2 key={template.id} xs={12} sm={6} md={4}>
                 <Card
                   variant="outlined"

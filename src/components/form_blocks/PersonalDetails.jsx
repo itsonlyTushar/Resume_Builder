@@ -235,7 +235,7 @@ function PersonalDetails() {
                 type="text"
                 placeholder="Something about yourself.."
                 {...register(`personalDetails.${index}.about`, {
-                  required: false,
+                  required: true,
                   validate: (value) => {
                     if (value === "") return true;
                     return value.trim().length > 0 || "Enter a valid input";

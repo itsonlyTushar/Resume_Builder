@@ -109,19 +109,22 @@ function Landing() {
             <p className="text-4xl font-bold">ATS Friendly</p>
           </div>
         </section>
+
         <section className="bg-[#10141F] rounded-t-[4rem] text-white py-10">
           <div className="grid sm:grid-cols-2">
-            <div className="1ST_DIV">
-              <div className="mx-4 mb-11 py-3">
+            {/* Left Side */}
+            <div className="px-4">
+              <div className="mb-11 py-3">
                 <h1 className="mt-28 text-6xl font-bold">Less Stress</h1>
                 <p className="max-w-lg mt-2">
                   No need to worry about layout, formatting, or readability—we
                   handle all of that for you.
                 </p>
               </div>
+
               <div
                 data-aos="fade-up"
-                className="mt-6 border-gray-700 border bg-[#1C2029] mx-3 rounded-3xl p-5 hover:bg-[#2d323c]"
+                className="mt-6 border-gray-700 border bg-[#1C2029] rounded-3xl p-5 hover:bg-[#2d323c]"
               >
                 <i className="ri-seo-fill text-4xl"></i>
                 <h1 className="font-bold mt-2 text-xl">Select a Template</h1>
@@ -133,22 +136,20 @@ function Landing() {
 
               <div
                 data-aos="fade-up"
-                className="mt-6 border-gray-700 border bg-[#1C2029] mx-3 rounded-3xl p-5 hover:bg-[#2d323c] "
+                className="mt-6 border-gray-700 border bg-[#1C2029] rounded-3xl p-5 hover:bg-[#2d323c]"
               >
-                <i class="ri-bard-fill text-4xl"></i>
+                <i className="ri-bard-fill text-4xl"></i>
                 <h1 className="font-bold mt-2 text-xl">
                   Customize Your Content
                 </h1>
-                <p>
-                  Fill in your details, skills, and experiences. Add, remove, or
-                  reorder sections effortlessly.
-                </p>
+                <p>Fill in your details, skills, and experiences.</p>
               </div>
+
               <div
                 data-aos="fade-up"
-                className="mt-6 border-gray-700 border bg-[#1C2029] mx-3 rounded-3xl p-5 hover:bg-[#2d323c] "
+                className="mt-6 border-gray-700 border bg-[#1C2029] rounded-3xl p-5 hover:bg-[#2d323c]"
               >
-                <i class="ri-download-line text-4xl"></i>
+                <i className="ri-download-line text-4xl"></i>
                 <h1 className="font-bold mt-2 text-xl">Download and Share</h1>
                 <p>
                   Save, download, or share your resume directly. Perfectly
@@ -156,21 +157,24 @@ function Landing() {
                 </p>
               </div>
             </div>
-            <div data-aos="fade-up" className="2ND_DIV mt-10">
-              <div className="mt-6 border-gray-700 border bg-[#1C2029] mx-4 rounded-3xl p-8 hover:bg-[#2d323c] ">
+
+            {/* Right Side */}
+            <div data-aos="fade-up" className="mt-10 px-4">
+              <div className="border-gray-700 border bg-[#1C2029] rounded-3xl p-8 hover:bg-[#2d323c]">
                 <i className="ri-color-filter-line text-5xl"></i>
                 <h1 className="font-bold mt-2 text-xl">More Effective</h1>
                 <p>
                   Access industry-approved templates and formats that have been
                   tried and tested.
                 </p>
-                <Link to={"/signup"}>
-                  <button className="py-4 px-8 bg-white mt-5  text-black font-mono rounded-full text-xl shadow-md  shadow-gray-400">
-                    Sign Up<i className="ri-arrow-right-line ml-2"></i>
+                <Link to="/signup">
+                  <button className="py-4 px-8 bg-white mt-5 text-black font-mono rounded-full text-xl shadow-md shadow-gray-400">
+                    Sign Up <i className="ri-arrow-right-line ml-2"></i>
                   </button>
                 </Link>
               </div>
-              <div className="mt-6 border-gray-700 border bg-[#1C2029] mx-4 rounded-3xl p-8 hover:bg-[#2d323c] ">
+
+              <div className="mt-6 border-gray-700 border bg-[#1C2029] rounded-3xl p-8 hover:bg-[#2d323c]">
                 <i className="ri-questionnaire-line text-5xl"></i>
                 <h1 className="font-bold mt-2 text-xl">Have Questions?</h1>
                 <p>
@@ -178,7 +182,7 @@ function Landing() {
                   resume-building experience. Reach out to us anytime.
                 </p>
 
-                <button className="py-4 flex px-8 bg-white mt-5  text-black font-mono rounded-full text-xl shadow-md  shadow-gray-400">
+                <button className="py-4 flex items-center px-8 bg-white mt-5 text-black font-mono rounded-full text-xl shadow-md shadow-gray-400">
                   <Contact />
                   <i className="ri-contacts-line ml-2"></i>
                 </button>

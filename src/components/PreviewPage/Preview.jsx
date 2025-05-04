@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { generatePDF } from "../Templates/pdfTemplates";
 import Footer from "../Footer/Footer";
 import Navbar from "../Navbar/Navbar";
 import { useNavigate } from "react-router-dom";
@@ -12,6 +11,7 @@ import {
 } from "../../utils/resumeOperations";
 import * as pdfjsLib from "pdfjs-dist";
 import Loader from "../UI/Loader";
+import { generatePDF } from "../../utils/helpers";
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
 

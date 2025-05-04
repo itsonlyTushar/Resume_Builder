@@ -17,7 +17,13 @@ const initialState = {
       },
     ],
     educationDetails: [
-      { collegeName: "", course: "", location: "", year: "", id: 1 },
+      {
+        collegeName: "",
+        course: "",
+        location: "",
+        year: "",
+        id: 1,
+      },
     ],
     experienceDetails: [
       {
@@ -30,10 +36,17 @@ const initialState = {
       },
     ],
     projectDetails: [
-      { projectName: "", techStack: "", year: "", projectLink: "", id: 1 },
+      {
+        projectName: "",
+        techStack: "",
+        year: "",
+        projectLink: "",
+        id: 1,
+      },
     ],
     skills: [{ skillName: "", id: 1 }],
-    selected_template: 1,
+    certification: [{ certiName: "", year: "", id: 1 }],
+    selected_template: null,
   },
 };
 

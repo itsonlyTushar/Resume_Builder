@@ -23,6 +23,7 @@ import {
 import { handleSignOut } from "../UserPage/User";
 import { useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
+import { notifications } from "../../constants/constant";
 
 function Navbar() {
   const [accountMenuAnchor, setAccountMenuAnchor] = useState(null);
@@ -36,15 +37,6 @@ function Navbar() {
   const { reset } = useForm();
   const navigate = useNavigate();
 
-  const notifications = [
-    { id: 1, message: "Check new features", isRead: false },
-    {
-      id: 2,
-      message: "Please remember you can download only 2 resumes",
-      isRead: false,
-    },
-    { id: 3, message: "Keep resume short and simple", isRead: false },
-  ];
   const unreadCount = notifications.filter((n) => !n.isRead).length;
 
   // Menu open states
@@ -142,6 +134,10 @@ function Navbar() {
       onClose={handleMenuClose}
       sx={{ marginTop: isMobile ? "-60px" : "-5px" }}
     >
+      <div className="flex justify-between items-center gap-10 mx-2 px-4">
+        <h3 className="font-semibold">Notifications</h3>
+        <span className="text-gray-600 cursor-pointer text-xs ">Mark all as read</span>
+      </div>
       <List sx={{ width: "250px", maxWidth: "100vw" }}>
         {notifications.map((notification) => (
           <ListItem key={notification.id} sx={{ py: 1 }}>

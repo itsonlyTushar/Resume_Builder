@@ -60,6 +60,7 @@ function Builder() {
     "Project Details",
     "Other Details",
   ];
+  
   const theme = useTheme();
   const dispatch = useDispatch();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
@@ -71,7 +72,7 @@ function Builder() {
   const handleBack = () => {
     setActiveStep((prev) => Math.max(prev - 1, 0));
   };
-
+ 
   const handleOpenDialog = () => {
     setOpenDialog(true);
   };
@@ -157,7 +158,7 @@ function Builder() {
       ],
       skills: [{ skillName: "", level: "", id: 1 }]
     });
-
+    handleCloseDialog();
     setActiveStep(0);
   };
 
