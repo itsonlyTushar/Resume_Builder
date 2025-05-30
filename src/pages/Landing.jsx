@@ -26,7 +26,7 @@ function Landing() {
               <li>
                 <button
                   onClick={() => transtionNavigate("/signin")}
-                  className="bg-black border text-lg text-white rounded-xl px-2 py-1 shadow-sm"
+                  className="bg-black border text-lg text-white rounded-lg shadow-sm py-1 pr-1 pl-1"
                 >
                   Sign in
                 </button>
@@ -34,7 +34,7 @@ function Landing() {
               <li>
                 <button
                   onClick={() => transtionNavigate("/signup")}
-                  className="py-1 px-2 border bg-white rounded-xl text-lg shadow-sm"
+                  className="py-1 border bg-white rounded-lg text-lg shadow-sm pr-1 pl-1"
                 >
                   Sign up
                 </button>

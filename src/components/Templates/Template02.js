@@ -115,6 +115,8 @@ export const Template02 = ({ formData }) => {
       });
     }
 
+    // education section 
+
     pdf.setFont("roboto_bol");
     pdf.setFontSize(12);
     pdf.setTextColor(170, 90, 255);
@@ -194,7 +196,7 @@ export const Template02 = ({ formData }) => {
       checkEach(projectDetails, "techStack") ||
       checkEach(projectDetails, "year")
     ) {
-      yPosition += 20;
+      yPosition += 35;
       pdf.setFont("roboto_bol");
       pdf.setFontSize(12);
       pdf.setTextColor(170, 90, 255);

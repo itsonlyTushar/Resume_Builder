@@ -1,6 +1,4 @@
 
-
-
 // Notifications 
 export const notifications = [
   { id: 1, message: "Check new features", isRead: false },
@@ -11,7 +9,6 @@ export const notifications = [
   },
   { id: 3, message: "Keep resume short and simple", isRead: false },
 ];
-
 
 
 // templates are stored in cloudinary 

@@ -3,7 +3,6 @@ import noto_reg from "../../assets/fonts/noto/NotoSans-Regular.ttf";
 import noto_bol from "../../assets/fonts/noto/NotoSans-Bold.ttf";
 import noto_semi from "../../assets/fonts/noto/NotoSans-SemiBold.ttf";
 
-
 import toast from "react-hot-toast";
 import { checkEach, checkStr } from "../../utils/helpers";
 
@@ -62,7 +61,7 @@ export const Template03 = ({ formData }) => {
     pdf.text(description, leftMargin - 24, yPosition + 6, { align: "left" });
 
     // line with icon section and contact details
-    yPosition += 25;
+    yPosition += 30;
     pdf.line(0, yPosition, 210, yPosition);
 
     pdf.setTextColor(46, 49, 53);
@@ -90,7 +89,7 @@ export const Template03 = ({ formData }) => {
       checkEach(experienceDetails, "location") ||
       checkEach(experienceDetails, "description")
     ) {
-      yPosition += 15;
+      yPosition += 9;
       pdf.setFont("noto_bol");
       pdf.setFontSize(16);
       pdf.text("WORK EXPERIENCE", rightMargin, yPosition);
@@ -119,11 +118,11 @@ export const Template03 = ({ formData }) => {
         // jd
         yPosition += 10;
         const JD = pdf.splitTextToSize(exp.description, 80);
-        pdf.text(JD, rightMargin, yPosition, { align: "left" });
-        yPosition += 10;
+        pdf.text(JD, rightMargin, yPosition , { align: "left" });
+   
       });
     }
-
+     yPosition += 10;
     // projects section
     if (
       checkEach(projectDetails, "projectName") ||
@@ -131,6 +130,7 @@ export const Template03 = ({ formData }) => {
       checkEach(projectDetails, "year") ||
       checkEach(projectDetails, "projectLink")
     ) {
+      yPosition += 20;
       pdf.setTextColor(46, 49, 53);
       yPosition += 20;
       pdf.setFont("noto_bol");
@@ -145,8 +145,11 @@ export const Template03 = ({ formData }) => {
         pdf.setFont("noto_bol");
         pdf.text(pro.projectName, rightMargin, yPosition - 5);
         pdf.setFontSize(9);
-        
-        pdf.text(`Techstack - ${pro.techStack}`, rightMargin, yPosition);
+
+        const tech = pdf.splitTextToSize(pro.techStack, 80);
+        pdf.text(tech, rightMargin, yPosition, { align: "left" });
+      
+        yPosition += 5;  
         pdf.setFont("noto_reg");
         pdf.setFontSize(9);
         yPosition += 5;
@@ -158,7 +161,7 @@ export const Template03 = ({ formData }) => {
         pdf.setTextColor(77, 81, 96);
         pdf.setFontSize(7);
         pdf.text(pro.year, rightMargin, yPosition + 5);
-        yPosition += 3
+        yPosition += 3;
         pdf.setTextColor(0, 0, 0);
         pdf.setFontSize(11);
       });
@@ -203,7 +206,7 @@ export const Template03 = ({ formData }) => {
     }
 
     // left side - education section
-    yPosition += 5;   
+    yPosition += 5;
     pdf.setFont("noto_bol");
     pdf.setFontSize(16);
     pdf.setTextColor(46, 49, 53);
