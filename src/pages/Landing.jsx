@@ -5,6 +5,7 @@ import Footer from "../components/Footer/Footer";
 import Contact from "./Contact";
 import { useViewTransition } from "../utils/useViewTranstion.js";
 import AOS from "aos";
+import Navigation from '../components/Navbar/Navigation.jsx'
 
 function Landing() {
   const transtionNavigate = useViewTransition();
@@ -19,30 +20,7 @@ function Landing() {
   return (
     <>
       <div className="landing_page">
-        <nav className="fixed backdrop-blur-md bg-opacinty-30 z-10 bg-white/45 w-full border-white border shadow-sm h-16 py-2 px-3 ">
-          <div className="flex justify-between items-center text-center">
-            <Logo />
-            <ul className="flex space-x-3 text-lg">
-              <li>
-                <button
-                  onClick={() => transtionNavigate("/signin")}
-                  className="bg-black border text-lg text-white rounded-lg shadow-sm py-1 pr-1 pl-1"
-                >
-                  Sign in
-                </button>
-              </li>
-              <li>
-                <button
-                  onClick={() => transtionNavigate("/signup")}
-                  className="py-1 border bg-white rounded-lg text-lg shadow-sm pr-1 pl-1"
-                >
-                  Sign up
-                </button>
-              </li>
-            </ul>
-          </div>
-        </nav>
-
+        <Navigation />
         <div className="pt-32 flex flex-col justify-center items-center">
           <p className="border-none rounded-3xl text-[#717985] px-10 py-2 font-mono text-[1rem] font-bold bg-[#EEEFEF]">
             Make Resume in Minutes
