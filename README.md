@@ -29,7 +29,6 @@ Resumate is a powerful and user-friendly resume builder designed to help users c
 - **Email Service:** EmailJS
 - **PDF Generation:** jsPdf
 - **E2E Testing:** Cypress
-- **AI Help:** Claude sonnet,  GPT 4
 
 
 ## Demo
