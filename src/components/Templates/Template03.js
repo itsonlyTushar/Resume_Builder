@@ -2,7 +2,6 @@ import jsPDF from "jspdf";
 import noto_reg from "../../assets/fonts/noto/NotoSans-Regular.ttf";
 import noto_bol from "../../assets/fonts/noto/NotoSans-Bold.ttf";
 import noto_semi from "../../assets/fonts/noto/NotoSans-SemiBold.ttf";
-
 import toast from "react-hot-toast";
 import { checkEach, checkStr } from "../../utils/helpers";
 
@@ -40,46 +39,55 @@ export const Template03 = ({ formData }) => {
     pdf.addFont(noto_semi, "noto_semi", "normal");
     pdf.setFont("noto_semi");
 
-    // personal information
-    pdf.setFontSize(28);
-    pdf.setTextColor(46, 49, 53);
-    pdf.text(
-      `${personalDetails.firstName} ${personalDetails.lastName}`,
-      leftMargin - 25,
-      yPosition
-    );
+    if (
+      checkStr(personalDetails.firstName) ||
+      checkStr(personalDetails.lastName) ||
+      checkStr(personalDetails.about) ||
+      checkStr(personalDetails.linkedin) ||
+      checkStr(personalDetails.email) ||
+      checkStr(personalDetails.phoneNumber)
+    ) {
+      // personal information
+      pdf.setFontSize(28);
+      pdf.setTextColor(46, 49, 53);
+      pdf.text(
+        `${personalDetails.firstName} ${personalDetails.lastName}`,
+        leftMargin - 25,
+        yPosition
+      );
 
-    // about me
+      // about me
 
-    pdf.setFont("noto_reg");
-    pdf.setFontSize(10);
-    pdf.setTextColor(0, 0, 0);
-    const description = pdf.splitTextToSize(
-      personalDetails.about,
-      pageWidth / 2.2
-    );
-    pdf.text(description, leftMargin - 24, yPosition + 6, { align: "left" });
+      pdf.setFont("noto_reg");
+      pdf.setFontSize(10);
+      pdf.setTextColor(0, 0, 0);
+      const description = pdf.splitTextToSize(
+        personalDetails.about,
+        pageWidth / 2.2
+      );
+      pdf.text(description, leftMargin - 24, yPosition + 6, { align: "left" });
 
-    // line with icon section and contact details
-    yPosition += 30;
-    pdf.line(0, yPosition, 210, yPosition);
+      // line with icon section and contact details
+      yPosition += 30;
+      pdf.line(0, yPosition, 210, yPosition);
 
-    pdf.setTextColor(46, 49, 53);
-    pdf.setFont("noto_bol");
-    pdf.addImage(mailIcon, leftMargin - 20, yPosition + 4, 4, 4);
-    pdf.text(personalDetails.email, leftMargin - 14, yPosition + 7);
+      pdf.setTextColor(46, 49, 53);
+      pdf.setFont("noto_bol");
+      pdf.addImage(mailIcon, leftMargin - 20, yPosition + 4, 4, 4);
+      pdf.text(personalDetails.email, leftMargin - 14, yPosition + 7);
 
-    if (checkStr(personalDetails.linkedin)) {
-      pdf.addImage(linkedinIcon, leftMargin + 65, yPosition + 4, 4, 4);
-      pdf.textWithLink("Linkedin", leftMargin + 72, yPosition + 7, {
-        url: `${personalDetails.linkedin}`,
-      });
+      if (checkStr(personalDetails.linkedin)) {
+        pdf.addImage(linkedinIcon, leftMargin + 65, yPosition + 4, 4, 4);
+        pdf.textWithLink("Linkedin", leftMargin + 72, yPosition + 7, {
+          url: `${personalDetails.linkedin}`,
+        });
+      }
+
+      pdf.addImage(phoneIcon, leftMargin + 120, yPosition + 4, 4, 4);
+      pdf.text(personalDetails.phoneNumber, leftMargin + 125, yPosition + 7);
+      yPosition += 12;
+      pdf.line(0, yPosition, 210, yPosition);
     }
-
-    pdf.addImage(phoneIcon, leftMargin + 120, yPosition + 4, 4, 4);
-    pdf.text(personalDetails.phoneNumber, leftMargin + 125, yPosition + 7);
-    yPosition += 12;
-    pdf.line(0, yPosition, 210, yPosition);
 
     // Work experince section
     if (
@@ -118,11 +126,10 @@ export const Template03 = ({ formData }) => {
         // jd
         yPosition += 10;
         const JD = pdf.splitTextToSize(exp.description, 80);
-        pdf.text(JD, rightMargin, yPosition , { align: "left" });
-   
+        pdf.text(JD, rightMargin, yPosition, { align: "left" });
       });
     }
-     yPosition += 10;
+    yPosition += 10;
     // projects section
     if (
       checkEach(projectDetails, "projectName") ||
@@ -148,8 +155,8 @@ export const Template03 = ({ formData }) => {
 
         const tech = pdf.splitTextToSize(pro.techStack, 80);
         pdf.text(tech, rightMargin, yPosition, { align: "left" });
-      
-        yPosition += 5;  
+
+        yPosition += 5;
         pdf.setFont("noto_reg");
         pdf.setFontSize(9);
         yPosition += 5;
@@ -167,7 +174,8 @@ export const Template03 = ({ formData }) => {
       });
     }
 
-    // left side - skills section
+    // skills section
+    if(checkEach(skills, 'skillName')){
     pdf.setFont("noto_bol");
     pdf.setFontSize(16);
     pdf.setTextColor(46, 49, 53);
@@ -179,8 +187,9 @@ export const Template03 = ({ formData }) => {
     skills.forEach((skill) => {
       pdf.text(skill.skillName, leftMargin + 75, (xPosition += 10));
     });
+    }
 
-    // left side - certification section
+    // certification section
 
     if (
       checkEach(certification, "certiName") ||
@@ -205,6 +214,7 @@ export const Template03 = ({ formData }) => {
       });
     }
 
+    if(checkEach(educationDetails, 'course') || checkEach(educationDetails, 'collegeName') || checkEach(educationDetails, 'location')  ) {
     // left side - education section
     yPosition += 5;
     pdf.setFont("noto_bol");
@@ -227,6 +237,7 @@ export const Template03 = ({ formData }) => {
       pdf.setFontSize(10);
       pdf.setTextColor(46, 49, 53);
     });
+    }
 
     return pdf;
   } catch (error) {

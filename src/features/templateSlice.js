@@ -2,72 +2,48 @@ import { createSlice } from "@reduxjs/toolkit";
 import { nanoid } from "@reduxjs/toolkit";
 
 // setting the initial state
-
 const initialState = {
   form_data: {
     personalDetails: [
       {
-        firstName: "Tushar",
-        lastName: "Soni",
-        email: "tushargsoni17@gmail.com",
-        phoneNumber: "9327584894",
-        linkedin: "https://www.linkedin.com/in/tushar-soni-b0426022b",
-        about: `I’m a Front-End Developer who loves building smooth, high-performance web experiences. I work mainly with React, JavaScript, and modern UI tools like MUI. I’m especially excited about real-time features and creating interfaces that feel intuitive, fast, and just work beautifully. Always learning, always refining. I aim to build user experiences that truly stand out.`,
+        firstName: "",
+        lastName: "",
+        email: "",
+        phoneNumber: "",
+        linkedin: "",
+        about: ``,
         id: 1,
       },
     ],
     educationDetails: [
       {
-        collegeName: "Sacsma College of Commerce",
-        course: "Bachelor of Commerce - Bcom",
-        location: "Surat",
-        year: "2020-2024",
+        collegeName: "",
+        course: "",
+        location: "",
+        year: "",
         id: 1,
-      },
-      {
-        collegeName: "Woolf",
-        course: "Masters in Computer Science - Software Engineering",
-        location: "USA",
-        year: "2024 - 2026",
-        id: 2,
       },
     ],
     experienceDetails: [
       {
-        companyName: "Jay Air Systems Private Limited",
-        role: "Data Entry Operator",
-        location: "Surat",
-        year: "May-2023 - Apr-2025",
-        description: `Generating daily sales and service reports to
-provide realtime insights to respective
-departments.Developed a VBA module with
-ChatGPT that automates reporting tasks, saving
-approximately 1 hour of daily manual work.Creating monthly dashboard reports segmented by salesperson to track performance metrics and identify growth opportunities.`,
-        id: 1,
-      },
-            {
-        companyName: "Jay Air Systems Private Limited",
-        role: "Data Entry Operator",
-        location: "Surat",
-        year: "May-2023 - Apr-2025",
-        description: `Generating daily sales and service reports to
-provide realtime insights to respective
-departments.Developed a VBA module with
-ChatGPT that automates reporting tasks, saving
-approximately 1 hour of daily manual work.Creating monthly dashboard reports segmented by salesperson to track performance metrics and identify growth opportunities.`,
+        companyName: "",
+        role: "",
+        location: "",
+        year: "",
+        description: ``,
         id: 1,
       },
     ],
     projectDetails: [
       {
-        projectName: "Order Ease - QR Food Ordering System",
-        techStack: "React, Redux, Tailwind, Radix UI, Material UI, Firebase Firestore",
-        year: "May-2025",
-        projectLink: "https://order-ease-xi.vercel.app",
+        projectName: "",
+        techStack: "",
+        year: "",
+        projectLink: "",
         id: 1,
       },
     ],
-    skills: [{ skillName: "HTML", id: 1 }, { skillName: "Javascript", id: 1 }, { skillName: "CSS", id: 1 }, { skillName: "React", id: 1 }, { skillName: "Redux", id: 1 }, { skillName: "Tailwind", id: 1 }, { skillName: "Material UI", id: 1 },],
+    skills: [{ skillName: "", id: 1 }],
     certification: [{ certiName: "", year: "", id: 1 }],
     selected_template: null,
   },

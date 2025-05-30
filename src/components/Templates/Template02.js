@@ -44,28 +44,35 @@ export const Template02 = ({ formData }) => {
     pdf.setFont("roboto_bol");
     pdf.setFontSize(12);
     pdf.setTextColor(170, 90, 255);
-    pdf.text("Personal Information", leftMargin - 24, yPosition + 2);
+    if (
+      checkStr(personalDetails.linkedin) ||
+      checkStr(personalDetails.email) ||
+      checkStr(personalDetails.phoneNumber)
+    ) {
+      pdf.text("Personal Information", leftMargin - 24, yPosition + 2);
 
-    pdf.setTextColor(0, 0, 0);
-    pdf.setFontSize(9);
-    pdf.setFont("roboto_reg");
-    if (checkStr(personalDetails.linkedin)) {
-      yPosition += 4;
-      pdf.addImage(linkIcon, leftMargin - 11, yPosition + 1, 4, 4);
-      pdf.textWithLink("Linkedin", leftMargin - 24, yPosition + 4, {
-        url: `${personalDetails.linkedin}`,
+      pdf.setTextColor(0, 0, 0);
+      pdf.setFontSize(9);
+      pdf.setFont("roboto_reg");
+      if (checkStr(personalDetails.linkedin)) {
+        yPosition += 4;
+        pdf.addImage(linkIcon, leftMargin - 11, yPosition + 1, 4, 4);
+        pdf.textWithLink("Linkedin", leftMargin - 24, yPosition + 4, {
+          url: `${personalDetails.linkedin}`,
+        });
+      }
+      pdf.text(personalDetails.email, leftMargin - 24, yPosition + 9, {
+        align: "left",
       });
+      pdf.text(
+        `Tel : ${personalDetails.phoneNumber}`,
+        leftMargin - 24,
+        yPosition + 14,
+        { align: "left" }
+      );
     }
-    pdf.text(personalDetails.email, leftMargin - 24, yPosition + 9, {
-      align: "left",
-    });
-    pdf.text(
-      `Tel : ${personalDetails.phoneNumber}`,
-      leftMargin - 24,
-      yPosition + 14,
-      { align: "left" }
-    );
 
+    if(checkStr(personalDetails.about)) {
     // about me section
     pdf.setFont("roboto_bol");
     pdf.setFontSize(12);
@@ -76,21 +83,24 @@ export const Template02 = ({ formData }) => {
     const description = pdf.splitTextToSize(personalDetails.about, 180);
     pdf.setFontSize(9);
     pdf.text(description, leftMargin + 34, yPosition + 3);
+    }
 
-    // skills section
-    yPosition += 25;
-    pdf.setFont("roboto_bol");
-    pdf.setFontSize(12);
-    pdf.setTextColor(170, 90, 255);
-    pdf.text("Technical Skills", leftMargin - 24, yPosition + 2);
-    pdf.setTextColor(0, 0, 0);
-    pdf.setFontSize(9);
-    pdf.setFont("roboto_bol");
+    if (checkEach(skills, "skillName")) {
+      // skills section
+      yPosition += 25;
+      pdf.setFont("roboto_bol");
+      pdf.setFontSize(12);
+      pdf.setTextColor(170, 90, 255);
+      pdf.text("Technical Skills", leftMargin - 24, yPosition + 2);
+      pdf.setTextColor(0, 0, 0);
+      pdf.setFontSize(9);
+      pdf.setFont("roboto_bol");
 
-    skills.forEach((skill) => {
-      yPosition += 5;
-      pdf.text(`• ${skill.skillName}`, leftMargin - 24, yPosition + 4);
-    });
+      skills.forEach((skill) => {
+        yPosition += 5;
+        pdf.text(`• ${skill.skillName}`, leftMargin - 24, yPosition + 4);
+      });
+    }
 
     // Certification section
 
@@ -115,8 +125,9 @@ export const Template02 = ({ formData }) => {
       });
     }
 
-    // education section 
+    // education section
 
+    if(checkEach(educationDetails, "collegeName") || checkEach(educationDetails, "location") || checkEach(educationDetails, "year") || checkEach(educationDetails, "course") ){
     pdf.setFont("roboto_bol");
     pdf.setFontSize(12);
     pdf.setTextColor(170, 90, 255);
@@ -139,6 +150,7 @@ export const Template02 = ({ formData }) => {
       pdf.text(edu.year, leftMargin + 34, yPosition - 4);
       yPosition += 4;
     });
+    }
 
     // Experince section
 
