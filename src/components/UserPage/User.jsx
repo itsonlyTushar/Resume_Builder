@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import place_holder from "../../assets/placeholder-male.jpg";
 import { auth } from "../../auth/firebase";
 import { deleteUser, signOut } from "firebase/auth";

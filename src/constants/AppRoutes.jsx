@@ -1,4 +1,3 @@
-import React from "react";
 import SignIn from "../auth/SignIn.jsx";
 import SignUp from "../auth/SignUp.jsx";
 import Landing from "../pages/Landing.jsx";

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import about_us from "../assets/about_us.jpg";
 import { Avatar, Box, Card, CardMedia, Rating } from "@mui/material";
 import myImg from "../assets/team_photos/201.jpg";

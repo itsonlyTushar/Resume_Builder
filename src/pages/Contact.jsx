@@ -1,10 +1,9 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
-import emailjs from "emailjs-com";
+import emailjs from '@emailjs/browser';
 import toast, { Toaster } from "react-hot-toast";
 import { Box, Button, Modal } from "@mui/material";
 import Logo from "./Logo";
-import { auth } from "../auth/firebase";
 
 const Contact = () => {
   const [open, setopen] = useState(false);
@@ -37,7 +36,7 @@ const Contact = () => {
         import.meta.env.VITE_EMAILJS_SERVICE_ID,
         import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
         template_params,
-        import.meta.evn.VITE_EMAILJS_PUBLIC_KEYS
+        import.meta.env.VITE_EMAILJS_PUBLIC_KEYS
       )
       .then((response) => {
         setLoading(false);
@@ -121,7 +120,7 @@ const Contact = () => {
             <input
               className="outline-none w-full border rounded-xl p-3"
               placeholder="Enter email..."
-              type="text"
+              type="email"
               {...register("email", {
                 required: true,
                 onChange: (e) => setEmail(e.target.value),

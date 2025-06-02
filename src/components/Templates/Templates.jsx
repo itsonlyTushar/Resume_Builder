@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Outlet } from "react-router";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";

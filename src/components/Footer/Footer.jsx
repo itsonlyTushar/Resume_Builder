@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Logo from '../../pages/Logo'
 import toast, { Toaster } from "react-hot-toast";
 import { useForm } from "react-hook-form";

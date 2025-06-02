@@ -1,4 +1,3 @@
-import React from "react";
 import { deleteResume } from "../../utils/resumeOperations";
 import toast from "react-hot-toast";
 import {

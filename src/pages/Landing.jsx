@@ -1,6 +1,5 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
-import Logo from "./Logo";
 import Footer from "../components/Footer/Footer";
 import Contact from "./Contact";
 import { useViewTransition } from "../utils/useViewTranstion.js";
@@ -102,7 +101,7 @@ function Landing() {
 
               <div
                 data-aos="fade-up"
-                className="mt-6 border-gray-700 border bg-[#1C2029] rounded-3xl p-5 hover:bg-[#2d323c]"
+                className="shadow-lg shadow-white/5 mt-6 border-gray-700 border bg-[#1C2029] rounded-3xl p-5 hover:bg-[#2d323c]"
               >
                 <i className="ri-seo-fill text-4xl"></i>
                 <h1 className="font-bold mt-2 text-xl">Select a Template</h1>
@@ -114,7 +113,7 @@ function Landing() {
 
               <div
                 data-aos="fade-up"
-                className="mt-6 border-gray-700 border bg-[#1C2029] rounded-3xl p-5 hover:bg-[#2d323c]"
+                className="shadow-lg shadow-white/5 mt-6 border-gray-700 border bg-[#1C2029] rounded-3xl p-5 hover:bg-[#2d323c]"
               >
                 <i className="ri-bard-fill text-4xl"></i>
                 <h1 className="font-bold mt-2 text-xl">
@@ -125,7 +124,7 @@ function Landing() {
 
               <div
                 data-aos="fade-up"
-                className="mt-6 border-gray-700 border bg-[#1C2029] rounded-3xl p-5 hover:bg-[#2d323c]"
+                className="shadow-lg shadow-white/5 mt-6 border-gray-700 border bg-[#1C2029] rounded-3xl p-5 hover:bg-[#2d323c]"
               >
                 <i className="ri-download-line text-4xl"></i>
                 <h1 className="font-bold mt-2 text-xl">Download and Share</h1>
