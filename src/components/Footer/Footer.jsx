@@ -71,7 +71,7 @@ function Footer() {
             <li className="font-bold text-lg">Company</li>
             <div className="text-[#858B96] cursor-pointer hover:text-[#c7cdd9] transition-all ease-in-out hover:transition-all">
               <li className="my-3 hover:text-[#858B96]">
-                <a href="mailto=tushargsoni17@gmail.com">Email</a>
+                <a href="mailto:tushargsoni17@gmail.com" target="_blank" rel="noopener noreferrer">Email</a>
               </li>
               <li className="my-3 hover:text-[#858B96]">
                 <Contact />

@@ -7,8 +7,14 @@ import { useNavigate } from "react-router";
 import * as Popover from "@radix-ui/react-popover";
 import Navbar from "../Navbar/Navbar";
 import Footer from "../Footer/Footer.jsx";
-import { COLLECTION_ID, DATABASE_ID, databases, storage, STORAGE_BUCKET } from "../../backend/appwrite";
-import { ID, Query } from "appwrite";
+import {
+  COLLECTION_ID,
+  DATABASE_ID,
+  databases,
+  storage,
+  STORAGE_BUCKET,
+} from "../../backend/appwrite";
+import { ID, Query, Role, Permission } from "appwrite";
 import ResumeList from "./ResumeList";
 import { fetchUserResumes } from "../../utils/resumeOperations.js";
 import { useDispatch } from "react-redux";
@@ -23,11 +29,11 @@ import {
 import { useForm } from "react-hook-form";
 import Loader from "../UI/Loader.jsx";
 
-export const handleSignOut = async (dispatch, navigate,resetForm) => {
+export const handleSignOut = async (dispatch, navigate, resetForm) => {
   const loading = toast.loading("Signing you out...");
 
   try {
-    // Deley for smooth transition
+    // Delay for smooth transition
     await new Promise((resolve) => setTimeout(resolve, 1500));
 
     await signOut(auth);
@@ -42,40 +48,36 @@ export const handleSignOut = async (dispatch, navigate,resetForm) => {
 
     // navigate to home page after log out.
     setTimeout(() => {
-      navigate("/"); 
-    }, 2000); 
+      navigate("/");
+    }, 2000);
   } catch (error) {
     console.error("Sign out error:", error);
     toast.error("Sign out failed!", { id: loading });
   }
 };
 
-
-
 function User() {
-
   const navigate = useNavigate();
   const user = auth.currentUser;
   const userId = user.uid;
   const displayName = user.displayName;
   const [documentId, setDocumentId] = useState(null);
   const [isLoadingResumes, setIsLoadingResumes] = useState(true);
-  const [uploading,setUploading] = useState(false);
-  const [image, setImage] = useState(null);
+  const [uploading, setUploading] = useState(false);
+  const [image, setImage] = useState(place_holder);
   const [fileId, setFileId] = useState(null);
   const [resumes, setResumes] = useState([]);
+  const [imageLoading, setImageLoading] = useState(false);
   const dispatch = useDispatch();
   const [openDialog, setOpenDialog] = useState(false);
   const { reset } = useForm();
 
   // Appwrite Config
-  const storage_bucket = STORAGE_BUCKET
-  const database_id = DATABASE_ID
-  const collection_id = COLLECTION_ID
+  const storage_bucket = STORAGE_BUCKET;
+  const database_id = DATABASE_ID;
+  const collection_id = COLLECTION_ID;
   const MAX_FILE_SIZE = 5 * 1024 * 1024;
   const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/jpg"];
-
-
 
   const handleOpenDialog = () => {
     setOpenDialog(true);
@@ -85,10 +87,51 @@ function User() {
     setOpenDialog(false);
   };
 
+  const getImageUrl = (fileId) => {
+    try {
+      const viewUrl = storage.getFileView(storage_bucket, fileId);
+      return viewUrl.href || viewUrl.toString() || viewUrl;
+    } catch (error) {
+      console.error("Error generating view URL:", error);
+      try {
+        const previewUrl = storage.getFilePreview(
+          storage_bucket,
+          fileId,
+          400,
+          400,
+          "center",
+          100
+        );
+        return previewUrl.href || previewUrl.toString() || previewUrl;
+      } catch (previewError) {
+        console.error("Error generating preview URL:", previewError);
+        return null;
+      }
+    }
+  };
+
+  const testImageUrl = (url) => {
+    return new Promise((resolve) => {
+      if (!url) {
+        resolve(false);
+        return;
+      }
+
+      const img = new Image();
+      img.onload = () => resolve(true);
+      img.onerror = () => resolve(false);
+
+      setTimeout(() => resolve(false), 5000);
+
+      img.src = url;
+    });
+  };
+
   // handling the profile image upload to appwrite
   const imageUpload = async (e) => {
     const file = e.target.files[0];
 
+    if (!file) return;
 
     if (file.size > MAX_FILE_SIZE) {
       toast.error("File size must be less than 5MB");
@@ -115,19 +158,18 @@ function User() {
       const response = await storage.createFile(
         storage_bucket,
         ID.unique(),
-        file
+        file,
+        [Permission.read(Role.any())]
       );
 
       const newFileId = response.$id;
 
-      // Prepare document data with timestamp
       const documentData = {
         uid: userId,
         fileId: newFileId,
         lastUpdated: new Date().toISOString(),
       };
 
-      // Update or create document based on whether we have an existing one
       if (documentId) {
         await databases.updateDocument(
           database_id,
@@ -145,17 +187,22 @@ function User() {
         setDocumentId(dbResponse.$id);
       }
 
-      // Update the UI with the new image
-      const previewUrl = storage.getFilePreview(storage_bucket, newFileId);
-      setFileId(newFileId);
-      setImage(previewUrl);
+      const imageUrl = getImageUrl(newFileId);
+      const isUrlAccessible = await testImageUrl(imageUrl);
 
-      toast.success("Image uploaded successfully", { id: uploadToast });
+      if (isUrlAccessible) {
+        setFileId(newFileId);
+        setImage(imageUrl);
+        toast.success("Image uploaded successfully", { id: uploadToast });
+      } else {
+        throw new Error("Uploaded image is not accessible");
+      }
     } catch (error) {
       console.error("Upload error:", error);
       toast.error(`Failed to upload image: ${error.message}`, {
         id: uploadToast,
       });
+      setImage(place_holder);
     } finally {
       setUploading(false);
     }
@@ -163,8 +210,9 @@ function User() {
 
   useEffect(() => {
     const fetchUserImage = async () => {
+      setImageLoading(true);
+
       try {
-        // Fetch the most recent image document for this user
         const response = await databases.listDocuments(
           database_id,
           collection_id,
@@ -173,29 +221,46 @@ function User() {
 
         if (response.documents.length > 0) {
           const userDoc = response.documents[0];
+
           setDocumentId(userDoc.$id);
           setFileId(userDoc.fileId);
 
           try {
+            // Check if file exists in storage
             await storage.getFile(storage_bucket, userDoc.fileId);
-            const previewUrl = storage.getFilePreview(
-              storage_bucket,
-              userDoc.fileId
-            );
-            setImage(previewUrl);
+
+            // Get image URL
+            const imageUrl = getImageUrl(userDoc.fileId);
+
+            if (imageUrl) {
+              // Test if the image URL is accessible
+              const isAccessible = await testImageUrl(imageUrl);
+
+              if (isAccessible) {
+                setImage(imageUrl);
+              } else {
+                setImage(place_holder);
+              }
+            } else {
+              setImage(place_holder);
+            }
           } catch (fileError) {
-            console.error("File not found:", fileError);
             setImage(place_holder);
           }
+        } else {
+          setImage(place_holder);
         }
       } catch (error) {
-        console.error("Error fetching user image:", error);
         toast.error("Failed to load profile image");
         setImage(place_holder);
+      } finally {
+        setImageLoading(false);
       }
     };
+
     fetchUserImage();
 
+    // Load resumes logic
     const loadResumes = async () => {
       if (!userId) return;
 
@@ -224,8 +289,7 @@ function User() {
     }
   };
 
-
-  // delete account permenantly
+  // delete account permanently
   const handleDelete = async () => {
     try {
       const user = auth.currentUser;
@@ -240,8 +304,6 @@ function User() {
       toast.error("Failed to delete account");
     }
   };
-
-
 
   const handleResumeDelete = () => {
     const loadResumes = async () => {
@@ -267,12 +329,28 @@ function User() {
                 <div className="z-10">
                   <Popover.Root>
                     <Popover.Trigger asChild>
-                      <button className="px-4 py-2 rounded-3xl text-white">
-                        <img
-                          className="rounded-3xl h-[14rem]"
-                          src={image || place_holder}
-                          alt="place-holder"
-                        />
+                      <button className="px-4 py-2 rounded-3xl text-white relative">
+                        {imageLoading ? (
+                          <div className="rounded-3xl h-[14rem] w-[14rem] bg-gray-200 flex items-center justify-center">
+                            <Loader />
+                          </div>
+                        ) : (
+                          <img
+                            className="rounded-3xl h-[14rem] w-[14rem] object-cover"
+                            src={image}
+                            alt="profile"
+                            onError={(e) => {
+                              console.error(
+                                "Image failed to render, switching to placeholder"
+                              );
+                              e.target.src = place_holder;
+                              setImage(place_holder);
+                            }}
+                            onLoad={() =>
+                              console.log("Image rendered successfully")
+                            }
+                          />
+                        )}
                       </button>
                     </Popover.Trigger>
 
@@ -288,14 +366,17 @@ function User() {
                           style={{ display: "none" }}
                           id="file-upload"
                           onChange={imageUpload}
+                          accept="image/jpeg,image/png,image/jpg"
                         />
                         <button
-                          onClick={() => document.getElementById('file-upload').click()}
+                          onClick={() =>
+                            document.getElementById("file-upload").click()
+                          }
                           disabled={uploading}
-                          htmlFor="file-upload"
-                          className="z-10 cursor-pointer"
+                          className="z-10 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                         >
-                          <i className="ri-upload-2-line"></i> Upload
+                          <i className="ri-upload-2-line"></i>{" "}
+                          {uploading ? "Uploading..." : "Upload"}
                         </button>
                         <Popover.Arrow
                           className="fill-white h-3 w-2"
@@ -310,7 +391,7 @@ function User() {
                 </div>
                 <div className="flex sm:flex-col justify-center items-center mx-auto text-center gap-2 z-10 mb-6 mt-6">
                   <button
-                    onClick={() => handleSignOut(dispatch,navigate,reset)}
+                    onClick={() => handleSignOut(dispatch, navigate, reset)}
                     className="border transition-all hover:shadow-lg shadow-sm ease-in-out delay-100 hover:-translate-y-0 hover:scale-110 font-semibold rounded-2xl cursor-pointer text-lg text-white bg-black py-2 px-2"
                   >
                     Sign out
