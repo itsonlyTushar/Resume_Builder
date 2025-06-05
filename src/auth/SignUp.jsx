@@ -30,6 +30,11 @@ function SignUp() {
     }
   };
 
+  const hidePassword = (e) => {
+    e.preventDefault();
+    setIsHidden(!isHidden)
+  }
+
   return (
     <section>
       <Navigation />
@@ -74,7 +79,7 @@ function SignUp() {
               })}
               placeholder="Confirm Password"
             />
-            <button onClick={() => setIsHidden(!isHidden)} className="absolute right-3 top-1/2 transform -translate-y-1/2">{isHidden ? <i className="ri-eye-off-line"></i> : <i class="ri-eye-line"></i>}</button>
+            <button onClick={hidePassword} className="absolute right-3 top-1/2 transform -translate-y-1/2">{isHidden ? <i className="ri-eye-off-line"></i> : <i class="ri-eye-line"></i>}</button>
             </div>
 
             {errors.confirmPassword && (

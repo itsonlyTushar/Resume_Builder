@@ -9,7 +9,6 @@ const RESUMES_COLLECTION = '679b1dfe003d6270e5df'
 const MAX_RESUMES = 2;
 
 // Get user counts from appwrite collection
-
 const getUserResumeCount = async (userId) => {
   try {
     const shortUserId = userId.slice(0,4);
@@ -30,7 +29,7 @@ const getUserResumeCount = async (userId) => {
 export const uploadResume = async (pdfDoc, userId) => {
   const loadingToast = toast.loading('Saving Resume...');
   try {
-    // Check resume count first
+
     const resumeCount = await getUserResumeCount(userId);
     if (resumeCount >= MAX_RESUMES) {
       toast.error(`You can only create up to ${MAX_RESUMES} resumes. Please delete an existing resume first.`, { id: loadingToast });
@@ -77,7 +76,6 @@ export const uploadResume = async (pdfDoc, userId) => {
 };
 
 // Fetching the resumes to show in user page
-
 export const fetchUserResumes = async (userId) => {
   try {
     const shortUserId = userId.slice(0, 4);
@@ -120,8 +118,7 @@ export const getResumeFileUrl = async (fileId) => {
     }
 };
 
-// deletes resume from appwrite
-
+// deletes resume from appwrite and a user page also
 export const deleteResume = async (documentId, fileId) => {
   const loadingToast = toast.loading('Deleting resume...');
   try {
@@ -148,7 +145,6 @@ export const deleteResume = async (documentId, fileId) => {
 };
 
 // download function to download resumes
-
 export const downloadResume = async (documentId, fileId) => {
   try {
     const doc = await databases.getDocument(

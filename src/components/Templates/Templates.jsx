@@ -50,6 +50,7 @@ function Templates() {
         <Loader />
       ) : (
         <div className="p-4 mt-5 mb-24">
+          <h1 className="text-center text-5xl py-6 font-semibold">Select a Template</h1>
           <Grid2 container spacing={3} justifyContent="center">
             {templateImgs.map((template) => (
               <Grid2 key={template.id} xs={12} sm={6} md={4}>

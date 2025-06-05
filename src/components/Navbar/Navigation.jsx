@@ -19,7 +19,7 @@ function Navigation() {
           <Logo />
         </div>
         <div
-          className={`sm:block hidden fixed backdrop-blur-md bg-opacity-30 bg-white/45 w-full border-white border shadow-sm h-16 py-2 px-3 mb-5 z-20`}
+          className={`sm:block hidden fixed backdrop-blur-md bg-opacity-30 bg-white/70 w-full border-white border shadow-sm h-16 py-2 px-3 mb-5 z-20`}
         >
           <div className="flex justify-between">
             <Logo />

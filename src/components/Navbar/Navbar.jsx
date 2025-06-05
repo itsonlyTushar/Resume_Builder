@@ -39,12 +39,11 @@ function Navbar() {
 
   const unreadCount = notifications.filter((n) => !n.isRead).length;
 
-  // Menu open states
   const isAccountMenuOpen = Boolean(accountMenuAnchor);
   const isMobileMenuOpen = Boolean(mobileMenuAnchor);
   const isNotificationMenuOpen = Boolean(notificationMenuAnchor);
 
-  // Handle menu openings
+
   const handleNotificationsOpen = (event) => {
     setNotificationMenuAnchor(event.currentTarget);
     if (isMobile) {
@@ -63,14 +62,12 @@ function Navbar() {
     setMobileMenuAnchor(event.currentTarget);
   };
 
-  // Handle menu closings
   const handleMenuClose = () => {
     setAccountMenuAnchor(null);
     setNotificationMenuAnchor(null);
     setMobileMenuAnchor(null);
   };
 
-  // Account menu component
   const accountMenu = (
     <Menu
       anchorEl={accountMenuAnchor}

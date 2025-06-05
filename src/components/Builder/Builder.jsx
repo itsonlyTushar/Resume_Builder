@@ -84,7 +84,7 @@ function Builder() {
   const onSubmit = async () => {
     const loadingToast = toast.loading('Generating resume...');
     try {
-      toast.success('Resume generated and you can download', { id: loadingToast });
+      toast.success('Resume generated', { id: loadingToast });
       navigate('/preview');
     } catch (err) {
       console.error('Submit error:', err);
@@ -92,6 +92,7 @@ function Builder() {
     }
   };
 
+  // made a custom loader timer
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
@@ -165,7 +166,8 @@ function Builder() {
   return (
     <>
       <Navbar />
-      <div className="flex flex-col md:flex sm:flex-row justify-center items-center px-0 z-10 mb-32 mt-6">
+      <h1 className="text-center text-5xl pt-10 font-semibold">Builder Form</h1>
+      <div className="flex flex-col md:flex sm:flex-row justify-center items-center px-0 z-10 mb-32 mt-6">     
         <div className="p-5">
           <div className="border-none rounded-3xl flex-wrap overflow-hidden bg-gray-100 py-6 sm:px-10  sm:py-28 shadow-sm">
             <Stepper
