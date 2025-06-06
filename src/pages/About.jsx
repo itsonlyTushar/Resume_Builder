@@ -73,8 +73,6 @@ function About() {
     page * reviewsPerPage
   );
 
-
-
   const team_imgs = [
     {
       name: "Regie Donald",
@@ -106,6 +104,7 @@ function About() {
       img: "https://images.unsplash.com/photo-1617859524891-1de8cee43c39?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NzJ8fGJsYWNrJTIwYW5kJTIwd2hpdGUlMjBwb3J0cmFpdHxlbnwwfHwwfHx8MA%3D%3D",
       position: "Project Manager",
     },
+    
   ];
 
   return (
@@ -140,7 +139,6 @@ function About() {
             </p>
 
             {/* Team Photos  */}
-
             <div
               data-aos="fade-up"
               className="grid sm:grid-cols-3 grid-cols-1 text-center mt-10"
@@ -157,7 +155,9 @@ function About() {
                 >
                   <CardMedia
                     component="img"
-                    sx={{ objectFit: "cover" }}
+                    sx={{ height: {xs:300, sm:600, md:600, lg:600}, 
+                      objectFit: "cover",
+                    }}
                     image={img}
                     alt="image"
                   />
