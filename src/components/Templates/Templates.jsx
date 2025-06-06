@@ -99,7 +99,6 @@ function Templates() {
         </div>
       )}
 
-      {/* Modal for Template Preview */}
       <Dialog open={!!selectedTemplate} onClose={handleCloseModal} maxWidth="md" fullWidth>
         <DialogContent sx={{ textAlign: "center", padding: "20px" }}>
           {selectedTemplate && (

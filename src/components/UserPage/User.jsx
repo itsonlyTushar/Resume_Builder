@@ -66,7 +66,6 @@ function User() {
   };
 
   useEffect(() => {
-    // Load resumes logic
     const loadResumes = async () => {
       if (!userId) return;
 
@@ -85,7 +84,7 @@ function User() {
     loadResumes();
   }, [userId]);
 
-  // function to open resume on click
+  
   const handleResumeClick = async (resume) => {
     try {
       window.open(resume.downloadUrl, "_blank");

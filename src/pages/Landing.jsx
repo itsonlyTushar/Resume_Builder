@@ -5,6 +5,8 @@ import Contact from "./Contact";
 import { useViewTransition } from "../utils/useViewTranstion.js";
 import AOS from "aos";
 import Navigation from "../components/Navbar/Navigation.jsx";
+import laptop from "../assets/laptop.png";
+import Faq from "../components/UI/Faq.jsx";
 
 function Landing() {
   const transtionNavigate = useViewTransition();
@@ -91,7 +93,6 @@ function Landing() {
 
         <section className="bg-[#10141F] rounded-t-3xl text-white py-10 px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-10">
-            {/* Left Side */}
             <div>
               <div className="mb-11 py-3">
                 <h1 className="mt-10 sm:mt-28 text-4xl sm:text-6xl font-bold">
@@ -145,7 +146,6 @@ function Landing() {
               </div>
             </div>
 
-            {/* Right Side */}
             <div data-aos="fade-up">
               <div className="border-gray-700 border bg-[#1C2029] rounded-3xl p-6 sm:p-8 hover:bg-[#2d323c]">
                 <i className="ri-color-filter-line text-3xl sm:text-5xl"></i>
@@ -179,6 +179,32 @@ function Landing() {
                 </button>
               </div>
             </div>
+          </div>
+        </section>
+
+        <section className="bg-gray-100 grid grid-cols-1 sm:grid-cols-2 place-items-center py-36">
+          <div data-aos="fade-up" className="p-10 max-w-2xl">
+            <h1 className="text-5xl font-semibold py-2">
+              Customize any template to suit your needs
+            </h1>
+            <p className="text-gray-600 text-sm">
+              ResuMate offers a range of professionally designed templates so
+              you can make the right first impression—no matter your industry or
+              experience level.
+            </p>
+          </div>
+
+          <div data-aos="fade-left">
+            <img src={laptop} alt="laptop" />
+          </div>
+        </section>
+
+        <section className="py-6 ">
+          <h1 className="text-4xl text-center font-semibold">
+            Frequently Asked Questions
+          </h1>
+          <div className="max-w-3xl mx-auto flex justify-center items-center px-4 py-16">
+            <Faq />
           </div>
         </section>
 
