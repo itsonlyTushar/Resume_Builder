@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
-import about_us from "../assets/about_us.jpg";
 import { Avatar, Box, Card, CardMedia, Rating } from "@mui/material";
-import myImg from "../assets/team_photos/201.jpg";
+import myImg from "../assets/team_photos/201.png";
 import { Pagination } from "@mui/material";
 import Footer from "../components/Footer/Footer";
 import FabScroll from "../components/UI/Fab";
@@ -74,6 +73,8 @@ function About() {
     page * reviewsPerPage
   );
 
+
+
   const team_imgs = [
     {
       name: "Regie Donald",
@@ -113,9 +114,9 @@ function About() {
       <div className="pt-20">
         <h1 className="text-5xl text-center mb-10 font-bold py-4">About Us</h1>
         {/* About section  */}
-        <section className="grid sm:grid-cols-2 grid-cols-1 place-items-center text-center px-16 mx-4 bg-gray-100 py-16 rounded-3xl">
+        <section data-aos="fade-up" className="flex text-center justify-center items-center text-center px-16 mx-4 bg-gray-100 py-16 rounded-3xl">
           <div className="max-w-3xl px-4 rounded-2xl">
-            <h1 className="text-5xl font-semibold">
+            <h1 className="sm:text-5xl text-3xl font-semibold">
               How Resume Builder Created and Why?
             </h1>
             <p className="mb-5 pt-10">
@@ -127,13 +128,6 @@ function About() {
               and adding new features.
             </p>
           </div>
-          <div>
-            <img
-              className="sm:max-w-xl rounded-2xl"
-              src={about_us}
-              alt="aboutus"
-            />
-          </div>
         </section>
         {/* Team section  */}
         <section className="sm:flex  justify-center items-center mt-24">
@@ -141,7 +135,7 @@ function About() {
             <h1 className="text-left m-2 text-green-600 font-bold">
               Meet the team
             </h1>
-            <p className="text-left text-4xl font-semibold">
+            <p className="text-left sm:text-5xl text-3xl font-semibold">
               Meet our hardworking team
             </p>
 
@@ -200,8 +194,8 @@ function About() {
         {/* Reviews  */}
 
         <section className="items-center p-10 w-full">
-          <h1 className="text-5xl font-bold text-center m-2 mb-4">
-            Testimonials{" "}
+          <h1 className="sm:text-5xl text-3xl font-bold text-center m-2 mb-4">
+            Testimonials
           </h1>
 
           {displayedReviews.map(({ id, name, review, avatar, star }) => (
