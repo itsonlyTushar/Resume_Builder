@@ -194,7 +194,7 @@ function Landing() {
             </p>
           </div>
 
-          <div data-aos="fade-left">
+          <div data-aos="fade-up">
             <img src={laptop} alt="laptop" />
           </div>
         </section>
