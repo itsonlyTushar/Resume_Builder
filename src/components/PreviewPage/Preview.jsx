@@ -10,9 +10,16 @@ import { generatePDF } from "../../utils/helpers";
 import { Viewer, Worker } from "@react-pdf-viewer/core";
 import "@react-pdf-viewer/core/lib/styles/index.css";
 import "@react-pdf-viewer/default-layout/lib/styles/index.css";
+import { Modal } from "@mui/material";
+import Logo from "../../pages/Logo";
+import { PizzaIcon } from "lucide-react";
+import qr from '../../assets/qr.png'
 
 function Preview() {
   const [pdfDoc, setPdfDoc] = useState(null);
+  const [open, setopen] = useState(false);
+
+  const handleClose = () => setopen(false);
   const [isLoading, setIsLoading] = useState(false);
   const [uploadDoc, setUploadDoc] = useState(null);
   const navigate = useNavigate();
@@ -86,6 +93,8 @@ function Preview() {
       toast.success("Resume saved and downloaded successfully", {
         id: loadingToast,
       });
+
+      setopen(true);
     } catch (error) {
       console.error("Download error:", error);
       toast.error(error.message || "Failed to save resume. Please try again", {
@@ -95,7 +104,6 @@ function Preview() {
       setIsLoading(false);
     }
   };
-
 
   return (
     <>
@@ -109,11 +117,7 @@ function Preview() {
           {/* PDF Preview Display*/}
           <div className="w-full lg:w-2/3 ">
             <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js">
-              {pdfDoc && (
-                <Viewer
-                  fileUrl={pdfDoc}
-                />
-              )}
+              {pdfDoc && <Viewer fileUrl={pdfDoc} />}
             </Worker>
           </div>
 
@@ -139,6 +143,36 @@ function Preview() {
           </div>
         </div>
       </div>
+      <Modal open={open} onClose={handleClose}>
+        <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white p-6 rounded-xl shadow-lg max-w-md w-full">
+          <div className="text-center">
+            <Logo />
+            <p className="text-md  text-blackBg mt-4 py-4">
+              if you liked using app consider paying what you like!
+            </p>
+            <div className="flex justify-center items-center">
+              <img src={qr} alt="qr" />
+            </div>
+            <div className="flex justify-center items-center">
+              
+
+
+              <a
+                href="upi://pay?pa=tushargsoni17@okicici&pn=TusharSoni&cu=INR"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <button className="flex items-center gap-2 justify-center bg-black text-white px-2 py-2 rounded-xl text-lg">
+                  <PizzaIcon />
+                  Buy me a Pizza
+                </button>
+              </a>
+
+            </div>
+          </div>
+        </div>
+      </Modal>
+
       <Footer />
     </>
   );
