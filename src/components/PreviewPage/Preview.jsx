@@ -108,7 +108,7 @@ function Preview() {
   return (
     <>
       <Navbar />
-      <h2 className="mt-5 text-5xl font-bold mb-5 text-center">
+      <h2 className="mt-5 sm:text-2xl text-3xl md:text-2xl lg:text-4xl font-bold mb-5 text-center">
         Resume Preview
       </h2>
 
@@ -144,7 +144,7 @@ function Preview() {
         </div>
       </div>
       <Modal open={open} onClose={handleClose}>
-        <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white p-6 rounded-xl shadow-lg max-w-md w-full">
+        <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white p-6 rounded-xl shadow-lg w-full max-w-xs sm:max-w-md" >
           <div className="text-center">
             <Logo />
             <p className="text-md  text-blackBg mt-4 py-4">

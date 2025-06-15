@@ -9,13 +9,12 @@ function Logo() {
     if(current_location.pathname === targetpath) {
       return
     }
-    
     navigate(targetpath)
 
   }
 
   return (
-    <h1 className={`text-3xl font-bold`}>
+    <h1 className={`sm:text-3xl text-2xl font-bold`}>
       <button onClick={() => handleNavigation('/select_template')}>
         <i className="ri-attachment-2"></i>ResuMate
       </button>
