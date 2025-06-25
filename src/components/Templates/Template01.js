@@ -31,7 +31,7 @@ export const Template01 = ({ formData }) => {
     // personal details section.
     pdf.text(
       `${personalDetails.firstName} ${personalDetails.lastName}`,
-      leftMargin,
+      leftMargin + 6,
       yPosition,
       { align: "center" }
     );
