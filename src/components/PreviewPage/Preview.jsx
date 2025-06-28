@@ -5,7 +5,7 @@ import Navbar from "../Navbar/Navbar";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { auth } from "../../auth/firebase";
-import { uploadResume, downloadResume } from "../../utils/resumeOperations";
+import { uploadResume, downloadResume } from "../../backend/resumeOperations";
 import { generatePDF } from "../../utils/helpers";
 import { Viewer, Worker } from "@react-pdf-viewer/core";
 import "@react-pdf-viewer/core/lib/styles/index.css";

@@ -1,4 +1,4 @@
-import { deleteResume } from "../../utils/resumeOperations";
+import { deleteResume } from "../../backend/resumeOperations";
 import toast from "react-hot-toast";
 import {
   Button,

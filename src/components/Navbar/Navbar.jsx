@@ -20,10 +20,10 @@ import {
   useTheme,
   useMediaQuery,
 } from "@mui/material";
-import { handleSignOut } from "../UserPage/User";
 import { useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
 import { notifications } from "../../constants/constant";
+import { handleSignOut } from "../../auth/authOperations/logOut";
 
 function Navbar() {
   const [accountMenuAnchor, setAccountMenuAnchor] = useState(null);
@@ -54,7 +54,7 @@ function Navbar() {
   const handleAccountMenuOpen = (event) => {
     setAccountMenuAnchor(event.currentTarget);
     if (isMobile) {
-      setMobileMenuAnchor(null); // Close mobile menu when opening account menu
+      setMobileMenuAnchor(null);
     }
   };
 

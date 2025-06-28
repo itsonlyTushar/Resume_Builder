@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
 import { auth } from "../../auth/firebase";
-import { deleteUser, signOut } from "firebase/auth";
 import toast, { Toaster } from "react-hot-toast";
 import { useNavigate } from "react-router";
 import Navbar from "../Navbar/Navbar";
 import Footer from "../Footer/Footer.jsx";
 import ResumeList from "./ResumeList";
-import { fetchUserResumes } from "../../utils/resumeOperations.js";
+import { fetchUserResumes } from "../../backend/resumeOperations.js";
 import { useDispatch } from "react-redux";
 import {
   Button,
@@ -18,33 +17,8 @@ import {
 } from "@mui/material";
 import { useForm } from "react-hook-form";
 import Loader from "../UI/Loader.jsx";
-
-export const handleSignOut = async (dispatch, navigate, resetForm) => {
-  const loading = toast.loading("Signing you out...");
-
-  try {
-    // Delay for smooth transition
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-
-    await signOut(auth);
-
-    dispatch({ type: "RESET_STORE" });
-
-    resetForm();
-
-    toast.success("Signed out successfully!", { id: loading });
-
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-
-    // navigate to home page after log out.
-    setTimeout(() => {
-      navigate("/");
-    }, 2000);
-  } catch (error) {
-    console.error("Sign out error:", error);
-    toast.error("Sign out failed!", { id: loading });
-  }
-};
+import { handleDelete } from "../../auth/authOperations/deleteAccount";
+import { handleSignOut } from "../../auth/authOperations/logOut.js";
 
 function User() {
   const navigate = useNavigate();
@@ -91,22 +65,6 @@ function User() {
     } catch (error) {
       console.error("Error opening resume:", error);
       toast.error("Failed to open resume");
-    }
-  };
-
-  // delete account permanently
-  const handleDelete = async () => {
-    try {
-      const user = auth.currentUser;
-      await deleteUser(user);
-      toast.success("Account deleted successfully");
-
-      setTimeout(() => {
-        navigate("/");
-      }, 2000);
-    } catch (error) {
-      console.error("Delete error:", error);
-      toast.error("Failed to delete account");
     }
   };
 
@@ -204,7 +162,7 @@ function User() {
           <DialogActions>
             <Button onClick={handleCloseDialog}>Cancel</Button>
             <Button
-              onClick={handleDelete}
+              onClick={() => handleDelete(navigate)}
               variant="contained"
               style={{
                 backgroundColor: "#E10400",

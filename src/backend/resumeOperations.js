@@ -1,4 +1,4 @@
-import { storage, databases } from '../backend/appwrite'
+import { storage, databases } from './appwrite'
 import { ID, Query } from 'appwrite';
 import toast from "react-hot-toast";
 
