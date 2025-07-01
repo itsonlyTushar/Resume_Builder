@@ -79,6 +79,10 @@ function Footer() {
               <li className="my-3 hover:text-[#858B96]">
                 <button onClick={() => transtionNavigate('/about')} >About Us</button>
               </li>
+                <li className="my-3 hover:text-[#858B96]">
+                <button onClick={() => transtionNavigate('/terms')} >Terms</button>
+              </li>
+              
             </div>
           </ul>
         </div>

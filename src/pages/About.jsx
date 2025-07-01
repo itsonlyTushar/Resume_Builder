@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { Avatar, Box, Card, CardMedia, Rating } from "@mui/material";
-import myImg from "../assets/team_photos/201.png";
 import { Pagination } from "@mui/material";
 import Footer from "../components/Footer/Footer";
 import FabScroll from "../components/UI/Fab";
 import AOS from "aos";
 import Navigation from "../components/Navbar/Navigation";
+import { Link } from "react-router-dom";
+import tushar from "../assets/team_photos/tushar.jpg";
 
 function About() {
   useEffect(() => {
@@ -73,47 +74,16 @@ function About() {
     page * reviewsPerPage
   );
 
-  const team_imgs = [
-    {
-      name: "Regie Donald",
-      img: "https://images.unsplash.com/photo-1504257432389-52343af06ae3?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      position: "Head of Product",
-    },
-    {
-      name: "Shanaya Singh",
-      img: "https://images.unsplash.com/photo-1620122303020-87ec826cf70d?q=80&w=1287&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      position: "UI/UX Designer",
-    },
-    {
-      name: "Rajat Gurjar",
-      img: "https://images.unsplash.com/photo-1618284554746-71a7b3e923c6?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      position: "Graphic Designer",
-    },
-    {
-      name: "Tushar Soni",
-      img: myImg,
-      position: "Web Developer",
-    },
-    {
-      name: "Dolly Singh",
-      img: "https://images.unsplash.com/photo-1617187735632-727b180e432d?q=80&w=1227&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      position: "React Developer",
-    },
-    {
-      name: "Clark Kent",
-      img: "https://images.unsplash.com/photo-1617859524891-1de8cee43c39?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NzJ8fGJsYWNrJTIwYW5kJTIwd2hpdGUlMjBwb3J0cmFpdHxlbnwwfHwwfHx8MA%3D%3D",
-      position: "Project Manager",
-    },
-    
-  ];
-
   return (
     <>
       <Navigation />
       <div className="pt-20">
         <h1 className="text-5xl text-center mb-10 font-bold py-4">About Us</h1>
         {/* About section  */}
-        <section data-aos="fade-up" className="flex text-center justify-center items-center text-center px-16 mx-4 bg-gray-100 py-16 rounded-3xl">
+        <section
+          data-aos="fade-up"
+          className="flex text-center justify-center items-center text-center px-16 mx-4 bg-gray-100 py-16 rounded-3xl"
+        >
           <div className="max-w-3xl px-4 rounded-2xl">
             <h1 className="sm:text-5xl text-3xl font-semibold">
               How Resume Builder Created and Why?
@@ -129,120 +99,52 @@ function About() {
           </div>
         </section>
         {/* Team section  */}
-        <section className="sm:flex  justify-center items-center mt-24">
-          <div className="p-12 m-2 shadow-xl border rounded-xl">
-            <h1 className="text-left m-2 text-green-600 font-bold">
-              Meet the team
-            </h1>
-            <p className="text-left sm:text-5xl text-3xl font-semibold">
-              Meet our hardworking team
+
+        <div className="grid sm:grid-cols-2 grid-cols-1 place-items-center content-center items-center m-5 gap-8 py-14">
+          <div data-aos="fade-left" className="p-5 m-2">
+            <h2 className="text-4xl font-bold mb-4 text-blackBg">
+              Hey i build this !
+            </h2>
+            <p className="max-w-xl text-justify text-xl">
+              I’m Tushar Soni — a web developer and the person behind Resumate,
+              a professional resume builder. I built this with a simple goal in
+              mind: to make creating resumes quicker, easier, and more modern.
+              As someone who loves building things that solve everyday problems,
+              this project is close to my heart. It's all about helping job
+              seekers craft professional resumes effortlessly and giving them a
+              smoother experience during their job search.
             </p>
 
-            {/* Team Photos  */}
-            <div
-              data-aos="fade-up"
-              className="grid sm:grid-cols-3 grid-cols-1 text-center mt-10"
-            >
-              {team_imgs.map(({ name, img, position }) => (
-                <Card
-                  key={name}
-                  sx={{
-                    position: "relative",
-                    borderRadius: "20px",
-                    m: 2,
-                    "&:hover .hover-box": { opacity: 1 },
-                  }}
-                >
-                  <CardMedia
-                    component="img"
-                    sx={{ height: {xs:300, sm:600, md:600, lg:600}, 
-                      objectFit: "cover",
-                    }}
-                    image={img}
-                    alt="image"
-                  />
-
-                  <Box
-                    className="hover-box"
-                    sx={{
-                      position: "absolute",
-                      top: 0,
-                      left: 0,
-                      width: "100%",
-                      height: "100%",
-                      bgcolor: "rgba(0,0,0,0.6)",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      opacity: 0,
-                      transition: "opacity 0.3s ease-in-out",
-                    }}
+            <div className="mt-5">
+              <ul className="flex gap-4 text-2xl text-blackBg">
+                <li className="border-red max-w-xl bg-red-100  px-6 py-2 rounded-lg">
+                  <Link to={"https://www.instagram.com/tushar_28.7/"}>
+                    <i className="ri-instagram-line"></i>
+                  </Link>
+                </li>
+                <li className="border-red max-w-xl bg-red-100  px-6 py-2 rounded-lg">
+                  <Link to={"https://x.com/ts28_7"}>
+                    <i className="ri-twitter-x-line"></i>
+                  </Link>
+                </li>
+                <li className="border-red max-w-xl bg-red-100  px-6 py-2 rounded-lg">
+                  <Link
+                    to={"https://www.linkedin.com/in/tushar-soni-b0426022b/"}
                   >
-                    <div>
-                      <h4 className="text-3xl font-semibold text-white">
-                        {name}
-                      </h4>
-                      <h3 className="text-2xl text-gray-400">{position}</h3>
-                    </div>
-                  </Box>
-                </Card>
-              ))}
+                    <i className="ri-linkedin-fill"></i>
+                  </Link>
+                </li>
+              </ul>
             </div>
           </div>
-        </section>
 
-        {/* Reviews  */}
-
-        <section className="items-center p-10 w-full">
-          <h1 className="sm:text-5xl text-3xl font-bold text-center m-2 mb-4">
-            Testimonials
-          </h1>
-
-          {displayedReviews.map(({ id, name, review, avatar, star }) => (
-            <div
-              key={id}
-              className="bg-gray-100 text-justify p-2 m-2 mb-2 rounded-2xl"
-            >
-              <div className="sm:flex sm:w-full p-2">
-                <h4 className="p-2 mr-3">{avatar}</h4>
-                <div className="text-wrap">
-                  <h2 className="p-2">{review}</h2>
-                </div>
-              </div>
-              <div className="mt-2 p-2 items-center ">
-                <h2 className="mr-2 text-2xl font-semibold">{name}</h2>
-                <div className="flex">
-                  <Rating
-                    name="half-rating"
-                    defaultValue={star}
-                    precision={0.5}
-                    readOnly
-                  />
-                </div>
-              </div>
-            </div>
-          ))}
-        </section>
-        <div className="flex justify-center items-center mb-5">
-          <Pagination
-            sx={{
-              "& .MuiPaginationItem-root:hover": {
-                backgroundColor: "#E5E7EB",
-              },
-              "& .MuiPaginationItem-root.Mui-selected": {
-                backgroundColor: "black",
-                color: "white",
-                "&:hover": {
-                  backgroundColor: "#111",
-                },
-              },
-            }}
-            count={totalPages}
-            page={page}
-            onChange={handleChange}
-            color="standard"
-            className="mt-4"
-          />
+          <div data-aos="fade-up" className="bg-blackBg  rounded-xl pt-10 p-5 m-2">
+            <img
+              className="sm:max-w-md max-w-sm object-cover rounded-xl"
+              src={tushar}
+              alt="tushar"
+            />
+          </div>
         </div>
       </div>
       <FabScroll />

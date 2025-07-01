@@ -16,6 +16,7 @@ import {
   Outlet,
 } from "react-router-dom";
 import { ScrollTop } from "../utils/helpers.js";
+import Terms from "../pages/Terms.jsx";
 
 const ProtectedRoutesWrapper = () => (
   <ProtectedRoute>
@@ -33,6 +34,7 @@ function AppRoutes() {
         <Route path="/signin" element={<SignIn />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/about" element={<About />} />
+        <Route path="/terms" element={<Terms />} />
         <Route path="/" element={<Landing />} />
 
         {/* Protected Routes */}
