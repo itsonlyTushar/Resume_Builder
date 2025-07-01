@@ -10,14 +10,13 @@ import { Box } from "@mui/material";
 import Grid2 from "@mui/material/Grid2";
 import { useDispatch } from "react-redux";
 import { catch_template } from "../../features/templateSlice";
-import Loader from '../UI/Loader';
+import Loader from "../UI/Loader";
 import { useNavigate } from "react-router";
 import Navbar from "../Navbar/Navbar";
-import Footer from '../Footer/Footer';
-import { templateImgs } from "../../constants/constant";
+import Footer from "../Footer/Footer";
+import { templateImgs } from "./templateConfig";
 
 function Templates() {
-
   const [loading, setLoading] = useState(true);
   const [selectedTemplate, setSelectedTemplate] = useState(null);
   const dispatch = useDispatch();
@@ -50,10 +49,12 @@ function Templates() {
         <Loader />
       ) : (
         <div className="p-4 mt-5 mb-24">
-          <h1 className="text-center text-5xl py-6 font-semibold">Select a Template</h1>
+          <h1 className="text-center text-5xl py-6 font-semibold">
+            Select a Template
+          </h1>
           <Grid2 container spacing={3} justifyContent="center">
             {templateImgs.map((template) => (
-              <Grid2 key={template.id} xs={12} sm={6} md={4}>
+              <Grid2 key={template.id} xs={12} sm={6} md={3}>
                 <Card
                   variant="outlined"
                   sx={{
@@ -99,7 +100,12 @@ function Templates() {
         </div>
       )}
 
-      <Dialog open={!!selectedTemplate} onClose={handleCloseModal} maxWidth="md" fullWidth>
+      <Dialog
+        open={!!selectedTemplate}
+        onClose={handleCloseModal}
+        maxWidth="md"
+        fullWidth
+      >
         <DialogContent sx={{ textAlign: "center", padding: "20px" }}>
           {selectedTemplate && (
             <>

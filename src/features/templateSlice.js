@@ -1,7 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { nanoid } from "@reduxjs/toolkit";
 
-// setting the initial state
 const initialState = {
   form_data: {
     personalDetails: [

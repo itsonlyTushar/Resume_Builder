@@ -168,7 +168,7 @@ function Builder() {
       <Navbar />
       <h1 className="text-center text-5xl pt-10 font-semibold">Builder Form</h1>
       <div className="flex flex-col md:flex sm:flex-row justify-center items-center px-0 z-10 mb-32 mt-6">     
-        <div className="p-5">
+        <div className="p-2">
           <div className="border-none rounded-3xl flex-wrap overflow-hidden bg-gray-100 py-6 sm:px-10  sm:py-28 shadow-sm">
             <Stepper
               activeStep={activeStep}
@@ -205,10 +205,10 @@ function Builder() {
             </Stepper>
           </div>
         </div>
-        <div className="p-5">
+        <div className="p-2">
           <FormProvider {...methods}> 
             <form onSubmit={(e) => e.preventDefault()}>
-              <div className="bg-[#EEEEEE] min-h-scren rounded-3xl p-10 sm:w-[55vw] w-full overflow-y-auto custom-scrollbar">
+              <div className="bg-[#EEEEEE] rounded-3xl p-10 sm:w-[55vw] w-full overflow-y-auto custom-scrollbar">
                 {loading ? <Loader /> : handleFormChange(activeStep)}
                 <div className="flex gap-4 items-center mt-8 overflow-y-auto custom-scrollbar">
                   <Tooltip title="Reset Complete Form">

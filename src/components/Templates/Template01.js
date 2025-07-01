@@ -15,6 +15,15 @@ export const Template01 = ({ formData }) => {
     let yPosition = 20;
     const pageWidth = pdf.internal.pageSize.width;
     let rightMargin = pageWidth - 10;
+    const bottomMargin = 20;
+    const pageHeight = pdf.internal.pageSize.height;
+
+    const checkAddPage = (extraSpace = 0) => {
+      if (yPosition + extraSpace > pageHeight - bottomMargin) {
+        pdf.addPage();
+        yPosition = 20; // or your top margin
+      }
+    };
 
     // gathring the data to make pdf
     const personalDetails = formData.personalDetails[0];
@@ -67,6 +76,7 @@ export const Template01 = ({ formData }) => {
       pdf.setFontSize(16);
       pdf.text("Education", leftMargin - 26, yPosition);
       educationDetails.forEach((edu, index) => {
+        checkAddPage(15); // Estimate space needed for each education entry
         if (index !== 0) {
           yPosition += 10;
         }
@@ -96,6 +106,7 @@ export const Template01 = ({ formData }) => {
       pdf.setFontSize(16);
       pdf.text("Experience", leftMargin - 26, yPosition);
       experienceDetails.forEach((exp, index) => {
+        checkAddPage(25); // Estimate space needed for each experience entry
         if (index !== 0) {
           yPosition += 20;
         }
@@ -133,6 +144,7 @@ export const Template01 = ({ formData }) => {
       pdf.setFontSize(16);
       pdf.text("Projects", leftMargin - 26, yPosition);
       projectDetails.forEach((pro, index) => {
+        checkAddPage(15); // Estimate space needed for each project entry
         if (index !== 0) {
           yPosition += 10;
         }

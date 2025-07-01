@@ -6,7 +6,6 @@ import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { auth } from "../../auth/firebase";
 import { uploadResume, downloadResume } from "../../backend/resumeOperations";
-import { generatePDF } from "../../utils/helpers";
 import { Viewer, Worker } from "@react-pdf-viewer/core";
 import "@react-pdf-viewer/core/lib/styles/index.css";
 import "@react-pdf-viewer/default-layout/lib/styles/index.css";
@@ -14,6 +13,7 @@ import { Modal } from "@mui/material";
 import Logo from "../../pages/Logo";
 import { PizzaIcon } from "lucide-react";
 import qr from '../../assets/qr.png'
+import { generatePDF } from "../Templates/templateConfig";
 
 function Preview() {
   const [pdfDoc, setPdfDoc] = useState(null);
