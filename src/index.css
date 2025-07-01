@@ -67,6 +67,13 @@ body::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
 
+/* styling the card  */
+
+.card-img {
+  img {
+    image-rendering: high-quality;
+  }
+}
 
 
 /* custom loader spinner  */

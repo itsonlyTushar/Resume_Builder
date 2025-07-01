@@ -7,6 +7,8 @@ import AOS from "aos";
 import Navigation from "../components/Navbar/Navigation.jsx";
 import laptop from "../assets/laptop.png";
 import Faq from "../components/UI/Faq.jsx";
+import CardSwap, { Card } from "../components/CardSwap/CardSwap.jsx";
+import { templateImgs } from "../components/Templates/templateConfig.js";
 
 function Landing() {
   const transtionNavigate = useViewTransition();
@@ -183,28 +185,49 @@ function Landing() {
         </section>
 
         <section className="bg-gray-100 grid grid-cols-1 sm:grid-cols-2 place-items-center py-36">
+          <div data-aos="fade-up">
+            <img src={laptop} alt="laptop" />
+          </div>
+
           <div data-aos="fade-up" className="p-10 max-w-2xl">
             <h1 className="text-5xl font-semibold py-2">
               Customize any template to suit your needs
             </h1>
-            <p className="text-gray-600 text-sm">
+  
+          </div>
+        </section>
+
+        {/* Cardswap compoenenet  */}
+        <section className="bg-[#10141F] rounded-t-3xl grid sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 place-items-center content-center py-36 overflow-hidden">
+          <div data-aos="fade-up" className="p-10 max-w-2xl">
+            <h1 className="text-5xl text-white font-semibold py-2">
+              Browse Unique Templates to Stand Out
+            </h1>
+            <p className="text-gray-400 text-sm">
               ResuMate offers a range of professionally designed templates so
               you can make the right first impression—no matter your industry or
               experience level.
             </p>
           </div>
 
-          <div data-aos="fade-up">
-            <img src={laptop} alt="laptop" />
-          </div>
-        </section>
-
-        <section className="py-6 ">
-          <h1 className="text-4xl text-center font-semibold">
-            Frequently Asked Questions
-          </h1>
-          <div className="max-w-3xl mx-auto flex justify-center items-center px-4 py-16">
-            <Faq />
+          <div className="card-img" style={{ height: "500px", position: "relative" }}>
+            <CardSwap
+              skewAmount={1}
+              cardDistance={70}
+              verticalDistance={15}
+              delay={2000}
+              pauseOnHover={false}
+            >
+              {templateImgs.slice(0, 10).map((img) => (
+                <Card key={img.id} className="border-none">
+                  <img
+                    className="rounded-xl"
+                    src={img.image}
+                    alt={img.id}
+                  />
+                </Card>
+              ))}
+            </CardSwap>
           </div>
         </section>
 

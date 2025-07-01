@@ -6,7 +6,7 @@ const STORAGE_BUCKET = '676d037b001892026fbf';
 const DATABASE_ID = '677138b5003a8ac08657';
 const RESUMES_COLLECTION = '679b1dfe003d6270e5df'
 
-const MAX_RESUMES = 2;
+const MAX_RESUMES = 4;
 
 // Get user counts from appwrite collection
 const getUserResumeCount = async (userId) => {
