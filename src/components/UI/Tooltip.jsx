@@ -1,4 +1,3 @@
-import React from "react";
 import { createTheme, ThemeProvider, Tooltip } from "@mui/material";
 
 const theme = createTheme({

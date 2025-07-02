@@ -8,6 +8,7 @@ import {
 import toast, { Toaster } from "react-hot-toast";
 import GoogleAuth from "./GoogleAuth";
 import Navigation from "../components/Navbar/Navigation";
+import { Tooltip } from "@mui/material";
 
 
 function SignIn() {
@@ -65,7 +66,9 @@ function SignIn() {
           <div className="flex justify-center text-5xl ">
             <i className="ri-attachment-2"></i>
           </div>
-          <h1 className="text-xl font-bold mb-4 text-center">Sign In With Resumate</h1>
+          <h1 className="text-xl font-bold mb-4 text-center">
+            Sign In With Resumate
+          </h1>
           <div className="block">
             <input
               onChange={(e) => setEmail(e.target.value)}
@@ -87,13 +90,21 @@ function SignIn() {
               {isLoading ? "" : <i class="ri-login-box-line"></i>} Continue Sign
               In
             </button>
+
             <button
               type="button"
               onClick={handlePasswordReset}
               className="mt-1 text-sm"
             >
-              Forgot Password?
+              <Tooltip
+                title="Click this after entering the email in the above field"
+                placement="left-start"
+                arrow
+              >
+                <span>Forgot Password?</span>
+              </Tooltip>
             </button>
+
             <div className="bg-gray-300 h-[0.2px] mt-4 w-full"></div>
 
             <GoogleAuth name="Sign in with Google" />

@@ -15,7 +15,7 @@ function Logo() {
 
   return (
     <h1 className={`sm:text-3xl text-2xl font-bold`}>
-      <button onClick={() => handleNavigation('/select_template')}>
+      <button onClick={() => handleNavigation('/')}>
         <i className="ri-attachment-2"></i>ResuMate
       </button>
     </h1>

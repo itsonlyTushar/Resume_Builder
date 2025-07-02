@@ -6,9 +6,10 @@ import { useViewTransition } from "../utils/useViewTranstion.js";
 import AOS from "aos";
 import Navigation from "../components/Navbar/Navigation.jsx";
 import laptop from "../assets/laptop.png";
-import Faq from "../components/UI/Faq.jsx";
 import CardSwap, { Card } from "../components/CardSwap/CardSwap.jsx";
 import { templateImgs } from "../components/Templates/templateConfig.js";
+import { Helmet } from "react-helmet";
+import Fabscroll from "../components/UI/Fab.jsx";
 
 function Landing() {
   const transtionNavigate = useViewTransition();
@@ -22,6 +23,46 @@ function Landing() {
 
   return (
     <>
+      <Helmet>
+      
+        <title>
+          ResuMate | Resume Builder - Make Your Resume in Minutes
+        </title>
+        <meta
+          name="description"
+          content="Create professional, ATS-friendly resumes for free with ResuMate. Choose from industry-approved templates and build your resume in minutes."
+        />
+        <meta
+          name="keywords"
+          content="resume builder, free resume, ATS resume, professional resume, online resume, resume templates, career, job application"
+        />
+        <meta name="robots" content="index, follow" />
+        <meta property="og:title" content="ResuMate | Free Resume Builder" />
+        <meta
+          property="og:description"
+          content="Build your resume for free with ResuMate. Choose templates, customize, and download instantly."
+        />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://resumate.shop" />
+        <meta
+          property="og:image"
+          content="https://resumate.shop/og-img.png"
+        />
+        {/* Twitter Card */}
+        <meta name="twitter:card" content="https://resumate.shop/og-img.png" />
+        <meta name="twitter:title" content="ResuMate | Free Resume Builder" />
+        <meta
+          name="twitter:description"
+          content="Create professional, ATS-friendly resumes for free in minutes with ResuMate."
+        />
+        <meta
+          name="twitter:image"
+          content="https://resumate.shop/og-img.png"
+        />
+        <meta name="twitter:url" content="https://resumate.shop" />
+
+      </Helmet>
+
       <div className="landing_page">
         <Navigation />
         <div className="pt-32 flex flex-col justify-center items-center px-4 sm:px-6 lg:px-8">
@@ -193,7 +234,6 @@ function Landing() {
             <h1 className="text-5xl font-semibold py-2">
               Customize any template to suit your needs
             </h1>
-  
           </div>
         </section>
 
@@ -210,7 +250,10 @@ function Landing() {
             </p>
           </div>
 
-          <div className="card-img" style={{ height: "500px", position: "relative" }}>
+          <div
+            className="card-img"
+            style={{ height: "500px", position: "relative" }}
+          >
             <CardSwap
               skewAmount={1}
               cardDistance={70}
@@ -220,16 +263,14 @@ function Landing() {
             >
               {templateImgs.slice(0, 10).map((img) => (
                 <Card key={img.id} className="border-none">
-                  <img
-                    className="rounded-xl"
-                    src={img.image}
-                    alt={img.id}
-                  />
+                  <img className="rounded-xl" src={img.image} alt={img.id} />
                 </Card>
               ))}
             </CardSwap>
           </div>
         </section>
+
+        <Fabscroll />
 
         <Footer />
       </div>

@@ -83,6 +83,15 @@ function Navbar() {
           My Account
         </Link>
       </MenuItem>
+
+
+            <MenuItem onClick={handleMenuClose}>
+        <Link to="/select_template" className="flex items-center">
+          <i className="ri-file-add-line text-md mr-2"></i>
+          Templates
+        </Link>
+      </MenuItem>
+      
       <MenuItem
         onClick={() => {
           handleSignOut(dispatch, navigate, reset);
@@ -116,8 +125,12 @@ function Navbar() {
         <IconButton size="large" color="inherit">
           <AccountCircle />
         </IconButton>
-        <p className="ml-2">My Account</p>
+        <p className="ml-2">Account</p>
       </MenuItem>
+
+
+
+      
     </Menu>
   );
 
@@ -184,6 +197,7 @@ function Navbar() {
               >
                 <AccountCircle />
               </IconButton>
+
             </Box>
           )}
 

@@ -1,6 +1,5 @@
-import { useEffect, useState } from "react";
-import { Avatar, Box, Card, CardMedia, Rating } from "@mui/material";
-import { Pagination } from "@mui/material";
+import { useEffect } from "react";
+import Faq from "../components/UI/Faq";
 import Footer from "../components/Footer/Footer";
 import FabScroll from "../components/UI/Fab";
 import AOS from "aos";
@@ -16,68 +15,12 @@ function About() {
     });
   }, []);
 
-  const reviews = [
-    {
-      id: 1,
-      name: "Sahiba Bali",
-      avatar: (
-        <Avatar
-          sx={{ width: 70, height: 70 }}
-          alt="sahiba"
-          src="https://images.unsplash.com/photo-1606122017369-d782bbb78f32?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-        />
-      ),
-      review:
-        "This Resume builder transformed my job search experience. The intuitive interface and professional templates helped me create a standout resume that landed me multiple interview opportunities within weeks.",
-      star: 3.5,
-    },
-    {
-      id: 2,
-      name: "Deval Soni",
-      avatar: (
-        <Avatar
-          sx={{ width: 70, height: 70 }}
-          alt="deval"
-          src="https://images.unsplash.com/photo-1629747490241-624f07d70e1e?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fHBvcnRyYWl0c3xlbnwwfHwwfHx8MA%3D%3D"
-        />
-      ),
-      review:
-        "What impressed me most was how quickly I could create different versions of my resume for various roles. The template selection is modern and professional. Made my job application process much more efficient.",
-      star: 4,
-    },
-    {
-      id: 3,
-      name: "Manik Manha",
-      avatar: (
-        <Avatar
-          sx={{ width: 70, height: 70 }}
-          alt="puneet"
-          src="https://images.unsplash.com/photo-1619300026534-8e8a76941138?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-        />
-      ),
-      review:
-        "As someone who reviews hundreds of resumes, I appreciate how this tool maintains professional formatting while allowing for creativity. ",
-      star: 3.5,
-    },
-  ];
-
-  const [page, setPage] = useState(1);
-  const reviewsPerPage = 1;
-  const totalPages = Math.ceil(reviews.length / reviewsPerPage);
-
-  const handleChange = (event, value) => {
-    setPage(value);
-  };
-
-  const displayedReviews = reviews.slice(
-    (page - 1) * reviewsPerPage,
-    page * reviewsPerPage
-  );
-
   return (
     <>
-      <Navigation />
-      <div className="pt-20">
+      <header>
+        <Navigation />
+      </header>
+      <main className="pt-20">
         <h1 className="text-5xl text-center mb-10 font-bold py-4">About Us</h1>
         {/* About section  */}
         <section
@@ -100,7 +43,7 @@ function About() {
         </section>
         {/* Team section  */}
 
-        <div className="grid sm:grid-cols-2 grid-cols-1 place-items-center content-center items-center m-5 gap-8 py-14">
+        <section className="grid sm:grid-cols-2 grid-cols-1 place-items-center content-center items-center m-5 gap-8 py-14">
           <div data-aos="fade-left" className="p-5 m-2">
             <h2 className="text-4xl font-bold mb-4 text-blackBg">
               Hey i build this !
@@ -138,17 +81,29 @@ function About() {
             </div>
           </div>
 
-          <div data-aos="fade-up" className="bg-blackBg  rounded-xl pt-10 p-5 m-2">
+          <div
+            data-aos="fade-up"
+            className="bg-blackBg  rounded-xl pt-10 p-5 m-2"
+          >
             <img
               className="sm:max-w-md max-w-sm object-cover rounded-xl"
               src={tushar}
               alt="tushar"
             />
           </div>
-        </div>
-      </div>
+        </section>
+      </main>
+
+      <section className="bg-gray-100 py-16 px-6">
+        <h1 className="text-center text-4xl font-semibold my-4">
+          Frequently Asked Questions
+        </h1>
+        <Faq />
+      </section>
       <FabScroll />
-      <Footer />
+      <footer>
+        <Footer />
+      </footer>
     </>
   );
 }
