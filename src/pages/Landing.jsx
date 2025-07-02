@@ -270,8 +270,6 @@ function Landing() {
           </div>
         </section>
 
-        <Fabscroll />
-
         <Footer />
       </div>
     </>
