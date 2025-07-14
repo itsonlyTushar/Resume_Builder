@@ -13,6 +13,7 @@ import { Template12 } from "./Template12";
 import { Template13 } from "./Template13";
 import { Template15 } from "./Template15";
 import { Template16 } from "./Template16";
+import { Template17 } from "./Template17";
 
 const TEMPLATE_REGISTRY = {
   101: Template01,
@@ -31,6 +32,7 @@ const TEMPLATE_REGISTRY = {
   113: Template13,
   115: Template15,
   116: Template16,
+  117: Template17
 };
 
 // generates template on selected templates
@@ -46,6 +48,12 @@ export const generatePDF = ({ formData }) => {
 
   return templateGenerator({ formData });
 };
+
+export const devTemplate = {
+  id: 117,
+  image: `https://res.cloudinary.com/dartdvch1/image/upload/v1752485028/wbice_page-0001_vijpwg.jpg`,
+};
+
 
 // templates are stored in cloudinary
 export const templateImgs = [

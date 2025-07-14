@@ -9,7 +9,6 @@ import laptop from "../assets/laptop.png";
 import CardSwap, { Card } from "../components/CardSwap/CardSwap.jsx";
 import { templateImgs } from "../components/Templates/templateConfig.js";
 import { Helmet } from "react-helmet";
-import Fabscroll from "../components/UI/Fab.jsx";
 
 function Landing() {
   const transtionNavigate = useViewTransition();

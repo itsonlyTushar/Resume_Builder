@@ -15,6 +15,11 @@ function ProjectDetails() {
   const projectDetails = useSelector(
     (state) => state.resumeBuilder.form_data.projectDetails
   );
+
+  const selectedTemplate = useSelector(
+    (state) => state.resumeBuilder.form_data.selected_template
+  );
+  console.log(selectedTemplate);
   const dispatch = useDispatch();
 
   const handleAddField = (arrState) => {
@@ -31,8 +36,6 @@ function ProjectDetails() {
     dispatch(updateFields({ index, field, value, arrState }));
     setValue(`${arrState}.${index}.${field}`, value);
   };
-
-
 
   const handleDelete = (id, arrState) => {
     dispatch(removeFields({ id, arrState }));
@@ -58,7 +61,7 @@ function ProjectDetails() {
                 placeholder="Enter name..."
                 {...register(`projectDetails.${index}.projectName`, {
                   required: false,
-              
+
                   validate: (value) => {
                     if (value === "") return true;
                     return value.trim().length > 0 || "Enter a valid input";
@@ -87,7 +90,6 @@ function ProjectDetails() {
                 Tech Stack
               </label>
               <input
-              
                 data-testid="tech-stack"
                 className="outline-none mt-1 p-3 flex items-center border-none shadow-md w-min rounded-xl text-gray-700"
                 name={`projectDetails.${index}.techStack`}
@@ -184,6 +186,44 @@ function ProjectDetails() {
                 </p>
               )}
             </div>
+
+            {selectedTemplate === 117 && (
+              <div className="grid grid-cols-1 sm:grid-cols-1">
+                <div className="p-2 ml-2">
+                  <label
+                    className="text-black font-bold text-md"
+                    htmlFor={`projectDetails.${index}.description`}
+                  >
+                    Description
+                  </label>
+                  <textarea
+                    className="outline-none mt-1 p-3 flex items-center border-none shadow-md w-full rounded-xl text-gray-700"
+                    name={`projectDetails.${index}.description`}
+                    type="text"
+                    placeholder="Enter description"
+                    {...register(`projectDetails.${index}.description`, {
+                      required: false,
+                      validate: (value) => {
+                        if (value === "") return true;
+                        return value.trim().length > 0;
+                      },
+                      onChange: (e) =>
+                        handleInputChange(
+                          index,
+                          "description",
+                          e.target.value,
+                          "projectDetails"
+                        ),
+                    })}
+                  />
+                  {errors.projectDetails?.[index]?.description && (
+                    <p className="text-red-400 mt-1">
+                      <i className="mr-1 ri-alert-line"></i>Enter a valid input
+                    </p>
+                  )}
+                </div>
+              </div>
+            )}
           </div>
 
           {projectDetails.length > 1 && (

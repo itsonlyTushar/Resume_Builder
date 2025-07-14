@@ -58,7 +58,6 @@ function EducationDetails() {
                 placeholder="Enter college..."
                 {...register(`educationDetails.${index}.collegeName`, {
                   required: true,
-                  maxLength: 20,
                   validate: (value) =>
                     value.trim().length > 0 || "phone number cannot be empty",
                   onChange: (e) =>
@@ -88,9 +87,14 @@ function EducationDetails() {
                 className="outline-none mt-1 p-3 flex items-center border-none shadow-md w-min rounded-xl text-gray-700"
                 name={`educationDetails.${index}.course`}
                 type="text"
+                
                 placeholder="Enter course name..."
                 {...register(`educationDetails.${index}.course`, {
                   required: true,
+                  maxLength: {
+                    value: 20,
+                    message: "Keep the course name short"
+                  },
                   validate: (value) =>
                     value.trim().length > 0 || "phone number cannot be empty",
                   onChange: (e) =>
@@ -104,7 +108,7 @@ function EducationDetails() {
               />
               {errors.educationDetails?.[index]?.course && (
                 <p className="text-red-400 mt-1">
-                  <i className="mr-1 ri-alert-line"></i>Course name is required
+                  <i className="mr-1 ri-alert-line"></i> {errors.educationDetails[index].course.message}
                 </p>
               )}
             </div>

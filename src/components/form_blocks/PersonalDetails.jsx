@@ -9,6 +9,9 @@ function PersonalDetails() {
   const personalDetails = useSelector(
     (state) => state.resumeBuilder.form_data.personalDetails
   );
+    const selectedTemplate = useSelector(
+    (state) => state.resumeBuilder.form_data.selected_template
+  );
   const {
     register,
     formState: { errors },
@@ -258,6 +261,46 @@ function PersonalDetails() {
               )}
             </div>
           </div>
+          
+          { selectedTemplate === 117 && 
+                    <div className="grid grid-cols-1 sm:grid-cols-2">
+            <div className="p-2 ml-2">
+              <label
+                className="text-black font-bold text-md"
+                htmlFor={`personalDetails.${index}.github`}
+              >
+                Github
+              </label>
+              <input
+                className="outline-none mt-1 p-3 flex items-center border-none shadow-md w-min rounded-xl text-gray-700"
+                name={`personalDetails.${index}.github`}
+                type="url"
+                placeholder="Enter url..."
+                {...register(`personalDetails.${index}.github`, {
+                  required: false,
+                  validate: (value) => {
+                    if (value === "") return true;
+                    return value.trim().length > 0 || "Enter a valid input";
+                  },
+                  onChange: (e) =>
+                    handleChange(
+                      index,
+                      "github",
+                      e.target.value,
+                      "personalDetails"
+                    ),
+                })}
+              />
+              {errors.personalDetails?.[index]?.github && (
+                <p className="text-red-400 mt-1">
+                  <i 
+                    data-cy='red-error'
+                    className="mr-1 ri-alert-line"></i>Enter a Valid Input
+                </p>
+              )}
+            </div>
+          </div>
+          }
         </div>
       ))}
     </>
