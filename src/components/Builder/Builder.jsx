@@ -24,6 +24,7 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
+import { detectRefresh } from "../../utils/refreshDetect";
 
 function Builder() {
   const formData = useSelector((state) => state.resumeBuilder.form_data);
@@ -167,6 +168,23 @@ function Builder() {
     handleCloseDialog();
     setActiveStep(0);
   };
+
+  // attach beforeunload warning when there is entered/unsaved data
+  useEffect(() => {
+    // simple heuristic: any non-empty field in form values
+    const values = methods.getValues();
+    const hasAnyData = Object.values(values).some((v) =>
+      Array.isArray(v)
+        ? v.some((item) => Object.values(item).some(Boolean))
+        : Boolean(v)
+    );
+
+    const removeBeforeUnload = detectRefresh(hasAnyData);
+
+    return () => {
+      removeBeforeUnload();
+    };
+  }, [methods]); // rerun when form registration changes
 
   return (
     <>
