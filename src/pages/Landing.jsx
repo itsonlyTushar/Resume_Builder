@@ -9,6 +9,7 @@ import laptop from "../assets/laptop.png";
 import CardSwap, { Card } from "../components/CardSwap/CardSwap.jsx";
 import { templateImgs } from "../components/Templates/templateConfig.js";
 import { Helmet } from "react-helmet";
+import { laptopVideo } from "../constants/constant.js";
 
 function Landing() {
   const transtionNavigate = useViewTransition();
@@ -23,10 +24,7 @@ function Landing() {
   return (
     <>
       <Helmet>
-      
-        <title>
-          ResuMate | Resume Builder - Make Your Resume in Minutes
-        </title>
+        <title>ResuMate | Resume Builder - Make Your Resume in Minutes</title>
         <meta
           name="description"
           content="Create professional, ATS-friendly resumes for free with ResuMate. Choose from industry-approved templates and build your resume in minutes."
@@ -43,10 +41,7 @@ function Landing() {
         />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://resumate.shop" />
-        <meta
-          property="og:image"
-          content="https://resumate.shop/og-img.png"
-        />
+        <meta property="og:image" content="https://resumate.shop/og-img.png" />
         {/* Twitter Card */}
         <meta name="twitter:card" content="https://resumate.shop/og-img.png" />
         <meta name="twitter:title" content="ResuMate | Free Resume Builder" />
@@ -54,12 +49,8 @@ function Landing() {
           name="twitter:description"
           content="Create professional, ATS-friendly resumes for free in minutes with ResuMate."
         />
-        <meta
-          name="twitter:image"
-          content="https://resumate.shop/og-img.png"
-        />
+        <meta name="twitter:image" content="https://resumate.shop/og-img.png" />
         <meta name="twitter:url" content="https://resumate.shop" />
-
       </Helmet>
 
       <div className="landing_page">
@@ -225,14 +216,103 @@ function Landing() {
         </section>
 
         <section className="bg-gray-100 grid grid-cols-1 sm:grid-cols-2 place-items-center py-36">
-          <div data-aos="fade-up">
-            <img src={laptop} alt="laptop" />
+          <div className="relative w-full max-w-[700px] mx-auto px-4">
+            <iframe
+              className="w-full aspect-video rounded-lg border-none"
+              src={`${laptopVideo}&controls=false&autoplay=true&loop=true&muted=true`}
+              allow="autoplay; fullscreen; picture-in-picture"
+              title="Laptop Video"
+            ></iframe>
           </div>
 
           <div data-aos="fade-up" className="p-10 max-w-2xl">
             <h1 className="text-5xl font-semibold py-2">
-              Customize any template to suit your needs
+              Effortless Resume Creation
             </h1>
+            <p className="text-gray-400">
+              Experience an intuitive platform that makes building your resume
+              quick, easy, and stress-free.
+            </p>
+          </div>
+        </section>
+
+        {/* AI Resume Reviewer Section */}
+        <section className="bg-white rounded-3xl py-16 px-4 sm:px-6 lg:px-8 text-black">
+          <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+            <div data-aos="fade-up">
+              <span className="inline-block bg-[#EEEFEF] text-[#717985] font-mono px-4 py-1 rounded-full text-sm">
+                New Feature
+              </span>
+              <h2 className="text-4xl font-bold mt-4 mb-4">
+                <span className="font-bold text-transparent bg-clip-text bg-gradient-to-l from-[#17263d] via-[#171F2E] to-[#6b90cf]">
+                  AI
+                </span>{" "}
+                Resume Reviewer
+              </h2>
+              <p className="text-gray-600 mb-6">
+                Upload your resume and get an instant ATS score, targeted
+                suggestions, and clear next steps to land more interviews.
+              </p>
+              <ul className="text-gray-600 space-y-3 mb-6">
+                <li>
+                  <i className="fa-solid fa-check mr-3 text-green-400"></i>ATS
+                  compatibility scoring and detailed breakdown
+                </li>
+                <li>
+                  <i className="fa-solid fa-check mr-3 text-green-400"></i>
+                  Concrete language & keyword suggestions
+                </li>
+                <li>
+                  <i className="fa-solid fa-check mr-3 text-green-400"></i>
+                  Privacy-first processing your file stays secure
+                </li>
+              </ul>
+              <div className="flex gap-4">
+                <Link to="/review" className="inline-block">
+                  <button className="py-3 px-6 bg-white text-black rounded-full shadow-md hover:scale-105 transition">
+                    Try AI Reviewer
+                  </button>
+                </Link>
+                <Link to="/signup" className="inline-block">
+                  <button className="py-3 px-6 bg-transparent border border-gray-200 text-black rounded-full hover:bg-black/5 transition">
+                    Create Account
+                  </button>
+                </Link>
+              </div>
+            </div>
+
+            <div data-aos="fade-down" className="flex justify-center">
+              <div className="w-full max-w-md bg-[#1C2029] rounded-2xl p-6 text-white shadow-lg">
+                <div className="flex items-center justify-between mb-3">
+                  <h3 className="text-lg font-semibold">Report Analysis</h3>
+                  <div className="text-sm text-gray-400">PDF • AI</div>
+                </div>
+                <div className="flex items-center gap-4">
+                  <div className="flex items-center justify-center w-24 h-24 rounded-full bg-gradient-to-tr from-yellow-400 to-green-400 text-black font-bold text-2xl">
+                    82
+                  </div>
+                  <div className="flex-1">
+                    <p className="text-sm text-gray-300">TOTAL ATS SCORE</p>
+                    <p className="text-white font-semibold mt-1">
+                      Strengths: Clean formatting, strong keywords
+                    </p>
+                    <div className="w-full bg-gray-700 h-2 rounded-full mt-3 overflow-hidden">
+                      <div
+                        className="h-2 rounded-full bg-gradient-to-r from-yellow-400 to-green-400"
+                        style={{ width: "82%" }}
+                      ></div>
+                    </div>
+                    <p className="text-gray-400 text-sm mt-3">
+                      Suggestions: Add measurable results and tailor to the job
+                      description.
+                    </p>
+                  </div>
+                </div>
+                <div className="mt-5 text-xs text-gray-400">
+                  We process files securely. Only you can view your report.
+                </div>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -240,11 +320,11 @@ function Landing() {
         <section className="bg-[#10141F] rounded-t-3xl grid sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 place-items-center content-center py-36 overflow-hidden">
           <div data-aos="fade-up" className="p-10 max-w-2xl">
             <h1 className="text-5xl text-white font-semibold py-2">
-              Browse Unique Templates to Stand Out
+              Browse Unique Templates
             </h1>
-            <p className="text-gray-400 text-sm">
+            <p className="text-gray-400 text-sm max-w-sm text-start">
               ResuMate offers a range of professionally designed templates so
-              you can make the right first impression—no matter your industry or
+              you can make the right first impression no matter your industry or
               experience level.
             </p>
           </div>
@@ -255,8 +335,8 @@ function Landing() {
           >
             <CardSwap
               skewAmount={1}
-              cardDistance={70}
-              verticalDistance={15}
+              cardDistance={40}
+              verticalDistance={10}
               delay={2000}
               pauseOnHover={false}
             >

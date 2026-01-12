@@ -1,3 +1,4 @@
+import { useCallback } from "react";
 import { useFormContext } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -5,6 +6,7 @@ import {
   removeFields,
   updateFields,
 } from "../../features/templateSlice";
+import { sanitizeInput } from "../../utils/helpers";
 
 function ExperinceDetails() {
   
@@ -18,7 +20,7 @@ function ExperinceDetails() {
   );
   const dispatch = useDispatch();
 
-  const handleAddField = (arrState) => {
+  const handleAddField = useCallback((arrState) => {
     const newField = {
       companyName: "",
       role: "",
@@ -27,18 +29,17 @@ function ExperinceDetails() {
       description: "",
     };
     dispatch(addFields({ arrState, newField }));
-  };
+  }, [dispatch]);
 
-  const handleInputChange = (index, field, value, arrState) => {
-    dispatch(updateFields({ index, field, value, arrState }));
-    setValue(`${arrState}.${index}.${field}`, value);
-  };
+  const handleInputChange = useCallback((index, field, value, arrState) => {
+    const sanitizedValue = sanitizeInput(value);
+    dispatch(updateFields({ index, field, value: sanitizedValue, arrState }));
+    setValue(`${arrState}.${index}.${field}`, sanitizedValue);
+  }, [dispatch, setValue]);
 
-
-
-  const handleDelete = (id, arrState) => {
+  const handleDelete = useCallback((id, arrState) => {
     dispatch(removeFields({ id, arrState }));
-  };
+  }, [dispatch]);
 
   return (
     <>
@@ -54,7 +55,7 @@ function ExperinceDetails() {
                 Company Name
               </label>
               <input
-                className="outline-none mt-1 p-3 flex items-center border-none shadow-md w-min rounded-xl text-gray-700"
+                className="outline-none mt-1 p-3 flex items-center bg-white border border-gray-300 hover:border-gray-400 w-min rounded-xl text-black transition-colors"
                 name={`experienceDetails.${index}.companyName`}
                 type="text"
                 placeholder="Enter name..."
@@ -88,7 +89,7 @@ function ExperinceDetails() {
                 Role
               </label>
               <input
-                className="outline-none mt-1 p-3 flex items-center border-none shadow-md w-min rounded-xl text-gray-700"
+                className="outline-none mt-1 p-3 flex items-center bg-white border border-gray-300 hover:border-gray-400 w-min rounded-xl text-black transition-colors"
                 name={`experienceDetails.${index}.role`}
                 type="text"
                 placeholder="Enter role name..."
@@ -124,7 +125,7 @@ function ExperinceDetails() {
                 Location
               </label>
               <input
-                className="outline-none mt-1 p-3 flex items-center border-none shadow-md w-min rounded-xl text-gray-700"
+                className="outline-none mt-1 p-3 flex items-center bg-white border border-gray-300 hover:border-gray-400 w-min rounded-xl text-black transition-colors"
                 name={`experienceDetails.${index}.location`}
                 type="text"
                 placeholder="Enter location..."
@@ -158,7 +159,7 @@ function ExperinceDetails() {
                 Year
               </label>
               <input
-                className="outline-none mt-1 p-3 flex items-center border-none shadow-md w-min rounded-xl text-gray-700"
+                className="outline-none mt-1 p-3 flex items-center bg-white border border-gray-300 hover:border-gray-400 w-min rounded-xl text-black transition-colors"
                 name={`experienceDetails.${index}.year`}
                 type="text"
                 placeholder="2023-2025"
@@ -188,7 +189,7 @@ function ExperinceDetails() {
                 Description
               </label>
               <textarea
-                className="outline-none mt-1 p-3 flex items-center border-none shadow-md w-full rounded-xl text-gray-700"
+                className="outline-none mt-1 p-3 flex items-center bg-white border border-gray-300 hover:border-gray-400 w-full rounded-xl text-black transition-colors"
                 name={`experienceDetails.${index}.description`}
                 type="text"
                 placeholder="Enter description"

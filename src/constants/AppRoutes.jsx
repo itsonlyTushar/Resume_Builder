@@ -9,6 +9,8 @@ import Contact from "../pages/Contact.jsx";
 import Preview from "../components/PreviewPage/Preview.jsx";
 import NotFound from "../pages/NotFound.jsx";
 import About from "../pages/About.jsx";
+import PrivacyPolicy from "../pages/PrivacyPolicy.jsx";
+import TermsOfUse from "../pages/TermsOfUse.jsx";
 import {
   BrowserRouter as Router,
   Routes,
@@ -17,6 +19,7 @@ import {
 } from "react-router-dom";
 import { ScrollTop } from "../utils/helpers.js";
 import Terms from "../pages/Terms.jsx";
+import Review from "../pages/Review.jsx";
 
 const ProtectedRoutesWrapper = () => (
   <ProtectedRoute>
@@ -34,7 +37,8 @@ function AppRoutes() {
         <Route path="/signin" element={<SignIn />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/about" element={<About />} />
-        <Route path="/terms" element={<Terms />} />
+        <Route path="/privacy" element={<PrivacyPolicy />} />
+        <Route path="/terms" element={<TermsOfUse />} />
         <Route path="/" element={<Landing />} />
 
         {/* Protected Routes */}
@@ -43,6 +47,7 @@ function AppRoutes() {
           <Route path="/builder" element={<Builder />} />
           <Route path="/preview" element={<Preview />} />
           <Route path="/user" element={<User />} />
+          <Route path="/review" element={<Review />} />
         </Route>
 
         {/* 404 Route */}

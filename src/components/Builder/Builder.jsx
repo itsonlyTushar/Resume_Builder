@@ -25,7 +25,6 @@ import {
   useTheme,
 } from "@mui/material";
 
-
 function Builder() {
   const formData = useSelector((state) => state.resumeBuilder.form_data);
   const [openDialog, setOpenDialog] = useState(false);
@@ -47,32 +46,35 @@ function Builder() {
       projectDetails: formData.projectDetails || [],
       skills: formData.skills || [],
     });
-  }, [formData]);
+  }, [formData.personalDetails, formData.educationDetails, formData.experienceDetails, formData.projectDetails, formData.skills, methods]);
 
   const [loading, setIsLoading] = useState(true);
-  const [activeStep, setActiveStep] = useState(0);
-  
+  const [activeStep, setActiveStep] = useState(() => {
+    const savedStep = localStorage.getItem("activeStep");
+    return savedStep ? parseInt(savedStep, 10) : 0;
+  });
+
   const navigate = useNavigate();
   const steps = [
     "Personal Details",
     "Education Details",
     "Experience Details",
     "Project Details",
-    "Other Details",
+    "Addtional Details",
   ];
-  
+
   const theme = useTheme();
   const dispatch = useDispatch();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   const handleNext = () => {
-    setActiveStep((prev) => Math.min(prev + 1, steps.length));
+    setActiveStep((prev) => Math.min(prev + 1, steps.length - 1));
   };
 
   const handleBack = () => {
     setActiveStep((prev) => Math.max(prev - 1, 0));
   };
- 
+
   const handleOpenDialog = () => {
     setOpenDialog(true);
   };
@@ -82,13 +84,15 @@ function Builder() {
   };
 
   const onSubmit = async () => {
-    const loadingToast = toast.loading('Generating resume...');
+    const loadingToast = toast.loading("Generating resume...");
     try {
-      toast.success('Resume generated', { id: loadingToast });
-      navigate('/preview');
+      toast.success("Resume generated", { id: loadingToast });
+      navigate("/preview");
     } catch (err) {
-      console.error('Submit error:', err);
-      toast.error(`Failed to generate resume: ${err.message}`, { id: loadingToast });
+      console.error("Submit error:", err);
+      toast.error(`Failed to generate resume: ${err.message}`, {
+        id: loadingToast,
+      });
     }
   };
 
@@ -118,6 +122,7 @@ function Builder() {
 
   const handleClickPreview = (event) => {
     event.preventDefault();
+    localStorage.setItem("activeStep", activeStep.toString());
     navigate("/preview");
   };
 
@@ -157,7 +162,7 @@ function Builder() {
           id: 1,
         },
       ],
-      skills: [{ skillName: "", level: "", id: 1 }]
+      skills: [{ skillName: "", level: "", id: 1 }],
     });
     handleCloseDialog();
     setActiveStep(0);
@@ -167,9 +172,9 @@ function Builder() {
     <>
       <Navbar />
       <h1 className="text-center text-5xl pt-10 font-semibold">Builder Form</h1>
-      <div className="flex flex-col md:flex sm:flex-row justify-center items-center px-0 z-10 mb-32 mt-6">     
+      <div className="relative flex flex-col md:flex sm:flex-row justify-center items-center px-0 z-10 mb-32 mt-6">
         <div className="p-2">
-          <div className="border-none rounded-3xl flex-wrap overflow-hidden bg-gray-100 py-6 sm:px-10  sm:py-28 shadow-sm">
+          <div className="rounded-3xl flex-wrap overflow-hidden border  py-6 sm:px-10  sm:py-28 shadow-sm">
             <Stepper
               activeStep={activeStep}
               orientation={isMobile ? "horizontal" : "vertical"}
@@ -206,25 +211,25 @@ function Builder() {
           </div>
         </div>
         <div className="p-2">
-          <FormProvider {...methods}> 
+          <FormProvider {...methods}>
             <form onSubmit={(e) => e.preventDefault()}>
-              <div className="bg-[#EEEEEE] rounded-3xl p-10 sm:w-[55vw] w-full overflow-y-auto custom-scrollbar">
+              <div className="border rounded-3xl p-10 sm:w-[55vw] w-full min-h-[600px] max-h-[700px] overflow-y-auto scrollbar-hide">
                 {loading ? <Loader /> : handleFormChange(activeStep)}
-                <div className="flex gap-4 items-center mt-8 overflow-y-auto custom-scrollbar">
+                <div className="flex gap-4 items-center mt-8">
                   <Tooltip title="Reset Complete Form">
                     <button
-                      className="bg-white hover:bg-[#FAFAFA] text-black rounded-xl p-2 px-4"
+                      className="bg-white hover:bg-[#FAFAFA] text-black rounded-xl p-2 px-4 border border-gray-200 hover:border-white "
                       onClick={handleOpenDialog}
                     >
-                      <i className="ri-reset-right-line text-sm"></i>
+                      <i className="ri-reset-right-line"></i> Reset
                     </button>
                   </Tooltip>
                   <Tooltip title="Live preview">
                     <button
                       onClick={handleClickPreview}
-                      className="bg-white hover:bg-[#FAFAFA] text-black rounded-xl p-2 px-4"
+                      className="bg-white hover:bg-[#FAFAFA] text-black rounded-xl p-2 px-4 border border-gray-200 hover:border-white "
                     >
-                      Preview
+                      <i className="ri-qr-scan-line"></i> Preview
                     </button>
                   </Tooltip>
                 </div>
@@ -233,60 +238,61 @@ function Builder() {
           </FormProvider>
         </div>
         <div className="flex">
-        <button
-          className="bg-black text-white px-5 mx-2 py-2 rounded-2xl text-lg"
-          type={activeStep === steps.length - 1 ? "submit" : "button"}
-          onClick={
-            activeStep === steps.length - 1
-              ? methods.handleSubmit(onSubmit)
-              : methods.handleSubmit(handleNext)
-          }
-        >
-          {activeStep === steps.length - 1 ? "Submit" : "Next"}
-          <i className="ri-arrow-right-s-line text-sm"></i>
-        </button>
-        <button
-          hidden={activeStep === 0 ? true : false}
-          className="text-black px-5 mx-2 py-2 rounded-2xl text-lg bg-[#EEEFEF]"
-          onClick={handleBack}
-        >
-          Back
-        </button>
+          <button
+            className="bg-black text-white px-5 mx-2 py-2 rounded-2xl text-lg"
+            type={activeStep === steps.length - 1 ? "submit" : "button"}
+            onClick={
+              activeStep === steps.length - 1
+                ? methods.handleSubmit(onSubmit)
+                : methods.handleSubmit(handleNext)
+            }
+          >
+            {activeStep === steps.length - 1 ? "Submit" : "Next"}
+            <i className="ri-arrow-right-s-line text-sm"></i>
+          </button>
+          <button
+            hidden={activeStep === 0 ? true : false}
+            className="text-black px-5 mx-2 py-2 rounded-2xl text-lg bg-[#EEEFEF]"
+            onClick={handleBack}
+          >
+            Back
+          </button>
         </div>
       </div>
       <Dialog
-          open={openDialog}
-          onClose={handleCloseDialog}
-          aria-labelledby="alert-dialog-title"
-          aria-describedby="alert-dialog-description"
-          style={{
-            borderRadius: "30px",
-          }}
-        >
-          <DialogTitle id="alert-dialog-title">
-            {"Are you sure you want to reset form ?"}
-          </DialogTitle>
-          <DialogContent>
-            <DialogContentText id="alert-dialog-description">
-              All input data will be reset
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleCloseDialog}>Cancel</Button>
-            <Button
-              onClick={handleReset}
-              variant="contained"
-              style={{
-                backgroundColor: "#000000",
-                color: "white",
-                borderRadius: "10px",
-              }}
-              autoFocus
-            >
-              Reset Form
-            </Button>
-          </DialogActions>
-        </Dialog>
+        open={openDialog}
+        onClose={handleCloseDialog}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+        style={{
+          borderRadius: "30px",
+        }}
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"Are you sure you want to reset form ?"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            All input data will be reset
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialog}>Cancel</Button>
+          <Button
+            onClick={handleReset}
+            variant="contained"
+            style={{
+              backgroundColor: "#000000",
+              color: "white",
+              borderRadius: "10px",
+              border: "1px solid black",
+            }}
+            autoFocus
+          >
+            Reset Form
+          </Button>
+        </DialogActions>
+      </Dialog>
 
       <Footer />
     </>

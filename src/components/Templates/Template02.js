@@ -28,16 +28,15 @@ export const Template02 = ({ formData }) => {
     pdf.addFont(roboto_bol, "roboto_bol", "normal");
 
     // full name with background
-    pdf.setFont("roboto_reg");
-    pdf.setFillColor(175, 160, 255);
-    pdf.rect(leftMargin - 35, yPosition - 20, pageWidth, 35, "F");
-    pdf.setFontSize(35);
-    pdf.setTextColor(255, 255, 255);
-    pdf.text(
-      `${personalDetails.firstName} ${personalDetails.lastName}`,
-      leftMargin - 25,
-      yPosition + 10
-    );
+    if (checkStr(personalDetails.firstName) || checkStr(personalDetails.lastName)) {
+      pdf.setFont("roboto_reg");
+      pdf.setFillColor(175, 160, 255);
+      pdf.rect(leftMargin - 35, yPosition - 20, pageWidth, 35, "F");
+      pdf.setFontSize(35);
+      pdf.setTextColor(255, 255, 255);
+      const fullName = `${personalDetails.firstName || ""} ${personalDetails.lastName || ""}`.trim();
+      pdf.text(fullName, leftMargin - 25, yPosition + 10);
+    }
 
     // personal information section
     yPosition += 25;
@@ -61,15 +60,19 @@ export const Template02 = ({ formData }) => {
           url: `${personalDetails.linkedin}`,
         });
       }
-      pdf.text(personalDetails.email, leftMargin - 24, yPosition + 9, {
-        align: "left",
-      });
-      pdf.text(
-        `Tel : ${personalDetails.phoneNumber}`,
-        leftMargin - 24,
-        yPosition + 14,
-        { align: "left" }
-      );
+      if (checkStr(personalDetails.email)) {
+        pdf.text(personalDetails.email, leftMargin - 24, yPosition + 9, {
+          align: "left",
+        });
+      }
+      if (checkStr(personalDetails.phoneNumber)) {
+        pdf.text(
+          `Tel : ${personalDetails.phoneNumber}`,
+          leftMargin - 24,
+          yPosition + 14,
+          { align: "left" }
+        );
+      }
     }
 
     if(checkStr(personalDetails.about)) {
@@ -97,6 +100,7 @@ export const Template02 = ({ formData }) => {
       pdf.setFont("roboto_bol");
 
       skills.forEach((skill) => {
+        if (!checkStr(skill.skillName)) return;
         yPosition += 5;
         pdf.text(`• ${skill.skillName}`, leftMargin - 24, yPosition + 4);
       });
@@ -114,6 +118,7 @@ export const Template02 = ({ formData }) => {
       pdf.text("Certication / Courses", leftMargin - 24, yPosition + 20);
 
       certification.forEach((certi) => {
+        if (!checkStr(certi.certiName)) return;
         pdf.setFontSize(9);
         pdf.setTextColor(0, 0, 0);
         yPosition += 7;
@@ -134,20 +139,30 @@ export const Template02 = ({ formData }) => {
     pdf.text("Education", leftMargin + 34, yPosition - 8);
 
     educationDetails.forEach((edu) => {
+      if (!checkStr(edu.collegeName) && !checkStr(edu.course) && !checkStr(edu.location) && !checkStr(edu.year)) return;
       yPosition += 4;
       pdf.setFontSize(9);
       pdf.setTextColor(0, 0, 0);
-      const collegeHeading = pdf.splitTextToSize(edu.collegeName, 200);
-      pdf.setTextColor(0, 0, 0);
-      pdf.text(
-        `${edu.course} - ${collegeHeading}, ${edu.location}`,
-        leftMargin + 34,
-        yPosition - 5
-      );
+      
+      const eduParts = [];
+      if (checkStr(edu.course)) eduParts.push(edu.course);
+      if (checkStr(edu.collegeName)) {
+        const collegeHeading = pdf.splitTextToSize(edu.collegeName, 200);
+        eduParts.push(collegeHeading);
+      }
+      if (checkStr(edu.location)) eduParts.push(edu.location);
+      
+      if (eduParts.length > 0) {
+        pdf.setTextColor(0, 0, 0);
+        pdf.text(eduParts.join(" - "), leftMargin + 34, yPosition - 5);
+      }
+      
       yPosition += 3;
-      pdf.setFontSize(7);
-      pdf.setTextColor(202, 202, 213);
-      pdf.text(edu.year, leftMargin + 34, yPosition - 4);
+      if (checkStr(edu.year)) {
+        pdf.setFontSize(7);
+        pdf.setTextColor(202, 202, 213);
+        pdf.text(edu.year, leftMargin + 34, yPosition - 4);
+      }
       yPosition += 4;
     });
     }
@@ -168,34 +183,42 @@ export const Template02 = ({ formData }) => {
       pdf.text("Experience", leftMargin + 34, yPosition - 8);
 
       experienceDetails.forEach((exp, index) => {
+        if (!checkStr(exp.role) && !checkStr(exp.companyName) && !checkStr(exp.location) && !checkStr(exp.year) && !checkStr(exp.description)) return;
         yPosition += 5;
         pdf.setFontSize(9);
         pdf.setTextColor(0, 0, 0);
 
-        const JD = pdf.splitTextToSize(exp.description, 140);
-        pdf.setTextColor(0, 0, 0);
         if (index !== 0) {
           yPosition += 12;
         }
-        pdf.setFont("roboto_bol");
-        pdf.text(
-          `${exp.role} -  ${exp.companyName}, ${exp.location}`,
-          leftMargin + 34,
-          yPosition - 5
-        );
+        
+        const expParts = [];
+        if (checkStr(exp.role)) expParts.push(exp.role);
+        if (checkStr(exp.companyName)) expParts.push(exp.companyName);
+        if (checkStr(exp.location)) expParts.push(exp.location);
+        
+        if (expParts.length > 0) {
+          pdf.setFont("roboto_bol");
+          pdf.text(expParts.join(" - "), leftMargin + 34, yPosition - 5);
+        }
         yPosition += 10;
 
-        pdf.setFont("roboto_reg");
-        pdf.setFontSize(7);
-        pdf.setTextColor(202, 202, 213);
-        pdf.setFont("roboto_bol");
-        pdf.text(exp.year, leftMargin + 34, yPosition - 12);
+        if (checkStr(exp.year)) {
+          pdf.setFont("roboto_reg");
+          pdf.setFontSize(7);
+          pdf.setTextColor(202, 202, 213);
+          pdf.setFont("roboto_bol");
+          pdf.text(exp.year, leftMargin + 34, yPosition - 12);
+        }
         pdf.setTextColor(0, 0, 0);
 
-        yPosition += 2;
-        pdf.setFontSize(9);
-        pdf.setFont("roboto_reg");
-        pdf.text(JD, leftMargin + 34, yPosition - 9);
+        if (checkStr(exp.description)) {
+          const JD = pdf.splitTextToSize(exp.description, 140);
+          yPosition += 2;
+          pdf.setFontSize(9);
+          pdf.setFont("roboto_reg");
+          pdf.text(JD, leftMargin + 34, yPosition - 9);
+        }
         yPosition += 4;
       });
     }

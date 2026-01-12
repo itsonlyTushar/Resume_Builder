@@ -5,6 +5,7 @@ import toast from "react-hot-toast";
 const STORAGE_BUCKET = '676d037b001892026fbf';
 const DATABASE_ID = '677138b5003a8ac08657';
 const RESUMES_COLLECTION = '679b1dfe003d6270e5df'
+const RETRIVE_USERS = '677138da00267c0a8682'
 
 const MAX_RESUMES = 4;
 
@@ -23,6 +24,80 @@ const getUserResumeCount = async (userId) => {
     throw error;
   }
 }
+
+// Get Count from the appwrite for the AI count
+export const getUserReviewCount = async (userId) => {
+  try {
+    const response = await databases.listDocuments(
+      DATABASE_ID, // db id
+      RETRIVE_USERS, // table id
+      [Query.equal('uid', userId)]
+    );
+    if (response.documents && response.documents.length > 0) {
+      const attempts = response.documents[0].ai_attempts;
+      // Handle NULL or undefined values
+      return attempts !== null && attempts !== undefined ? parseInt(attempts) : 3;
+    }
+    return 3; 
+  } catch (error) {
+    console.error('Error Getting the Count:', error)
+    return 3; // Return default on error
+  }
+}
+
+export const updateUserReviewCount = async (userId) => {
+  try {
+    // First, fetch the current user document
+    const response = await databases.listDocuments(
+      DATABASE_ID,
+      RETRIVE_USERS,
+      [Query.equal('uid', userId)]
+    );
+
+    if (response.documents.length === 0) {
+      // User not found, create a new document with initial attempts
+      const newDoc = await databases.createDocument(
+        DATABASE_ID,
+        RETRIVE_USERS,
+        ID.unique(),  // Generate a unique ID
+        {
+          uid: userId,
+          ai_attempts: '1',  // Start with 1 attempt used
+          fileId: '',  // Empty fileId since this is just for tracking review attempts
+          lastUpdated: new Date().toISOString()
+        }
+      );
+      return 1;  // Return the new attempts count
+    }
+
+    const userDoc = response.documents[0];
+    const currentAttempts = parseInt(userDoc.ai_attempts || 0);
+
+    // Increment attempts (assuming max is 3)
+    if (currentAttempts >= 3) {
+      throw new Error('Maximum attempts reached');
+    }
+
+    const newAttempts = currentAttempts + 1;
+
+    // Update the document
+    await databases.updateDocument(
+      DATABASE_ID,
+      RETRIVE_USERS,
+      userDoc.$id,  // Document ID
+      { 
+        ai_attempts: newAttempts.toString(),
+        lastUpdated: new Date().toISOString()
+      }
+    );
+
+    return newAttempts;  // Return updated attempts for UI update
+  } catch (error) {
+    console.error('Error updating review count:', error);
+    throw error;
+  }
+}
+
 
 // Uploads the resume to appwrite
 

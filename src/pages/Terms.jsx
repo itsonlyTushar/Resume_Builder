@@ -16,9 +16,17 @@ function Terms() {
   return (
     <>
       <Navigation />
-      <div className="pt-20">
+      <div className="relative pt-20">
         <h1 className="text-5xl text-center mb-10 font-bold py-4">Terms of Use</h1>
         
+        <div className="absolute p-5">
+          
+            <button>Acceptable Use Policy</button>
+      
+
+        </div>
+
+
         {/* Header section */}
         <section
           data-aos="fade-up"

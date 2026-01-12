@@ -1,3 +1,4 @@
+import { useCallback } from "react";
 import { useFormContext } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -5,6 +6,7 @@ import {
   removeFields,
   updateFields,
 } from "../../features/templateSlice";
+import { sanitizeInput } from "../../utils/helpers";
 
 function ProjectDetails() {
   const {
@@ -22,7 +24,7 @@ function ProjectDetails() {
   console.log(selectedTemplate);
   const dispatch = useDispatch();
 
-  const handleAddField = (arrState) => {
+  const handleAddField = useCallback((arrState) => {
     const newField = {
       projectName: "",
       techStack: "",
@@ -30,16 +32,17 @@ function ProjectDetails() {
       year: "",
     };
     dispatch(addFields({ arrState, newField }));
-  };
+  }, [dispatch]);
 
-  const handleInputChange = (index, field, value, arrState) => {
-    dispatch(updateFields({ index, field, value, arrState }));
-    setValue(`${arrState}.${index}.${field}`, value);
-  };
+  const handleInputChange = useCallback((index, field, value, arrState) => {
+    const sanitizedValue = sanitizeInput(value);
+    dispatch(updateFields({ index, field, value: sanitizedValue, arrState }));
+    setValue(`${arrState}.${index}.${field}`, sanitizedValue);
+  }, [dispatch, setValue]);
 
-  const handleDelete = (id, arrState) => {
+  const handleDelete = useCallback((id, arrState) => {
     dispatch(removeFields({ id, arrState }));
-  };
+  }, [dispatch]);
 
   return (
     <>
@@ -55,7 +58,7 @@ function ProjectDetails() {
                 Project Name
               </label>
               <input
-                className="outline-none mt-1 p-3 flex items-center border-none shadow-md w-min rounded-xl text-gray-700"
+                className="outline-none mt-1 p-3 flex items-center bg-white border border-gray-300 hover:border-gray-400 w-min rounded-xl text-black transition-colors"
                 name={`projectDetails.${index}.projectName`}
                 type="text"
                 placeholder="Enter name..."
@@ -91,7 +94,7 @@ function ProjectDetails() {
               </label>
               <input
                 data-testid="tech-stack"
-                className="outline-none mt-1 p-3 flex items-center border-none shadow-md w-min rounded-xl text-gray-700"
+                className="outline-none mt-1 p-3 flex items-center bg-white border border-gray-300 hover:border-gray-400 w-min rounded-xl text-black transition-colors"
                 name={`projectDetails.${index}.techStack`}
                 type="text"
                 placeholder="Javscript,Redux,React"
@@ -127,7 +130,7 @@ function ProjectDetails() {
                 Project Link
               </label>
               <input
-                className="outline-none mt-1 p-3 flex items-center border-none shadow-md w-min rounded-xl text-gray-700"
+                className="outline-none mt-1 p-3 flex items-center bg-white border border-gray-300 hover:border-gray-400 w-min rounded-xl text-black transition-colors"
                 name={`projectDetails.${index}.projectLink`}
                 type="text"
                 placeholder="Add Link..."
@@ -161,7 +164,7 @@ function ProjectDetails() {
                 Year
               </label>
               <input
-                className="outline-none mt-1 p-3 flex items-center border-none shadow-md w-min rounded-xl text-gray-700"
+                className="outline-none mt-1 p-3 flex items-center bg-white border border-gray-300 hover:border-gray-400 w-min rounded-xl text-black transition-colors"
                 name={`projectDetails.${index}.year`}
                 type="text"
                 placeholder="Mar-2024"
@@ -197,7 +200,7 @@ function ProjectDetails() {
                     Description
                   </label>
                   <textarea
-                    className="outline-none mt-1 p-3 flex items-center border-none shadow-md w-full rounded-xl text-gray-700"
+                    className="outline-none mt-1 p-3 flex items-center bg-white border border-gray-300 hover:border-gray-400 w-full rounded-xl text-black transition-colors"
                     name={`projectDetails.${index}.description`}
                     type="text"
                     placeholder="Enter description"

@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState, useMemo } from "react";
 import { auth } from '../auth/firebase.js'
 import { onAuthStateChanged } from 'firebase/auth'
 
@@ -20,9 +20,10 @@ export function AuthProvider({children}) {
         return unsubscribe;
     }, []);
 
-    const value = {
-        currentUser,loading
-    };
+    const value = useMemo(() => ({
+        currentUser,
+        loading
+    }), [currentUser, loading]);
 
     return (
         <AuthContext.Provider value={value}>

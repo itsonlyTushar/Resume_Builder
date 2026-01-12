@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback, memo } from "react";
 import { Outlet, useNavigate } from "react-router";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
@@ -16,6 +16,57 @@ import Footer from "../Footer/Footer";
 import { devTemplate, templateImgs } from "./templateConfig";
 import Tooltip from '../UI/Tooltip'
 
+// Memoized Template Card Component
+const TemplateCard = memo(({ template, onOpenModal }) => (
+  <Grid2 xs={12} sm={6} md={3}>
+    <Card
+      variant="outlined"
+      sx={{
+        borderRadius: "1rem",
+        overflow: "hidden",
+        transition: "all 0.3s ease-in-out",
+        "&:hover": {
+          boxShadow: "0 8px 16px rgba(0, 0, 0, 0.2)",
+          transform: "scale(1.02)",
+        },
+      }}
+    >
+      <CardMedia
+        component="img"
+        loading="lazy"
+        sx={{
+          height: "auto",
+          width: "100%",
+          maxHeight: 420,
+          objectFit: "cover",
+          cursor: "pointer",
+        }}
+        image={template.image}
+        onClick={() => onOpenModal(template)}
+      />
+      <CardActions>
+        <Box display="flex" justifyContent="center" width="100%">
+          <Button
+            onClick={() => onOpenModal(template)}
+            variant="contained"
+            size="small"
+            sx={{
+              backgroundColor: "black",
+              padding: "8px 16px",
+              borderRadius: "10px",
+              transition: "all 0.2s ease-in-out",
+              "&:hover": { backgroundColor: "#333" },
+            }}
+          >
+            View Template
+          </Button>
+        </Box>
+      </CardActions>
+    </Card>
+  </Grid2>
+));
+
+TemplateCard.displayName = 'TemplateCard';
 
 function Templates() {
   const [loading, setLoading] = useState(true);
@@ -23,18 +74,18 @@ function Templates() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleTemplateSelect = (templateId) => {
+  const handleTemplateSelect = useCallback((templateId) => {
     dispatch(catch_template(templateId));
     navigate("/builder");
-  };
+  }, [dispatch, navigate]);
 
-  const handleOpenModal = (template) => {
+  const handleOpenModal = useCallback((template) => {
     setSelectedTemplate(template);
-  };
+  }, []);
 
-  const handleCloseModal = () => {
+  const handleCloseModal = useCallback(() => {
     setSelectedTemplate(null);
-  };
+  }, []);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -124,52 +175,11 @@ function Templates() {
           
           <Grid2 container spacing={3} justifyContent="center">
             {templateImgs.map((template) => (
-              <Grid2 key={template.id} xs={12} sm={6} md={3}>
-                <Card
-                  variant="outlined"
-                  sx={{
-                    borderRadius: "1rem",
-                    overflow: "hidden",
-                    transition: "all 0.3s ease-in-out",
-                    "&:hover": {
-                      boxShadow: "0 8px 16px rgba(0, 0, 0, 0.2)",
-                      transform: "scale(1.02)",
-                    },
-                  }}
-                >
-                  <CardMedia
-                    component="img"
-                    loading="lazy"
-                    sx={{
-                      height: "auto",
-                      width: "100%",
-                      maxHeight: 420,
-                      objectFit: "cover",
-                      cursor: "pointer",
-                    }}
-                    image={template.image}
-                    onClick={() => handleOpenModal(template)}
-                  />
-                  <CardActions>
-                    <Box display="flex" justifyContent="center" width="100%">
-                      <Button
-                        onClick={() => handleOpenModal(template)}
-                        variant="contained"
-                        size="small"
-                        sx={{
-                          backgroundColor: "black",
-                          padding: "8px 16px",
-                          borderRadius: "10px",
-                          transition: "all 0.2s ease-in-out",
-                          "&:hover": { backgroundColor: "#333" },
-                        }}
-                      >
-                        View Template
-                      </Button>
-                    </Box>
-                  </CardActions>
-                </Card>
-              </Grid2>
+              <TemplateCard 
+                key={template.id} 
+                template={template} 
+                onOpenModal={handleOpenModal}
+              />
             ))}
           </Grid2>
 

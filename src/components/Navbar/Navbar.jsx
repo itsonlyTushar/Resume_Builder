@@ -24,6 +24,8 @@ import { useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
 import { notifications } from "../../constants/constant";
 import { handleSignOut } from "../../auth/authOperations/logOut";
+import { Circle } from "@mui/icons-material";
+import { Dot } from "lucide-react";
 
 function Navbar() {
   const [accountMenuAnchor, setAccountMenuAnchor] = useState(null);
@@ -43,11 +45,10 @@ function Navbar() {
   const isMobileMenuOpen = Boolean(mobileMenuAnchor);
   const isNotificationMenuOpen = Boolean(notificationMenuAnchor);
 
-
   const handleNotificationsOpen = (event) => {
     setNotificationMenuAnchor(event.currentTarget);
     if (isMobile) {
-      setMobileMenuAnchor(null); 
+      setMobileMenuAnchor(null);
     }
   };
 
@@ -79,19 +80,29 @@ function Navbar() {
     >
       <MenuItem onClick={handleMenuClose}>
         <Link to="/user" className="flex items-center">
-          <i className="fa-solid fa-user text-md mr-2"></i>
+          <i className="ri-user-line text-md mr-2"></i>
           My Account
         </Link>
       </MenuItem>
 
-
-            <MenuItem onClick={handleMenuClose}>
+      <MenuItem onClick={handleMenuClose}>
         <Link to="/select_template" className="flex items-center">
           <i className="ri-file-add-line text-md mr-2"></i>
           Templates
         </Link>
       </MenuItem>
-      
+
+      <MenuItem onClick={handleMenuClose}>
+        <Link to="/review" className="flex items-center">
+          <i className="ri-bard-line text-md mr-2"></i>
+          AI Resume Reviewer
+        </Link>
+        <span className="relative border text-xs font-medium rounded-lg bg-black text-white px-1 py-0.5 mx-2 ">
+          New
+          <Dot className="text-red-600 animate-pulse absolute bottom-2 left-5" />
+          </span>
+      </MenuItem>
+
       <MenuItem
         onClick={() => {
           handleSignOut(dispatch, navigate, reset);
@@ -127,10 +138,6 @@ function Navbar() {
         </IconButton>
         <p className="ml-2">Account</p>
       </MenuItem>
-
-
-
-      
     </Menu>
   );
 
@@ -146,7 +153,9 @@ function Navbar() {
     >
       <div className="flex justify-between items-center gap-10 mx-2 px-4">
         <h3 className="font-semibold">Notifications</h3>
-        <span className="text-gray-600 cursor-pointer text-xs ">Mark all as read</span>
+        <span className="text-gray-600 cursor-pointer text-xs ">
+          Mark all as read
+        </span>
       </div>
       <List sx={{ width: "250px", maxWidth: "100vw" }}>
         {notifications.map((notification) => (
@@ -197,7 +206,6 @@ function Navbar() {
               >
                 <AccountCircle />
               </IconButton>
-
             </Box>
           )}
 

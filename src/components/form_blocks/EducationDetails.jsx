@@ -1,3 +1,4 @@
+import { useCallback } from "react";
 import { useFormContext } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -5,6 +6,7 @@ import {
   removeFields,
   updateFields,
 } from "../../features/templateSlice";
+import { sanitizeInput } from "../../utils/helpers";
 
 function EducationDetails() {
   const {
@@ -20,11 +22,13 @@ function EducationDetails() {
   const dispatch = useDispatch();
 
   // after several attempts to updating redux state this method of conntecting redux and react-hook-form implemented
-  const handleInputChange = (index, field, value, arrState) => {
-    dispatch(updateFields({ index, field, value, arrState }));
-    setValue(`${arrState}.${index}.${field}`, value);
-  };
-  const handleAddField = (arrState) => {
+  const handleInputChange = useCallback((index, field, value, arrState) => {
+    const sanitizedValue = sanitizeInput(value);
+    dispatch(updateFields({ index, field, value: sanitizedValue, arrState }));
+    setValue(`${arrState}.${index}.${field}`, sanitizedValue);
+  }, [dispatch, setValue]);
+  
+  const handleAddField = useCallback((arrState) => {
     const newField = {
       collegeName: "",
       course: "",
@@ -32,11 +36,11 @@ function EducationDetails() {
       year: "",
     };
     dispatch(addFields({ arrState, newField }));
-  };
+  }, [dispatch]);
 
-  const handleDelete = (id, arrState) => {
+  const handleDelete = useCallback((id, arrState) => {
     dispatch(removeFields({ id, arrState }));
-  };
+  }, [dispatch]);
 
   return (
     <>
@@ -52,7 +56,7 @@ function EducationDetails() {
                 College Name
               </label>
               <input
-                className="outline-none mt-1 p-3 flex items-center border-none shadow-md w-min rounded-xl text-gray-700"
+                className="outline-none mt-1 p-3 flex items-center bg-white border border-gray-300 hover:border-gray-400 w-min rounded-xl text-black transition-colors"
                 name={`educationDetails.${index}.collegeName`}
                 type="text"
                 placeholder="Enter college..."
@@ -84,17 +88,13 @@ function EducationDetails() {
                 Course
               </label>
               <input
-                className="outline-none mt-1 p-3 flex items-center border-none shadow-md w-min rounded-xl text-gray-700"
+                className="outline-none mt-1 p-3 flex items-center bg-white border border-gray-300 hover:border-gray-400 w-min rounded-xl text-black transition-colors"
                 name={`educationDetails.${index}.course`}
                 type="text"
                 
                 placeholder="Enter course name..."
                 {...register(`educationDetails.${index}.course`, {
                   required: true,
-                  maxLength: {
-                    value: 20,
-                    message: "Keep the course name short"
-                  },
                   validate: (value) =>
                     value.trim().length > 0 || "phone number cannot be empty",
                   onChange: (e) =>
@@ -123,7 +123,7 @@ function EducationDetails() {
                 Location
               </label>
               <input
-                className="outline-none mt-1 p-3 flex items-center border-none shadow-md w-min rounded-xl text-gray-700"
+                className="outline-none mt-1 p-3 flex items-center bg-white border border-gray-300 hover:border-gray-400 w-min rounded-xl text-black transition-colors"
                 name={`educationDetails.${index}.location`}
                 type="text"
                 placeholder="Enter location..."
@@ -155,7 +155,7 @@ function EducationDetails() {
                 Year
               </label>
               <input
-                className="outline-none mt-1 p-3 flex items-center border-none shadow-md w-min rounded-xl text-gray-700"
+                className="outline-none mt-1 p-3 flex items-center bg-white border border-gray-300 hover:border-gray-400 w-min rounded-xl text-black transition-colors"
                 name={`educationDetails.${index}.year`}
                 type="text"
                 placeholder="2023-2025"

@@ -35,94 +35,112 @@ function ResumeList({ resumes, onResumeClick, onDelete }) {
     }
   };
 
-  if (resumes.length === 0) {
-    return (
-      <div className="flex flex-col items-center text-center justify-center p-8">
-        <div>
-          <i className="ri-file-list-3-line text-4xl text-gray-400 mb-2"></i>
-          <p className="text-gray-600 text-center">No resumes created yet</p>
-          <button
-            onClick={() => (window.location.href = "/select_template")}
-            className="mt-4 px-6 py-2 bg-black text-white rounded-full hover:bg-gray-800 transition-colors"
-          >
-            Create Resume
-          </button>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
-      {resumes.map((resume) => {
-          const created_At = resume.$createdAt;
-          const date = new Date(created_At);
-          const formateDate = date.toLocaleDateString("en-GB");
+    <>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {resumes.map((resume) => {
+            const created_At = resume.$createdAt;
+            const date = new Date(created_At);
+            const formateDate = date.toLocaleDateString("en-GB");
+            const isExpired = resume.downloadsLeft <= 0;
 
-          return (
-            <div
-              key={resume.$id}
-              className="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow"
-            >
-              <div className="flex justify-between items-start mb-4">
-                <div>
-                  <h3 className="font-semibold text-lg">
-                    Resume id: {resume.fileId}
-                  </h3>
-                  <p className="text-sm text-gray-500">
-                    Date: {formateDate}
-                  </p>
+            return (
+              <div
+                key={resume.$id}
+                className="group relative bg-white border-2 border-gray-100 rounded-2xl overflow-hidden hover:border-black hover:shadow-xl transition-all duration-300"
+              >
+                {/* Status Badge */}
+                <div className="absolute top-4 right-4 z-10">
+                  {isExpired ? (
+                    <span className="px-3 py-1 bg-red-100 text-red-600 text-xs font-semibold rounded-full">
+                      Expired
+                    </span>
+                  ) : (
+                    <span className="px-3 py-1 bg-green-100 text-green-600 text-xs font-semibold rounded-full">
+                      Active
+                    </span>
+                  )}
                 </div>
-                <button
-                  onClick={() => handleOpenDialog(resume)}
-                  className="text-red-500 hover:text-red-700 p-1 ml-5"
-                  title="Delete Resume"
-                >
-                  <i className="ri-delete-bin-line"></i>
-                </button>
-              </div>
 
-              <div className="mt-4 pt-4 border-t border-gray-100 flex justify-between items-center">
-                <button
-                  onClick={() => onResumeClick(resume)}
-                  className={`text-sm ${
-                    resume.downloadsLeft > 0
-                      ? "text-gray-500 hover:text-black"
-                      : "text-gray-300 cursor-not-allowed"
-                  } transition-colors`}
-                  disabled={resume.downloadsLeft <= 0}
-                >
-                  {resume.downloadsLeft > 0 ? "View Resume" : "No downloads left"}
-                </button>
-                <i className="ri-external-link-line text-gray-600"></i>
-              </div>
+                {/* Card Content */}
+                <div className="p-6">
+                  {/* Header */}
+                  <div className="mb-6">
+                    <div className="flex items-start justify-between mb-3">
+                      <div className="flex-1">
+                        <h3 className="font-bold text-lg text-gray-900 mb-1">
+                          Resume #{resume.fileId.slice(0, 8)}
+                        </h3>
+                        <div className="flex items-center text-sm text-gray-500">
+                          <i className="ri-calendar-line mr-1"></i>
+                          <span>{formateDate}</span>
+                        </div>
+                      </div>
+                      <button
+                        onClick={() => handleOpenDialog(resume)}
+                        className="text-gray-400 hover:text-red-500 hover:bg-red-50 p-2 rounded-lg transition-all duration-200"
+                        title="Delete Resume"
+                      >
+                        <i className="ri-delete-bin-line text-xl"></i>
+                      </button>
+                    </div>
+                  </div>
 
-              <div className="flex gap-2 text-[#4B5563] mt-2">
-                <a
-                  href={`https://api.whatsapp.com/send?text=Check%20out%20my%20resume%20here:%20${resume.downloadUrl}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <i className="ri-whatsapp-line"></i>
-                </a>
-                <a
-                  href={`https://www.linkedin.com/sharing/share-offsite/?url=${resume.downloadUrl}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <i className="ri-linkedin-fill"></i>
-                </a>
-                <a
-                  href={`https://twitter.com/intent/tweet?url=${resume.downloadUrl}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <i className="ri-twitter-x-line"></i>
-                </a>
+                  {/* View Button */}
+                  <button
+                    onClick={() => onResumeClick(resume)}
+                    disabled={isExpired}
+                    className={`w-full py-3 px-4 rounded-xl font-semibold transition-all duration-200 mb-4 ${
+                      isExpired
+                        ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                        : "bg-black text-white hover:bg-gray-800 hover:shadow-lg"
+                    }`}
+                  >
+                    <i className="ri-eye-line mr-2"></i>
+                    {isExpired ? "No Downloads Left" : "View Resume"}
+                  </button>
+
+                  {/* Social Share */}
+                  {!isExpired && (
+                    <div>
+                      <p className="text-xs text-gray-500 mb-2 font-semibold uppercase tracking-wide">Share on</p>
+                      <div className="flex gap-3">
+                        <a
+                          href={`https://api.whatsapp.com/send?text=Check%20out%20my%20resume%20here:%20${resume.downloadUrl}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex-1 flex items-center justify-center py-2 px-3 bg-[#25D366] hover:bg-[#1fb855] text-white rounded-lg transition-all duration-200 hover:scale-105"
+                          title="Share on WhatsApp"
+                        >
+                          <i className="ri-whatsapp-line text-lg"></i>
+                        </a>
+                        <a
+                          href={`https://www.linkedin.com/sharing/share-offsite/?url=${resume.downloadUrl}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex-1 flex items-center justify-center py-2 px-3 bg-[#0A66C2] hover:bg-[#004182] text-white rounded-lg transition-all duration-200 hover:scale-105"
+                          title="Share on LinkedIn"
+                        >
+                          <i className="ri-linkedin-fill text-lg"></i>
+                        </a>
+                        <a
+                          href={`https://twitter.com/intent/tweet?url=${resume.downloadUrl}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex-1 flex items-center justify-center py-2 px-3 bg-black hover:bg-gray-800 text-white rounded-lg transition-all duration-200 hover:scale-105"
+                          title="Share on X (Twitter)"
+                        >
+                          <i className="ri-twitter-x-line text-lg"></i>
+                        </a>
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })}
+      </div>
+
       <MuiDialog
         open={openDialog}
         onClose={handleCloseDialog}
@@ -156,7 +174,7 @@ function ResumeList({ resumes, onResumeClick, onDelete }) {
           </Button>
         </DialogActions>
       </MuiDialog>
-    </div>
+    </>
   );
 }
 

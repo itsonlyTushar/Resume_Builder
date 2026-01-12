@@ -3,10 +3,14 @@ import { Link, useLocation } from "react-router-dom";
 import Tooltip from "../UI/Tooltip";
 import Logo from "../../pages/Logo";
 import Contact from "../../pages/Contact";
+import { auth } from "../../auth/firebase";
 
 function Navigation() {
   const location = useLocation();
   const [isOpen, setIsOpen] = useState(false);
+
+  const getAuth = auth.currentUser
+  console.log("Current User in NavBar:", getAuth);
 
   return (
     <>
@@ -32,11 +36,18 @@ function Navigation() {
                     </button>
                   </Link>
                 ) : (
-                  <Link to="/signin">
-                    <button className="border-black bg-black text-md text-white rounded-xl px-2 py-1 mr-2 shadow-sm">
-                      Sign In
-                    </button>
-                  </Link>
+                                      getAuth ? 
+                      <Link to="/select_template">
+                        <button className="border-black bg-black text-md text-white rounded-xl px-2 py-2 shadow-sm">
+                         <i className="ri-layout-4-fill"></i> Templates
+                        </button>
+                      </Link>
+                    : 
+                    <Link to="/signin">
+                      <button className="border-black bg-black text-md text-white rounded-xl px-2 py-1 shadow-sm">
+                        Sign In
+                      </button>
+                    </Link>
                 )}
               </li>
               <li>
@@ -70,6 +81,13 @@ function Navigation() {
                       </button>
                     </Link>
                   ) : (
+                    getAuth ? 
+                      <Link to="/select_template">
+                        <button className="border-black bg-black text-md text-white rounded-xl px-2 py-1 shadow-sm">
+                          Templates
+                        </button>
+                      </Link>
+                    : 
                     <Link to="/signin">
                       <button className="border-black bg-black text-md text-white rounded-xl px-2 py-1 shadow-sm">
                         Sign In

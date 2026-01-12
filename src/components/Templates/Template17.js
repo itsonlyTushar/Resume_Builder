@@ -29,6 +29,14 @@ export const Template17 = ({ formData }) => {
     let yPosition = 15;
     const pageWidth = doc.internal.pageSize.width;
     const pageHeight = doc.internal.pageSize.height;
+    
+    // Define line heights for different font sizes
+    const lineHeights = {
+      9: 4,   // Small text: 4mm between lines
+      10: 4.5, // Regular text: 4.5mm between lines
+      11: 5,   // Section headers: 5mm between lines
+      28: 10   // Name header: 10mm
+    };
 
     // Get personal details
     const details = formData.personalDetails?.[0] || {};
@@ -141,8 +149,13 @@ export const Template17 = ({ formData }) => {
         doc.setFont("EB_bol", "normal");
         doc.setFontSize(10);
 
+        // Handle potentially long college names
         if (hasContent(edu.collegeName)) {
-          doc.text(edu.collegeName, leftMargin + 3, yPosition);
+          const maxWidth = hasContent(edu.location) 
+            ? pageWidth - leftMargin * 2 - 50  // Leave space for location
+            : pageWidth - leftMargin * 2 - 10;
+          const collegeLines = doc.splitTextToSize(edu.collegeName, maxWidth);
+          doc.text(collegeLines, leftMargin + 3, yPosition);
         }
 
         doc.setFont("EB_italic", "normal");
@@ -153,21 +166,29 @@ export const Template17 = ({ formData }) => {
           });
         }
 
-        yPosition += 4;
+        yPosition += lineHeights[10];
         doc.setFont("EB_italic", "normal");
         doc.setFontSize(10);
 
+        // Handle potentially long course names
         if (hasContent(edu.course)) {
-          doc.text(edu.course, leftMargin + 3, yPosition);
+          const maxWidth = hasContent(edu.year)
+            ? pageWidth - leftMargin * 2 - 30  // Leave space for year
+            : pageWidth - leftMargin * 2 - 10;
+          const courseLines = doc.splitTextToSize(edu.course, maxWidth);
+          doc.text(courseLines, leftMargin + 3, yPosition);
+          yPosition += courseLines.length * lineHeights[10];
+        } else {
+          yPosition += lineHeights[10];
         }
 
         if (hasContent(edu.year)) {
-          doc.text(edu.year, pageWidth - leftMargin, yPosition, {
+          doc.text(edu.year, pageWidth - leftMargin, yPosition - lineHeights[10], {
             align: "right",
           });
         }
 
-        yPosition += 8;
+        yPosition += 3;
       });
     }
 
@@ -190,15 +211,22 @@ export const Template17 = ({ formData }) => {
         checkPageBreak(20);
         doc.setFont("EB_bol", "normal");
         doc.setFontSize(10);
+        
+        // Calculate widths for project name and tech stack
+        let currentY = yPosition;
         if (hasContent(pro.projectName)) {
-          doc.text(`${pro.projectName} | `, leftMargin + 3, yPosition);
+          const projectText = `${pro.projectName} | `;
+          doc.text(projectText, leftMargin + 3, currentY);
         }
 
-        // Print Tech Stack in Italic
+        // Print Tech Stack in Italic on same line
         if (hasContent(pro.techStack)) {
-          const nameWidth = doc.getTextWidth(`${pro.projectName} | `);
+          const nameWidth = doc.getTextWidth(`${pro.projectName || ""} | `);
+          const availableWidth = pageWidth - leftMargin - 3 - nameWidth - (hasContent(pro.year) ? 30 : 10);
           doc.setFont("EB_italic", "normal");
-          doc.text(`${pro.techStack}`, leftMargin + 3 + nameWidth, yPosition);
+          const techLines = doc.splitTextToSize(pro.techStack, availableWidth);
+          doc.text(techLines, leftMargin + 3 + nameWidth, currentY);
+          currentY += (techLines.length - 1) * lineHeights[10]; // Add extra space if tech stack wraps
         }
 
         doc.setFont("EB_reg", "normal");
@@ -208,15 +236,21 @@ export const Template17 = ({ formData }) => {
           });
         }
 
-        yPosition += 4;
-        doc.setFontSize(9);
+        yPosition = currentY + lineHeights[10];
+        
+        // Handle project link with wrapping
         if (hasContent(pro.projectLink)) {
-          doc.text(`Live:  ${pro.projectLink}`, leftMargin + 3, yPosition);
+          doc.setFontSize(9);
+          const linkLines = doc.splitTextToSize(
+            `Live:  ${pro.projectLink}`, 
+            pageWidth - 2 * leftMargin - 5
+          );
+          doc.text(linkLines, leftMargin + 3, yPosition);
+          yPosition += linkLines.length * lineHeights[9] + 2;
         }
 
-        yPosition += 2;
+        // Handle project description with proper spacing
         if (hasContent(pro.description)) {
-          yPosition += 8;
           doc.setFontSize(9);
 
           // Split description into bullet points
@@ -230,12 +264,12 @@ export const Template17 = ({ formData }) => {
               `• ${bullet.trim()}.`,
               pageWidth - 2 * leftMargin - 5
             );
-            doc.text(bulletText, leftMargin + 5, yPosition - 5);
-            yPosition += bulletText.length * 4;
+            doc.text(bulletText, leftMargin + 5, yPosition);
+            yPosition += bulletText.length * lineHeights[9];
           });
         }
 
-        yPosition -= 3;
+        yPosition += 3;
       });
     }
 
@@ -260,8 +294,13 @@ export const Template17 = ({ formData }) => {
         doc.setFont("EB_bol", "normal");
         doc.setFontSize(10);
 
+        // Handle long company names
         if (hasContent(exp.companyName)) {
-          doc.text(exp.companyName, leftMargin + 3, yPosition);
+          const maxWidth = hasContent(exp.location)
+            ? pageWidth - leftMargin * 2 - 50
+            : pageWidth - leftMargin * 2 - 10;
+          const companyLines = doc.splitTextToSize(exp.companyName, maxWidth);
+          doc.text(companyLines, leftMargin + 3, yPosition);
         }
 
         doc.setFont("EB_italic", "normal");
@@ -272,23 +311,31 @@ export const Template17 = ({ formData }) => {
           });
         }
 
-        yPosition += 4;
+        yPosition += lineHeights[10];
         doc.setFont("EB_italic", "normal");
         doc.setFontSize(10);
 
+        // Handle long role names
         if (hasContent(exp.role)) {
-          doc.text(exp.role, leftMargin + 3, yPosition);
+          const maxWidth = hasContent(exp.year)
+            ? pageWidth - leftMargin * 2 - 30
+            : pageWidth - leftMargin * 2 - 10;
+          const roleLines = doc.splitTextToSize(exp.role, maxWidth);
+          doc.text(roleLines, leftMargin + 3, yPosition);
+          yPosition += roleLines.length * lineHeights[10];
+        } else {
+          yPosition += lineHeights[10];
         }
 
         if (hasContent(exp.year)) {
-          doc.text(exp.year, pageWidth - leftMargin, yPosition, {
+          doc.text(exp.year, pageWidth - leftMargin, yPosition - lineHeights[10], {
             align: "right",
           });
         }
 
-        yPosition += 2;
+        // Handle experience description with proper spacing
         if (hasContent(exp.description)) {
-          yPosition += 8;
+          yPosition += 2;
           doc.setFontSize(10);
 
           // Split description into bullet points
@@ -302,11 +349,12 @@ export const Template17 = ({ formData }) => {
               `• ${bullet.trim()}.`,
               pageWidth - 2 * leftMargin - 5
             );
-            doc.text(bulletText, leftMargin + 5, yPosition - 5);
-            yPosition += bulletText.length * 4;
+            doc.text(bulletText, leftMargin + 5, yPosition);
+            yPosition += bulletText.length * lineHeights[10];
           });
         }
-        yPosition += 1;
+        
+        yPosition += 3;
       });
     }
 
@@ -338,14 +386,14 @@ export const Template17 = ({ formData }) => {
 
       Object.entries(skillCategories).forEach(([category, skills]) => {
         if (skills.length > 0) {
-    
+          checkPageBreak(10);
           const skillLine = skills.join(", ");
           const wrappedSkills = doc.splitTextToSize(
-            skillLine,
+            `${category}:  ${skillLine}`,
             pageWidth - 2 * leftMargin - 5
           );
-          doc.text(`${category}:  ${wrappedSkills}`, leftMargin + 3, yPosition);
-          yPosition += wrappedSkills.length * 5;
+          doc.text(wrappedSkills, leftMargin + 3, yPosition);
+          yPosition += wrappedSkills.length * lineHeights[9];
         }
       });
 
@@ -361,19 +409,29 @@ export const Template17 = ({ formData }) => {
     if (certifications.length > 0) {
       addSectionHeader("CERTIFICATIONS & ACHIVEMENTS");
       certifications.forEach((cert) => {
+        checkPageBreak(10);
         doc.setFont("EB_reg", "normal");
         doc.setFontSize(10);
 
+        // Handle long certification names
         if (hasContent(cert.certiName)) {
-          doc.text(cert.certiName, leftMargin + 3, yPosition);
+          const maxWidth = hasContent(cert.year)
+            ? pageWidth - leftMargin * 2 - 30
+            : pageWidth - leftMargin * 2 - 10;
+          const certLines = doc.splitTextToSize(cert.certiName, maxWidth);
+          doc.text(certLines, leftMargin + 3, yPosition);
+          yPosition += certLines.length * lineHeights[10];
+        } else {
+          yPosition += lineHeights[10];
         }
 
         if (hasContent(cert.year)) {
-          doc.text(cert.year, pageWidth - leftMargin, yPosition, {
+          doc.text(cert.year, pageWidth - leftMargin, yPosition - lineHeights[10], {
             align: "right",
           });
         }
-        yPosition += 5;
+        
+        yPosition += 2;
       });
     }
 

@@ -1,8 +1,10 @@
+import { useCallback } from "react";
 import { useFormContext } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import {
   updateFields,
 } from "../../features/templateSlice";
+import { sanitizeInput } from "../../utils/helpers";
 
 function PersonalDetails() {
   const dispatch = useDispatch();
@@ -17,9 +19,10 @@ function PersonalDetails() {
     formState: { errors },
   } = useFormContext();
 
-  const handleChange = (index, field, value, arrState) => {
-    dispatch(updateFields({ index, field, value, arrState }));
-  };
+  const handleChange = useCallback((index, field, value, arrState) => {
+    const sanitizedValue = sanitizeInput(value);
+    dispatch(updateFields({ index, field, value: sanitizedValue, arrState }));
+  }, [dispatch]);
 
 
   return (
@@ -39,7 +42,7 @@ function PersonalDetails() {
                 First Name
               </label>
               <input
-                className="outline-none mt-1 p-3 flex items-center border-none shadow-md w-min rounded-xl text-gray-700"
+                className="outline-none mt-1 p-3 flex items-center bg-white border border-gray-300 hover:border-gray-400 w-min rounded-xl text-black transition-colors"
                 name={`personalDetails.${index}.firstName`}
                 type="text"
                 placeholder="Enter first name..."
@@ -74,7 +77,7 @@ function PersonalDetails() {
                 Last Name
               </label>
               <input
-                className="outline-none mt-1 p-3 flex items-center border-none shadow-md w-min rounded-xl text-gray-700"
+                className="outline-none mt-1 p-3 flex items-center bg-white border border-gray-300 hover:border-gray-400 w-min rounded-xl text-black transition-colors"
                 name={`personalDetails.${index}.lastName`}
                 type="text"
                 placeholder="Enter last name..."
@@ -110,7 +113,7 @@ function PersonalDetails() {
                 Email
               </label>
               <input
-                className="outline-none mt-1 p-3 flex items-center border-none shadow-md w-min rounded-xl text-gray-700"
+                className="outline-none mt-1 p-3 flex items-center bg-white border border-gray-300 hover:border-gray-400 w-min rounded-xl text-black transition-colors"
                 name={`personalDetails.${index}.email`}
                 type="email"
                 placeholder="email..."
@@ -160,7 +163,7 @@ function PersonalDetails() {
                 Phone Number
               </label>
               <input
-                className="outline-none mt-1 p-3 flex items-center border-none shadow-md w-min rounded-xl text-gray-700"
+                className="outline-none mt-1 p-3 flex items-center bg-white border border-gray-300 hover:border-gray-400 w-min rounded-xl text-black transition-colors"
                 name={`personalDetails.${index}.phoneNumber`}
                 type="text"
                 placeholder="number..."
@@ -196,7 +199,7 @@ function PersonalDetails() {
                 Linkedin
               </label>
               <input
-                className="outline-none mt-1 p-3 flex items-center border-none shadow-md w-min rounded-xl text-gray-700"
+                className="outline-none mt-1 p-3 flex items-center bg-white border border-gray-300 hover:border-gray-400 w-min rounded-xl text-black transition-colors"
                 name={`personalDetails.${index}.linkedin`}
                 type="url"
                 placeholder="Enter url..."
@@ -232,7 +235,7 @@ function PersonalDetails() {
                 About
               </label>
               <textarea
-                className="outline-none mt-1 p-3 flex items-center border-none shadow-md w-min rounded-xl text-gray-700"
+                className="outline-none mt-1 p-3 flex items-center bg-white border border-gray-300 hover:border-gray-400 w-min rounded-xl text-black transition-colors"
                 name={`personalDetails.${index}.about`}
                 type="text"
                 placeholder="Something about yourself.."
@@ -272,7 +275,7 @@ function PersonalDetails() {
                 Github
               </label>
               <input
-                className="outline-none mt-1 p-3 flex items-center border-none shadow-md w-min rounded-xl text-gray-700"
+                className="outline-none mt-1 p-3 flex items-center bg-white border border-gray-300 hover:border-gray-400 w-min rounded-xl text-black transition-colors"
                 name={`personalDetails.${index}.github`}
                 type="url"
                 placeholder="Enter url..."

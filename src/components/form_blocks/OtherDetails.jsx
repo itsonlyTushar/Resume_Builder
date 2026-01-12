@@ -1,3 +1,4 @@
+import { useCallback } from "react";
 import { useFormContext } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -5,6 +6,7 @@ import {
   removeFields,
   updateFields,
 } from "../../features/templateSlice";
+import { sanitizeInput } from "../../utils/helpers";
 
 function OtherDetails() {
   const {
@@ -23,31 +25,32 @@ function OtherDetails() {
 
   const dispatch = useDispatch();
 
-  const handleSkillAdd = (arrState) => {
+  const handleSkillAdd = useCallback((arrState) => {
     const newField = {
       categories: "",
       skillName: "",
     };
     dispatch(addFields({ arrState, newField }));
-  };
+  }, [dispatch]);
 
-  const handleCertiAdd = (arrState) => {
+  const handleCertiAdd = useCallback((arrState) => {
     const newField = {
       certiName: "",
       year: "",
     };
 
     dispatch(addFields({ arrState, newField }));
-  };
+  }, [dispatch]);
 
-  const handleInputChange = (index, field, value, arrState) => {
-    dispatch(updateFields({ index, field, value, arrState }));
-    setValue(`${arrState}.${index}.${field}`, value);
-  };
+  const handleInputChange = useCallback((index, field, value, arrState) => {
+    const sanitizedValue = sanitizeInput(value);
+    dispatch(updateFields({ index, field, value: sanitizedValue, arrState }));
+    setValue(`${arrState}.${index}.${field}`, sanitizedValue);
+  }, [dispatch, setValue]);
 
-  const handleDelete = (id, arrState) => {
+  const handleDelete = useCallback((id, arrState) => {
     dispatch(removeFields({ id, arrState }));
-  };
+  }, [dispatch]);
 
   const categories = [
     { name: "Languages" },
@@ -87,16 +90,15 @@ function OtherDetails() {
                           "skills"
                         ),
                     })}
-                    className="outline-none mt-1 p-3 flex items-center border-none shadow-md rounded-xl text-gray-700"
+                    className="outline-none mt-1 p-3 flex items-center bg-white border border-gray-300 hover:border-gray-400 rounded-xl text-black transition-colors"
                     name={`skills.${index}.category`}
                   >
+                    <option className="bg-slate-200">Select</option>
                     {categories.map((category) => (
-                      <>
-                        <option>Select</option>
+                        
                         <option key={category.name} value={category.name}>
                           {category.name}
                         </option>
-                      </>
                     ))}
                   </select>
                   {errors.skills?.[index]?.category && (
@@ -114,7 +116,7 @@ function OtherDetails() {
                     Skill
                   </label>
                   <input
-                    className="outline-none mt-1 p-3 flex items-center border-none shadow-md rounded-xl text-gray-700"
+                    className="outline-none mt-1 p-3 flex items-center bg-white border border-gray-300 hover:border-gray-400 rounded-xl text-black transition-colors"
                     name={`skills.${index}.skillName`}
                     type="text"
                     placeholder="Enter skill..."
@@ -162,7 +164,7 @@ function OtherDetails() {
                     Skill
                   </label>
                   <input
-                    className="outline-none mt-1 p-3 flex items-center border-none shadow-md rounded-xl text-gray-700"
+                    className="outline-none mt-1 p-3 flex items-center bg-white border border-gray-300 hover:border-gray-400 rounded-xl text-black transition-colors"
                     name={`skills.${index}.skillName`}
                     type="text"
                     placeholder="Enter skill..."
@@ -231,7 +233,7 @@ function OtherDetails() {
                   Certification
                 </label>
                 <input
-                  className="outline-none mt-1 p-3 flex items-center border-none shadow-md rounded-xl text-gray-700"
+                  className="outline-none mt-1 p-3 flex items-center bg-white border border-gray-300 hover:border-gray-400 rounded-xl text-black transition-colors"
                   name={`certification.${index}.certiName`}
                   type="text"
                   placeholder="Enter here..."
@@ -265,7 +267,7 @@ function OtherDetails() {
                   Year
                 </label>
                 <input
-                  className="outline-none mt-1 p-3 flex items-center border-none shadow-md w-min rounded-xl text-gray-700"
+                  className="outline-none mt-1 p-3 flex items-center bg-white border border-gray-300 hover:border-gray-400 w-min rounded-xl text-black transition-colors"
                   name={`certification.${index}.year`}
                   type="text"
                   placeholder="Mar-2024"

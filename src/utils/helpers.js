@@ -16,3 +16,10 @@ export const checkStr = (str) => str.trim().length > 0;
 export const checkEach = (details, str) => {
   return details.some((obj) => obj[str] !== "");
 };
+
+// Sanitizes user input by removing potentially harmful characters
+export const sanitizeInput = (input) => {
+  if (typeof input !== 'string') return input;
+  // Remove < > " ' characters to prevent basic XSS, preserve all spaces
+  return input.replace(/[<>\"']/g, '');
+};

@@ -14,6 +14,7 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  Avatar,
 } from "@mui/material";
 import { useForm } from "react-hook-form";
 import Loader from "../UI/Loader.jsx";
@@ -29,9 +30,13 @@ function User() {
   const [resumes, setResumes] = useState([]);
   const dispatch = useDispatch();
   const [openDialog, setOpenDialog] = useState(false);
+  const [dialogTitle, setDialogTitle] = useState("");
+  const [dialogMessage, setDialogMessage] = useState("");
   const { reset } = useForm();
 
-  const handleOpenDialog = () => {
+  const handleOpenDialog = ({ title = "Delete Account", message = "Are you sure?" } = {}) => {
+    setDialogTitle(title);
+    setDialogMessage(message);
     setOpenDialog(true);
   };
 
@@ -76,6 +81,15 @@ function User() {
     loadResumes();
   };
 
+  const initials = displayName
+    ? displayName
+        .split(" ")
+        .map((n) => n[0])
+        .slice(0, 2)
+        .join("")
+        .toUpperCase()
+    : "U";
+
   return (
     <>
       <div className="flex flex-col justify-center min-h-screen">
@@ -86,57 +100,158 @@ function User() {
         >
           <Toaster />
 
-          <div className="p-5">
-            <h1 className="text-center text-5xl font-semibold py-10">
+          <div className="p-5 max-w-7xl mx-auto">
+            <h1 className="text-center text-5xl pt-10 font-semibold mb-10">
               User Profile
             </h1>
-            <div className="border-none rounded-3xl p-5 flex justify-center items-center flex-wrap overflow-hidden w-[350px] sm:w-full bg-gray-100 border shadow-md">
-              <div className="grid grid-cols-1 sm:grid-cols-2 max-w-3xl py-16">
-                <div className="flex justify-center items-center">
-                  <h1 className="text-4xl mt-4 font-semibold">
-                    {displayName || "User"}
-                  </h1>
-                </div>
-                <div className="flex gap-2">
-                  <button
-                    onClick={() => handleSignOut(dispatch, navigate, reset)}
-                    className="border transition-all hover:shadow-lg shadow-sm ease-in-out delay-100 hover:-translate-y-0 hover:scale-110 font-semibold rounded-2xl cursor-pointer text-lg text-white bg-black py-2 px-2"
+            
+            {/* Profile Card */}
+            <div className="border rounded-3xl p-8 sm:p-12 shadow-sm mb-8 bg-gradient-to-br from-white to-gray-50">
+              <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
+                {/* Avatar and Info */}
+                <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 flex-1">
+                  <Avatar 
+                    sx={{ 
+                      bgcolor: "#000000", 
+                      width: 96, 
+                      height: 96,
+                      fontSize: '2rem',
+                      fontWeight: 600,
+                      border: '4px solid #f3f4f6'
+                    }}
                   >
-                    Sign out
-                  </button>
-                  <button
-                    onClick={() => {
+                    {initials}
+                  </Avatar>
+                  <div className="text-center sm:text-left">
+                    <h2 className="text-4xl font-bold mb-2">{displayName || "User"}</h2>
+                    <p className="text-lg text-gray-600 mb-4">{user?.email}</p>
+                    <div className="flex flex-wrap gap-2 justify-center sm:justify-start">
+                      <span className="px-3 py-1 bg-black text-white text-sm rounded-full">
+                        Active Account
+                      </span>
+                      <span className="px-3 py-1 bg-gray-200 text-gray-700 text-sm rounded-full">
+                        {resumes.length} Resume{resumes.length !== 1 ? 's' : ''}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Action Buttons */}
+                <div className="flex flex-col gap-3 mt-4 sm:mt-0 w-full sm:w-auto">
+                  <Button
+                    variant="outlined"
+                    fullWidth
+                    sx={{
+                      borderColor: 'black',
+                      color: 'black',
+                      borderRadius: '12px',
+                      padding: '10px 24px',
+                      fontWeight: 600,
+                      '&:hover': {
+                        backgroundColor: 'black',
+                        color: 'white',
+                        borderColor: 'black'
+                      }
+                    }}
+                    onClick={() => handleSignOut(dispatch, navigate, reset)}
+                  >
+                    <i className="ri-logout-box-r-line mr-2"></i>
+                    Sign Out
+                  </Button>
+                  <Button
+                    variant="contained"
+                    fullWidth
+                    sx={{
+                      backgroundColor: '#EF4444',
+                      color: 'white',
+                      borderRadius: '12px',
+                      padding: '10px 24px',
+                      fontWeight: 600,
+                      '&:hover': {
+                        backgroundColor: '#DC2626'
+                      }
+                    }}
+                    onClick={() =>
                       handleOpenDialog({
                         title: "Delete Account",
-                        message: "Are you sure you want delete you account ?",
-                      });
-                    }}
-                    className=" border transition-all hover:shadow-lg shadow-sm ease-in-out delay-100 hover:-translate-y-0 hover:scale-110 font-semibold rounded-2xl cursor-pointer text-lg text-white bg-[#E10400] py-2 px-2"
+                        message: "Your account and data will be permanently deleted.",
+                      })
+                    }
                   >
-                    Delete account
-                  </button>
+                    <i className="ri-delete-bin-line mr-2"></i>
+                    Delete Account
+                  </Button>
                 </div>
               </div>
             </div>
-            <div className="bg-[#EEEFEF] rounded-3xl sm:h-[60vh] h-[550px] max-w-3xl">
-              <div className="mt-10">
-                <h1 className="text-4xl font-semibold mt-5 mb-10 ml-3 p-5">
-                  My Resumes
-                </h1>
+            {/* Resumes Section */}
+            <div className="border rounded-3xl shadow-sm overflow-hidden">
+              {/* Header */}
+              <div className="bg-gradient-to-r from-gray-50 to-white border-b px-8 py-6">
+                <div className="flex items-center justify-between flex-wrap gap-4">
+                  <div>
+                    <h2 className="text-3xl font-bold mb-1">My Resumes</h2>
+                    <p className="text-gray-600">Manage and share your professional resumes</p>
+                  </div>
+                  {resumes.length > 0 && (
+                    <Button
+                      variant="contained"
+                      sx={{
+                        backgroundColor: 'black',
+                        color: 'white',
+                        borderRadius: '12px',
+                        padding: '10px 24px',
+                        fontWeight: 600,
+                        '&:hover': {
+                          backgroundColor: '#1f2937'
+                        }
+                      }}
+                      onClick={() => navigate('/builder')}
+                    >
+                      <i className="ri-add-line mr-2"></i>
+                      Create New Resume
+                    </Button>
+                  )}
+                </div>
               </div>
-              <div className="flex justify-center items-center">
+              
+              {/* Content */}
+              <div className="sm:h-[60vh] h-[550px] overflow-y-auto p-6 scrollbar-hide">
                 {isLoadingResumes ? (
-                  <div className="flex justify-center items-center h-40">
+                  <div className="flex justify-center items-center h-full">
                     <Loader />
                   </div>
-                ) : (
-                  <div>
-                    <ResumeList
-                      resumes={resumes}
-                      onResumeClick={handleResumeClick}
-                      onDelete={handleResumeDelete}
-                    />
+                ) : resumes.length === 0 ? (
+                  <div className="flex flex-col items-center justify-center h-full text-center p-8">
+                    <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mb-6">
+                      <i className="ri-file-list-3-line text-5xl text-gray-400"></i>
+                    </div>
+                    <h3 className="text-2xl font-semibold mb-3">No resumes yet</h3>
+                    <p className="text-gray-600 mb-6 max-w-md">Start building your professional resume with our easy-to-use builder</p>
+                    <Button 
+                      variant="contained"
+                      sx={{
+                        backgroundColor: 'black',
+                        color: 'white',
+                        borderRadius: '12px',
+                        padding: '12px 32px',
+                        fontWeight: 600,
+                        '&:hover': {
+                          backgroundColor: '#1f2937'
+                        }
+                      }}
+                      onClick={() => navigate('/builder')}
+                    >
+                      <i className="ri-add-line mr-2"></i>
+                      Create Your First Resume
+                    </Button>
                   </div>
+                ) : (
+                  <ResumeList
+                    resumes={resumes}
+                    onResumeClick={handleResumeClick}
+                    onDelete={handleResumeDelete}
+                  />
                 )}
               </div>
             </div>
@@ -151,12 +266,10 @@ function User() {
             borderRadius: "30px",
           }}
         >
-          <DialogTitle id="alert-dialog-title">
-            Are you sure you want to do this?
-          </DialogTitle>
+          <DialogTitle id="alert-dialog-title">{dialogTitle || "Confirm action"}</DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
-              Your Account will be deleted permanently
+              {dialogMessage || "This action cannot be undone."}
             </DialogContentText>
           </DialogContent>
           <DialogActions>

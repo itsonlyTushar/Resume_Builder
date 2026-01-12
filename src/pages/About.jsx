@@ -25,7 +25,7 @@ function About() {
         {/* About section  */}
         <section
           data-aos="fade-up"
-          className="flex text-center justify-center items-center text-center px-16 mx-4 bg-gray-100 py-16 rounded-3xl"
+          className="flex text-center justify-center items-center px-16 mx-4 bg-gray-100 py-16 rounded-3xl"
         >
           <div className="max-w-3xl px-4 rounded-2xl">
             <h1 className="sm:text-5xl text-3xl font-semibold">

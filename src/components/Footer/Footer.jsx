@@ -27,7 +27,7 @@ function Footer() {
   return (
     <>
       <Toaster />
-      <footer className="bg-black text-white py-14 grid sm:grid-cols-3 gap-28 ">
+      <footer className="bg-black text-white py-14 grid sm:grid-cols-4 gap-28 ">
         <div className="mx-4">
           <Logo />
           <h1 className="text-4xl font-bold mb-3 mt-6">Stay Updated</h1>
@@ -79,8 +79,21 @@ function Footer() {
               <li className="my-3 hover:text-[#858B96]">
                 <button onClick={() => transtionNavigate('/about')} >About Us</button>
               </li>
-                <li className="my-3 hover:text-[#858B96]">
-                <button onClick={() => transtionNavigate('/terms')} >Terms</button>
+
+              
+            </div>
+          </ul>
+        </div>
+
+        <div className="ml-3 text-center">
+          <ul>
+            <li className="font-bold text-lg">Read</li>
+            <div className="text-[#858B96] cursor-pointer hover:text-[#c7cdd9] transition-all ease-in-out hover:transition-all">
+              <li className="my-3 hover:text-[#858B96]">
+                <button onClick={() => transtionNavigate('/privacy')} >Privacy Policy</button>
+              </li>
+              <li className="my-3 hover:text-[#858B96]">
+                <button onClick={() => transtionNavigate('/terms')} >Terms of Use</button>
               </li>
               
             </div>
