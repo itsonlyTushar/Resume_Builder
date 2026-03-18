@@ -6,17 +6,20 @@ import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { auth } from "../../auth/firebase";
 import { uploadResume, downloadResume } from "../../backend/resumeOperations";
-import { Viewer, Worker } from "@react-pdf-viewer/core";
-import "@react-pdf-viewer/core/lib/styles/index.css";
-import "@react-pdf-viewer/default-layout/lib/styles/index.css";
+import { Document, Page, pdfjs } from "react-pdf";
+import "react-pdf/dist/Page/TextLayer.css";
+import "react-pdf/dist/Page/AnnotationLayer.css";
 import { Modal } from "@mui/material";
 import Logo from "../../pages/Logo";
 import { PizzaIcon } from "lucide-react";
 import qr from '../../assets/qr.png'
 import { generatePDF } from "../Templates/templateConfig";
 
+pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
+
 function Preview() {
   const [pdfDoc, setPdfDoc] = useState(null);
+  const [numPages, setNumPages] = useState(null);
   const [open, setopen] = useState(false);
 
   const handleClose = () => setopen(false);
@@ -116,9 +119,16 @@ function Preview() {
         <div className="flex flex-col lg:flex-row gap-8 items-start">
           {/* PDF Preview Display*/}
           <div className="w-full lg:w-2/3 ">
-            <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js">
-              {pdfDoc && <Viewer fileUrl={pdfDoc} />}
-            </Worker>
+            {pdfDoc && (
+              <Document
+                file={pdfDoc}
+                onLoadSuccess={({ numPages }) => setNumPages(numPages)}
+              >
+                {Array.from({ length: numPages || 0 }, (_, i) => (
+                  <Page key={i + 1} pageNumber={i + 1} width={600} />
+                ))}
+              </Document>
+            )}
           </div>
 
           <div className="w-full lg:w-1/3 flex flex-col  gap-4 py-24">
