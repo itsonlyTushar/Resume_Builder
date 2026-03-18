@@ -15,6 +15,15 @@ export const Template02 = ({ formData }) => {
     let leftMargin = 35;
     let yPosition = 20;
     const pageWidth = pdf.internal.pageSize.width;
+    const pageHeight = pdf.internal.pageSize.height;
+    const bottomMargin = 20;
+
+    const checkAddPage = (extraSpace = 0) => {
+      if (yPosition + extraSpace > pageHeight - bottomMargin) {
+        pdf.addPage();
+        yPosition = 20;
+      }
+    };
 
     // gathring the data to make pdf
     const personalDetails = formData.personalDetails[0];
@@ -98,12 +107,11 @@ export const Template02 = ({ formData }) => {
       pdf.setTextColor(0, 0, 0);
       pdf.setFontSize(9);
       pdf.setFont("roboto_bol");
-
-      skills.forEach((skill) => {
-        if (!checkStr(skill.skillName)) return;
-        yPosition += 5;
-        pdf.text(`• ${skill.skillName}`, leftMargin - 24, yPosition + 4);
-      });
+      yPosition += 6;
+      const skillsList = skills.filter(s => checkStr(s.skillName)).map(s => s.skillName).join(" \u2022 ");
+      const skillsWrapped = pdf.splitTextToSize(skillsList, 55);
+      pdf.text(skillsWrapped, leftMargin - 24, yPosition + 4);
+      yPosition += skillsWrapped.length * 4;
     }
 
     // Certification section
@@ -184,6 +192,7 @@ export const Template02 = ({ formData }) => {
 
       experienceDetails.forEach((exp, index) => {
         if (!checkStr(exp.role) && !checkStr(exp.companyName) && !checkStr(exp.location) && !checkStr(exp.year) && !checkStr(exp.description)) return;
+        checkAddPage(25);
         yPosition += 5;
         pdf.setFontSize(9);
         pdf.setTextColor(0, 0, 0);
@@ -213,11 +222,16 @@ export const Template02 = ({ formData }) => {
         pdf.setTextColor(0, 0, 0);
 
         if (checkStr(exp.description)) {
-          const JD = pdf.splitTextToSize(exp.description, 140);
           yPosition += 2;
           pdf.setFontSize(9);
           pdf.setFont("roboto_reg");
-          pdf.text(JD, leftMargin + 34, yPosition - 9);
+          const bullets = exp.description.split("•").filter(s => s.trim().length > 0);
+          bullets.forEach((bullet) => {
+            const bulletText = pdf.splitTextToSize(`• ${bullet.trim()}`, 135);
+            checkAddPage(bulletText.length * 4);
+            pdf.text(bulletText, leftMargin + 34, yPosition - 9);
+            yPosition += bulletText.length * 4;
+          });
         }
         yPosition += 4;
       });
@@ -238,6 +252,7 @@ export const Template02 = ({ formData }) => {
       pdf.text("Projects", leftMargin + 34, yPosition - 8);
 
       projectDetails.forEach((pro) => {
+        checkAddPage(20);
         yPosition += 4;
         pdf.setFontSize(9);
         pdf.setTextColor(0, 0, 0);
@@ -255,14 +270,24 @@ export const Template02 = ({ formData }) => {
         pdf.setFont("roboto_bol");
         pdf.text(pro.year, leftMargin + 34, yPosition - 12);
         pdf.setTextColor(0, 0, 0);
-        yPosition += 2;
-        pdf.setFontSize(9);
-        pdf.setFont("roboto_reg");
-        pdf.text(
-          `Live Link ~ ${pro.projectLink}`,
-          leftMargin + 34,
-          yPosition - 9
-        );
+
+        if (checkStr(pro.description)) {
+          pdf.setFontSize(9);
+          pdf.setFont("roboto_reg");
+          const desc = pdf.splitTextToSize(pro.description, 140);
+          checkAddPage(desc.length * 4);
+          pdf.text(desc, leftMargin + 34, yPosition - 9);
+          yPosition += desc.length * 4;
+        }
+
+        if (checkStr(pro.projectLink)) {
+          pdf.setFontSize(9);
+          pdf.setFont("roboto_reg");
+          pdf.setTextColor(0, 102, 204);
+          pdf.textWithLink(`Live Link ~ ${pro.projectLink}`, leftMargin + 34, yPosition - 5, { url: pro.projectLink });
+          pdf.setTextColor(0, 0, 0);
+          yPosition += 4;
+        }
         yPosition += 4;
       });
     }

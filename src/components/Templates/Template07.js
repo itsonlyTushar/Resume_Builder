@@ -18,10 +18,21 @@ export const Template07 = ({ formData }) => {
     const leftMargin = 20;
     let yPosition = 15;
     const pageWidth = doc.internal.pageSize.width;
+    const pageHeight = doc.internal.pageSize.height;
+    const bottomMargin = 20;
 
     // Set mint green background
     doc.setFillColor(230, 242, 236);
     doc.rect(0, 0, pageWidth, 297, "F");
+
+    const checkAddPage = (extraSpace = 0) => {
+      if (yPosition + extraSpace > pageHeight - bottomMargin) {
+        doc.addPage();
+        doc.setFillColor(230, 242, 236);
+        doc.rect(0, 0, pageWidth, 297, "F");
+        yPosition = 20;
+      }
+    };
 
     const details = formData.personalDetails?.[0] || {};
 
@@ -104,6 +115,7 @@ export const Template07 = ({ formData }) => {
 
       formData.experienceDetails.forEach((exp) => {
         if (hasContent(exp.role) || hasContent(exp.companyName)) {
+          checkAddPage(20);
           yPosition += 8;
           doc.setFont("Inter_bol");
           doc.setFontSize(12);
@@ -130,8 +142,7 @@ export const Template07 = ({ formData }) => {
               const wrappedBullet = doc.splitTextToSize(
                 bulletPoint,
                 pageWidth - 2 * leftMargin - 5
-              );
-              doc.setFontSize(9);
+              );              checkAddPage(wrappedBullet.length * 3);              doc.setFontSize(9);
               doc.text(wrappedBullet, leftMargin + 5, yPosition);
               yPosition += wrappedBullet.length * 3;
             });
@@ -177,6 +188,7 @@ export const Template07 = ({ formData }) => {
 
       formData.projectDetails.forEach((pro) => {
         if (hasContent(pro.projectName) || hasContent(pro.year)) {
+          checkAddPage(20);
           yPosition += 10;
           doc.setFont("Inter_bol");
           doc.setFontSize(12);
@@ -206,7 +218,10 @@ export const Template07 = ({ formData }) => {
             yPosition += 8;
             doc.setFont("Inter_reg");
             doc.setFontSize(9);
-            doc.text(`• ${pro.description}`, leftMargin + 5, yPosition);
+            const descWrapped = doc.splitTextToSize(pro.description, pageWidth - 2 * leftMargin - 10);
+            checkAddPage(descWrapped.length * 3.5);
+            doc.text(descWrapped, leftMargin + 5, yPosition);
+            yPosition += descWrapped.length * 3.5;
           }
         }
       });
@@ -220,6 +235,7 @@ export const Template07 = ({ formData }) => {
 
       formData.educationDetails.forEach((edu) => {
         if (hasContent(edu.course) || hasContent(edu.collegeName)) {
+          checkAddPage(20);
           yPosition += 8;
           doc.setFont("Inter_bol");
           doc.setFontSize(12);

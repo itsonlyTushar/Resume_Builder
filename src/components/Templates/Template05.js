@@ -20,6 +20,15 @@ export const Template05 = ({ formData }) => {
     let yPosition = 20;
     const pageWidth = doc.internal.pageSize.width;
     const contentWidth = pageWidth - 2 * leftMargin;
+    const pageHeight = doc.internal.pageSize.height;
+    const bottomMargin = 20;
+
+    const checkAddPage = (extraSpace = 0) => {
+      if (yPosition + extraSpace > pageHeight - bottomMargin) {
+        doc.addPage();
+        yPosition = 20;
+      }
+    };
 
     const details = formData.personalDetails?.[0] || {};
 
@@ -108,6 +117,7 @@ export const Template05 = ({ formData }) => {
       addSectionHeader("Professional Experience");
 
       validExperiences.forEach((exp) => {
+        checkAddPage(20);
         if (hasContent(exp.role)) {
           doc.setFont("roboto_bol");
           doc.setFontSize(11);
@@ -142,8 +152,7 @@ export const Template05 = ({ formData }) => {
             const wrappedBullet = doc.splitTextToSize(
               bulletText,
               contentWidth - 5
-            );
-            doc.text(wrappedBullet, leftMargin + 5, yPosition);
+            );            checkAddPage(wrappedBullet.length * 5);            doc.text(wrappedBullet, leftMargin + 5, yPosition);
             yPosition += wrappedBullet.length * 5;
           });
         }
@@ -193,6 +202,7 @@ export const Template05 = ({ formData }) => {
       addSectionHeader("Technical Projects");
 
       validProjects.forEach((project) => {
+        checkAddPage(20);
         if (hasContent(project.projectName)) {
           doc.setFont("roboto_bol");
           doc.setFontSize(11);
@@ -253,6 +263,7 @@ export const Template05 = ({ formData }) => {
       addSectionHeader("Education");
 
       validEducation.forEach((edu) => {
+        checkAddPage(15);
         if (hasContent(edu.course)) {
           doc.setFont("roboto_bol");
           doc.setFontSize(11);

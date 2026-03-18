@@ -66,6 +66,7 @@ export const Template01 = ({ formData }) => {
     if (checkStr(personalDetails.about)) {
       const summary = pdf.splitTextToSize(personalDetails.about, pageWidth - 14);
       pdf.text(summary, leftMargin - 26, yPosition + 10);
+      yPosition += 10 + summary.length * 4;
     }
 
     // education section
@@ -139,8 +140,13 @@ export const Template01 = ({ formData }) => {
         }
         if (checkStr(exp.description)) {
           yPosition += 5;
-          const description = pdf.splitTextToSize(exp.description, pageWidth - 40);
-          pdf.text(description, leftMargin + 5, yPosition - 4);
+          const bullets = exp.description.split("•").filter(s => s.trim().length > 0);
+          bullets.forEach((bullet) => {
+            const bulletText = pdf.splitTextToSize(`• ${bullet.trim()}`, pageWidth - 45);
+            checkAddPage(bulletText.length * 4);
+            pdf.text(bulletText, leftMargin + 5, yPosition - 4);
+            yPosition += bulletText.length * 4;
+          });
         }
         yPosition += 2;
       });
@@ -174,9 +180,21 @@ export const Template01 = ({ formData }) => {
         pdf.setFontSize(9);
         if (checkStr(pro.techStack)) {
           pdf.text(pro.techStack, leftMargin + 5, yPosition - 4);
+          yPosition += 2;
+        }
+        if (checkStr(pro.description)) {
+          yPosition += 2;
+          const desc = pdf.splitTextToSize(pro.description, pageWidth - 40);
+          checkAddPage(desc.length * 4);
+          pdf.text(desc, leftMargin + 5, yPosition);
+          yPosition += desc.length * 4;
         }
         if (checkStr(pro.projectLink)) {
-          pdf.text(pro.projectLink, leftMargin + 5, yPosition + 2);
+          yPosition += 2;
+          pdf.setTextColor(0, 102, 204);
+          pdf.textWithLink(pro.projectLink, leftMargin + 5, yPosition, { url: pro.projectLink });
+          pdf.setTextColor(0, 0, 0);
+          yPosition += 4;
         }
       });
     }
@@ -191,6 +209,7 @@ export const Template01 = ({ formData }) => {
       pdf.text("Certificates", leftMargin - 26, yPosition);
       certification.forEach((cer, index) => {
         if (!checkStr(cer.certiName) && !checkStr(cer.year)) return;
+        checkAddPage(15);
         if (index !== 0) {
           yPosition += 10;
         }
@@ -208,17 +227,16 @@ export const Template01 = ({ formData }) => {
     if (checkEach(skills, "skillName")) {
       // skills section
       yPosition += 20;
+      checkAddPage(15);
       pdf.setFontSize(14);
       pdf.text("Skills", leftMargin - 26, yPosition);
-
-      skills.forEach((skill, index) => {
-        if (!checkStr(skill.skillName)) return;
-        if (index !== 0) {
-          yPosition += 10;
-        }
-        pdf.setFontSize(11);
-        pdf.text(skill.skillName, leftMargin + 5, yPosition);
-      });
+      yPosition += 6;
+      pdf.setFontSize(9);
+      const skillsList = skills.filter(s => checkStr(s.skillName)).map(s => s.skillName).join(" • ");
+      const skillsWrapped = pdf.splitTextToSize(skillsList, pageWidth - 14);
+      checkAddPage(skillsWrapped.length * 4);
+      pdf.text(skillsWrapped, leftMargin - 26, yPosition);
+      yPosition += skillsWrapped.length * 4;
     }
 
     return pdf;

@@ -39,6 +39,32 @@ export const Template12 = ({ formData }) => {
       pdf.text(`LinkedIn: ${personal.linkedin}`, 20, 36);
     }
 
+    const pageHeight = pdf.internal.pageSize.getHeight();
+    const bottomMargin = 20;
+
+    const drawSidebar = () => {
+      pdf.setFillColor(245, 245, 245);
+      pdf.rect(0, 0, 60, pageHeight, "F");
+    };
+
+    const checkRightPage = (extraSpace = 0) => {
+      if (yRight + extraSpace > pageHeight - bottomMargin) {
+        pdf.addPage();
+        drawSidebar();
+        yRight = 15;
+        yLeft = 15;
+      }
+    };
+
+    const checkLeftPage = (extraSpace = 0) => {
+      if (yLeft + extraSpace > pageHeight - bottomMargin) {
+        pdf.addPage();
+        drawSidebar();
+        yLeft = 15;
+        yRight = 15;
+      }
+    };
+
     // Sidebar Background
     pdf.setFillColor(245, 245, 245);
     pdf.rect(0, 40, 60, 260, "F");
@@ -51,11 +77,12 @@ export const Template12 = ({ formData }) => {
     yLeft += 8;
     pdf.setFont("montserrat_reg");
     pdf.setFontSize(9);
-    skills.forEach((s) => {
-      if (s.skillName) {
-        pdf.text(`• ${s.skillName}`, 10, yLeft);
-        yLeft += 6;
-      }
+    const skillStr = skills.filter(s => s.skillName).map(s => s.skillName).join(" • ");
+    const skillLines = pdf.splitTextToSize(skillStr, 45);
+    skillLines.forEach((line) => {
+      checkLeftPage(5);
+      pdf.text(line, 10, yLeft);
+      yLeft += 5;
     });
     // Sidebar - Certifications
     if (checkEach(certs, "certiName")) {
@@ -67,9 +94,11 @@ export const Template12 = ({ formData }) => {
       pdf.setFont("montserrat_reg");
       pdf.setFontSize(9);
       certs.forEach((c) => {
+        checkLeftPage(12);
         // Split certification name to fit sidebar width (max 45mm)
         const certLines = pdf.splitTextToSize(`• ${c.certiName}`, 45);
         certLines.forEach((line) => {
+          checkLeftPage(5);
           pdf.text(line, 10, yLeft);
           yLeft += 5;
         });
@@ -110,6 +139,7 @@ export const Template12 = ({ formData }) => {
       pdf.text("Education", rightX, yRight);
       yRight += 6;
       education.forEach((edu) => {
+        checkRightPage(18);
         pdf.setFont("montserrat_bold");
         pdf.setFontSize(10);
         pdf.text(`${edu.course} - ${edu.collegeName}`, rightX, yRight);
@@ -132,6 +162,7 @@ export const Template12 = ({ formData }) => {
       pdf.text("Experience", rightX, yRight);
       yRight += 6;
       experience.forEach((exp) => {
+        checkRightPage(25);
         pdf.setFont("montserrat_bold");
         pdf.setFontSize(10);
         pdf.text(`${exp.role} - ${exp.companyName}`, rightX, yRight);
@@ -143,9 +174,17 @@ export const Template12 = ({ formData }) => {
         yRight += 5;
         pdf.setFontSize(9);
         pdf.setTextColor(44, 62, 80);
-        const lines = pdf.splitTextToSize(exp.description, 130);
-        pdf.text(lines, rightX, yRight);
-        yRight += lines.length * 5;
+        if (exp.description) {
+          const bullets = exp.description.split("•").filter(s => s.trim().length > 0);
+          bullets.forEach((bullet) => {
+            const bulletLines = pdf.splitTextToSize(`• ${bullet.trim()}`, 125);
+            bulletLines.forEach((line) => {
+              checkRightPage(5);
+              pdf.text(line, rightX, yRight);
+              yRight += 5;
+            });
+          });
+        }
       });
       pdf.line(rightX, yRight, 200, yRight);
       yRight += 8;
@@ -158,11 +197,26 @@ export const Template12 = ({ formData }) => {
       pdf.text("Projects", rightX, yRight);
       yRight += 6;
       projects.forEach((pro) => {
+        checkRightPage(20);
         pdf.setFont("montserrat_bold");
         pdf.setFontSize(10);
         pdf.text(`${pro.projectName} (${pro.techStack})`, rightX, yRight);
         yRight += 5;
+
+        if (pro.description) {
+          pdf.setFont("montserrat_reg");
+          pdf.setFontSize(9);
+          pdf.setTextColor(44, 62, 80);
+          const descLines = pdf.splitTextToSize(pro.description, 130);
+          descLines.forEach((line) => {
+            checkRightPage(5);
+            pdf.text(line, rightX, yRight);
+            yRight += 5;
+          });
+        }
+
         if (pro.projectLink) {
+          checkRightPage(6);
           pdf.setFontSize(8);
           pdf.setTextColor(0, 102, 204);
           pdf.textWithLink(`${pro.projectLink}`, rightX, yRight, {
@@ -178,6 +232,7 @@ export const Template12 = ({ formData }) => {
           yRight += 4;
           pdf.setTextColor(44, 62, 80);
         }
+        yRight += 2;
       });
     }
 

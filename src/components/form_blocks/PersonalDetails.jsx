@@ -302,6 +302,42 @@ function PersonalDetails() {
                 </p>
               )}
             </div>
+
+            <div className="p-2 ml-2">
+              <label
+                className="text-black font-bold text-md"
+                htmlFor={`personalDetails.${index}.portfolio`}
+              >
+                Portfolio
+              </label>
+              <input
+                className="outline-none mt-1 p-3 flex items-center bg-white border border-gray-300 hover:border-gray-400 w-min rounded-xl text-black transition-colors"
+                name={`personalDetails.${index}.portfolio`}
+                type="url"
+                placeholder="Enter url..."
+                {...register(`personalDetails.${index}.portfolio`, {
+                  required: false,
+                  validate: (value) => {
+                    if (value === "") return true;
+                    return value.trim().length > 0 || "Enter a valid input";
+                  },
+                  onChange: (e) =>
+                    handleChange(
+                      index,
+                      "portfolio",
+                      e.target.value,
+                      "personalDetails"
+                    ),
+                })}
+              />
+              {errors.personalDetails?.[index]?.portfolio && (
+                <p className="text-red-400 mt-1">
+                  <i
+                    data-cy='red-error'
+                    className="mr-1 ri-alert-line"></i>Enter a Valid Input
+                </p>
+              )}
+            </div>
           </div>
           }
         </div>

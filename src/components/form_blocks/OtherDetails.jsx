@@ -17,47 +17,68 @@ function OtherDetails() {
 
   const skills = useSelector((state) => state.resumeBuilder.form_data.skills);
   const certification = useSelector(
-    (state) => state.resumeBuilder.form_data.certification
+    (state) => state.resumeBuilder.form_data.certification,
   );
   const selectedTemplate = useSelector(
-    (state) => state.resumeBuilder.form_data.selected_template
+    (state) => state.resumeBuilder.form_data.selected_template,
   );
 
   const dispatch = useDispatch();
 
-  const handleSkillAdd = useCallback((arrState) => {
-    const newField = {
-      categories: "",
-      skillName: "",
-    };
-    dispatch(addFields({ arrState, newField }));
-  }, [dispatch]);
+  const handleSkillAdd = useCallback(
+    (arrState) => {
+      const newField = {
+        categories: "",
+        skillName: "",
+      };
+      dispatch(addFields({ arrState, newField }));
+    },
+    [dispatch],
+  );
 
-  const handleCertiAdd = useCallback((arrState) => {
-    const newField = {
-      certiName: "",
-      year: "",
-    };
+  const handleCertiAdd = useCallback(
+    (arrState) => {
+      const newField = {
+        certiName: "",
+        year: "",
+      };
 
-    dispatch(addFields({ arrState, newField }));
-  }, [dispatch]);
+      dispatch(addFields({ arrState, newField }));
+    },
+    [dispatch],
+  );
 
-  const handleInputChange = useCallback((index, field, value, arrState) => {
-    const sanitizedValue = sanitizeInput(value);
-    dispatch(updateFields({ index, field, value: sanitizedValue, arrState }));
-    setValue(`${arrState}.${index}.${field}`, sanitizedValue);
-  }, [dispatch, setValue]);
+  const handleInputChange = useCallback(
+    (index, field, value, arrState) => {
+      const sanitizedValue = sanitizeInput(value);
+      dispatch(updateFields({ index, field, value: sanitizedValue, arrState }));
+      setValue(`${arrState}.${index}.${field}`, sanitizedValue);
+    },
+    [dispatch, setValue],
+  );
 
-  const handleDelete = useCallback((id, arrState) => {
-    dispatch(removeFields({ id, arrState }));
-  }, [dispatch]);
+  const handleDelete = useCallback(
+    (id, arrState) => {
+      dispatch(removeFields({ id, arrState }));
+    },
+    [dispatch],
+  );
 
   const categories = [
     { name: "Languages" },
     { name: "Frameworks & Runtime" },
     { name: "Libraries & Tools" },
+    { name: "UI & Design" },
     { name: "Databases" },
+    { name: "Cloud Platforms" },
     { name: "Hosting & Infrastructure" },
+    { name: "DevOps & CI/CD" },
+    { name: "Testing & QA" },
+    { name: "Mobile Development" },
+    { name: "Data Science & ML" },
+    { name: "Security" },
+    { name: "Networking & Systems" },
+    { name: "Operating Systems" },
   ];
 
   return (
@@ -87,7 +108,7 @@ function OtherDetails() {
                           index,
                           "category",
                           e.target.value,
-                          "skills"
+                          "skills",
                         ),
                     })}
                     className="outline-none mt-1 p-3 flex items-center bg-white border border-gray-300 hover:border-gray-400 rounded-xl text-black transition-colors"
@@ -95,10 +116,9 @@ function OtherDetails() {
                   >
                     <option className="bg-slate-200">Select</option>
                     {categories.map((category) => (
-                        
-                        <option key={category.name} value={category.name}>
-                          {category.name}
-                        </option>
+                      <option key={category.name} value={category.name}>
+                        {category.name}
+                      </option>
                     ))}
                   </select>
                   {errors.skills?.[index]?.category && (
@@ -122,7 +142,6 @@ function OtherDetails() {
                     placeholder="Enter skill..."
                     {...register(`skills.${index}.skillName`, {
                       required: true,
-                      maxLength: 30,
                       validate: (value) =>
                         value.trim().length > 0 || "at least add one skill",
                       onChange: (e) =>
@@ -130,7 +149,7 @@ function OtherDetails() {
                           index,
                           "skillName",
                           e.target.value,
-                          "skills"
+                          "skills",
                         ),
                     })}
                   />
@@ -170,7 +189,6 @@ function OtherDetails() {
                     placeholder="Enter skill..."
                     {...register(`skills.${index}.skillName`, {
                       required: true,
-                      maxLength: 30,
                       validate: (value) =>
                         value.trim().length > 0 || "at least add one skill",
                       onChange: (e) =>
@@ -178,7 +196,7 @@ function OtherDetails() {
                           index,
                           "skillName",
                           e.target.value,
-                          "skills"
+                          "skills",
                         ),
                     })}
                   />
@@ -240,14 +258,12 @@ function OtherDetails() {
                   {...register(`certification.${index}.certiName`, {
                     required: false,
                     maxLength: 50,
-                    validate: (value) =>
-                      value.trim().length > 0 || "at least add one skill",
                     onChange: (e) =>
                       handleInputChange(
                         index,
                         "certiName",
                         e.target.value,
-                        "certification"
+                        "certification",
                       ),
                   })}
                 />
@@ -282,7 +298,7 @@ function OtherDetails() {
                         index,
                         "year",
                         e.target.value,
-                        "certification"
+                        "certification",
                       ),
                   })}
                   {...(errors.certification?.[index]?.year && (
@@ -292,28 +308,28 @@ function OtherDetails() {
                   ))}
                 />
               </div>
+
+              {certification.length > 1 && (
+                <button
+                  type="button"
+                  onClick={() => handleDelete(detail.id, "certification")}
+                  className="transition-all hover:shadow-lg shadow-xl ease-in-out delay-50 hover:-translate-y-0 hover:scale-110 border mx-2 mt-5 bg-red-500 py-1 px-2 text-white rounded-md"
+                >
+                  <i className="ri-delete-bin-6-line"></i>
+                </button>
+              )}
             </div>
           </div>
-
-          <button
-            type="button"
-            onClick={() => handleCertiAdd("certification")}
-            className="transition-all hover:shadow-lg shadow-xl ease-in-out delay-50 hover:-translate-y-0 hover:scale-110 border mx-2 mt-5 bg-black py-1 px-2 text-white text-md rounded-xl"
-          >
-            + Add field
-          </button>
-
-          {certification.length > 1 && (
-            <button
-              type="button"
-              onClick={() => handleDelete(detail.id, "certification")}
-              className="transition-all hover:shadow-lg shadow-xl ease-in-out delay-50 hover:-translate-y-0 hover:scale-110 border mx-2 mt-5 bg-red-500 py-1 px-2 text-white rounded-md"
-            >
-              <i className="ri-delete-bin-6-line"></i>
-            </button>
-          )}
         </div>
       ))}
+
+      <button
+        type="button"
+        onClick={() => handleCertiAdd("certification")}
+        className="transition-all hover:shadow-lg shadow-xl ease-in-out delay-50 hover:-translate-y-0 hover:scale-110 border mx-2 mt-5 bg-black py-1 px-2 text-white text-md rounded-xl"
+      >
+        + Add field
+      </button>
     </>
   );
 }

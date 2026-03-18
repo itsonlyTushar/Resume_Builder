@@ -23,6 +23,17 @@ export const Template08 = ({ formData }) => {
     let leftYPosition = 20;
     let rightYPosition = 20;
     const pageWidth = doc.internal.pageSize.width;
+    const pageHeight = doc.internal.pageSize.height;
+    const bottomMargin = 20;
+
+    const checkRightPage = (extraSpace = 0) => {
+      if (rightYPosition + extraSpace > pageHeight - bottomMargin) {
+        doc.addPage();
+        doc.setFillColor(50, 50, 50);
+        doc.rect(0, 0, rightColumnStart - 5, 297, "F");
+        rightYPosition = 20;
+      }
+    };
 
     // Helper function to check if a string has meaningful content
     const hasContent = (str) => str && str.trim().length > 0;
@@ -98,10 +109,11 @@ export const Template08 = ({ formData }) => {
       leftYPosition += 6;
 
       doc.setFont("Inter_reg");
-      validSkills.forEach((skill) => {
-        doc.text(`• ${skill.skillName}`, 10, leftYPosition);
-        leftYPosition += 5;
-      });
+      doc.setFontSize(8);
+      const skillsList = validSkills.map(s => s.skillName).join(" \u2022 ");
+      const skillsWrapped = doc.splitTextToSize(skillsList, rightColumnStart - 20);
+      doc.text(skillsWrapped, 10, leftYPosition);
+      leftYPosition += skillsWrapped.length * 3.5;
     }
 
     // Experience in Right Column
@@ -111,6 +123,7 @@ export const Template08 = ({ formData }) => {
 
       formData.experienceDetails.forEach((exp) => {
         if (hasContent(exp.role) || hasContent(exp.companyName)) {
+          checkRightPage(25);
           doc.setFont("Inter_bol");
           doc.setFontSize(12);
           if (hasContent(exp.role)) {
@@ -131,13 +144,15 @@ export const Template08 = ({ formData }) => {
           rightYPosition += 6;
 
           if (hasContent(exp.description)) {
-            const wrappedDescription = doc.splitTextToSize(
-              exp.description,
-              pageWidth - rightColumnStart - 15
-            );
             doc.setFontSize(10);
-            doc.text(wrappedDescription, rightColumnStart, rightYPosition);
-            rightYPosition += wrappedDescription.length * 5 + 5;
+            const bullets = exp.description.split("•").filter(s => s.trim().length > 0);
+            bullets.forEach((bullet) => {
+              const bulletText = doc.splitTextToSize(`• ${bullet.trim()}`, pageWidth - rightColumnStart - 20);
+              checkRightPage(bulletText.length * 5);
+              doc.text(bulletText, rightColumnStart, rightYPosition);
+              rightYPosition += bulletText.length * 5;
+            });
+            rightYPosition += 5;
           }
         }
       });
@@ -217,6 +232,7 @@ export const Template08 = ({ formData }) => {
 
       formData.projectDetails.forEach((pro) => {
         if (hasContent(pro.projectName)) {
+          checkRightPage(25);
           rightYPosition += 6;
           doc.setFont("Inter_bol");
           doc.setFontSize(12);
@@ -227,18 +243,31 @@ export const Template08 = ({ formData }) => {
           doc.setFontSize(10);
 
           if (hasContent(pro.projectLink)) {
-            doc.text(pro.projectLink, rightColumnStart, rightYPosition);
+            doc.setTextColor(0, 102, 204);
+            doc.textWithLink(pro.projectLink, rightColumnStart, rightYPosition, { url: pro.projectLink });
+            doc.setTextColor(0, 0, 0);
+            rightYPosition += 5;
           }
 
           if (hasContent(pro.techStack)) {
             doc.text(
               `Techstack : ${pro.techStack}`,
               rightColumnStart,
-              rightYPosition + 5
+              rightYPosition
             );
+            rightYPosition += 5;
+          }
+
+          if (hasContent(pro.description)) {
+            const desc = doc.splitTextToSize(pro.description, pageWidth - rightColumnStart - 15);
+            checkRightPage(desc.length * 4);
+            doc.setFontSize(9);
+            doc.text(desc, rightColumnStart, rightYPosition);
+            rightYPosition += desc.length * 4;
           }
 
           if (hasContent(pro.year)) {
+            doc.setFontSize(9);
             doc.text(pro.year, pageWidth - 15, rightYPosition, {
               align: "right",
             });

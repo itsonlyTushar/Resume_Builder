@@ -200,9 +200,6 @@ const ReviewPrompt = ({ answer, score }) => {
               <div className="mt-6 border border-black/10 rounded-2xl p-5 bg-gradient-to-br from-white to-gray-50/50 shadow-[0_6px_18px_rgba(0,0,0,0.04)]">
                 <h3 className="text-base font-semibold tracking-tight text-black">
                   Honest Advice
-                  <span className="ml-2 text-xs font-normal text-black/50">
-                    (only if critical issues found)
-                  </span>
                 </h3>
                 <div className="mt-4 space-y-4">
                   {advice.map((item, index) => {
@@ -236,7 +233,7 @@ const ReviewPrompt = ({ answer, score }) => {
       ) : (
         <div className="mt-8 text-center text-gray-500 p-12 border border-dashed border-gray-300 rounded-lg">
           No review yet. Upload a PDF and click{" "}
-          <span className="font-medium text-gray-700">GENERATE REVIEW</span>.
+          <span className="font-medium text-gray-700">Generate Review</span>.
         </div>
       )}
     </section>

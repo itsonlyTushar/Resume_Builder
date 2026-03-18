@@ -18,7 +18,16 @@ export const Template03 = ({ formData }) => {
     let xPosition = 60;
     const pageWidth = pdf.internal.pageSize.width * 2;
     const pageWi = pdf.internal.pageSize.width;
+    const pageHeight = pdf.internal.pageSize.height;
+    const bottomMargin = 20;
     let rightMargin = pageWi / 16;
+
+    const checkAddPage = (extraSpace = 0) => {
+      if (yPosition + extraSpace > pageHeight - bottomMargin) {
+        pdf.addPage();
+        yPosition = 20;
+      }
+    };
 
     // icons
     const mailIcon = `data:image/png;base64,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`;
@@ -105,10 +114,11 @@ export const Template03 = ({ formData }) => {
       pdf.setFontSize(11);
       pdf.setTextColor(0, 0, 0);
       experienceDetails.forEach((exp, index) => {
-        yPosition += 9;
         if (index !== 0) {
-          yPosition += 45;
+          yPosition += 8;
         }
+        checkAddPage(25);
+        yPosition += 9;
         pdf.setFont("noto_bol");
         pdf.text(exp.role, rightMargin, yPosition);
         pdf.setFontSize(9);
@@ -125,8 +135,15 @@ export const Template03 = ({ formData }) => {
 
         // jd
         yPosition += 10;
-        const JD = pdf.splitTextToSize(exp.description, 80);
-        pdf.text(JD, rightMargin, yPosition, { align: "left" });
+        if (exp.description) {
+          const bullets = exp.description.split("•").filter(s => s.trim().length > 0);
+          bullets.forEach((bullet) => {
+            const bulletText = pdf.splitTextToSize(`• ${bullet.trim()}`, 75);
+            checkAddPage(bulletText.length * 4);
+            pdf.text(bulletText, rightMargin, yPosition, { align: "left" });
+            yPosition += bulletText.length * 4;
+          });
+        }
       });
     }
     yPosition += 10;
@@ -147,6 +164,7 @@ export const Template03 = ({ formData }) => {
       pdf.setFontSize(11);
       pdf.setTextColor(0, 0, 0);
       projectDetails.forEach((pro) => {
+        checkAddPage(20);
         yPosition += 14;
 
         pdf.setFont("noto_bol");
@@ -156,18 +174,30 @@ export const Template03 = ({ formData }) => {
         const tech = pdf.splitTextToSize(pro.techStack, 80);
         pdf.text(tech, rightMargin, yPosition, { align: "left" });
 
-        yPosition += 5;
+        yPosition += tech.length * 3 + 2;
+
+        if (checkStr(pro.description)) {
+          pdf.setFont("noto_reg");
+          pdf.setFontSize(9);
+          const desc = pdf.splitTextToSize(pro.description, 80);
+          checkAddPage(desc.length * 3.5);
+          pdf.text(desc, rightMargin, yPosition);
+          yPosition += desc.length * 3.5;
+        }
+
         pdf.setFont("noto_reg");
         pdf.setFontSize(9);
-        yPosition += 5;
-        pdf.addImage(linkIcon, rightMargin + 14, yPosition - 3, 3, 3);
-        pdf.textWithLink("Live Link", rightMargin, yPosition, {
-          url: `${pro.projectLink}`,
-        });
+        if (checkStr(pro.projectLink)) {
+          pdf.addImage(linkIcon, rightMargin + 14, yPosition - 1, 3, 3);
+          pdf.textWithLink("Live Link", rightMargin, yPosition + 2, {
+            url: `${pro.projectLink}`,
+          });
+          yPosition += 4;
+        }
         pdf.setFontSize(11);
         pdf.setTextColor(77, 81, 96);
         pdf.setFontSize(7);
-        pdf.text(pro.year, rightMargin, yPosition + 5);
+        pdf.text(pro.year, rightMargin, yPosition + 2);
         yPosition += 3;
         pdf.setTextColor(0, 0, 0);
         pdf.setFontSize(11);
@@ -181,12 +211,13 @@ export const Template03 = ({ formData }) => {
     pdf.setTextColor(46, 49, 53);
     pdf.text("SKILLS", leftMargin + 75, (xPosition += 11));
     pdf.setFont("noto_reg");
-    pdf.setFontSize(10);
+    pdf.setFontSize(9);
     pdf.setTextColor(0, 0, 0);
-    yPosition += 5;
-    skills.forEach((skill) => {
-      pdf.text(skill.skillName, leftMargin + 75, (xPosition += 10));
-    });
+    xPosition += 6;
+    const skillsList = skills.filter(s => checkStr(s.skillName)).map(s => s.skillName).join(" \u2022 ");
+    const skillsWrapped = pdf.splitTextToSize(skillsList, 90);
+    pdf.text(skillsWrapped, leftMargin + 75, xPosition);
+    xPosition += skillsWrapped.length * 4;
     }
 
     // certification section

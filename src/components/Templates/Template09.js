@@ -258,11 +258,23 @@ export const Template09 = ({ formData }) => {
             doc.text(pro.techStack, leftMargin, yPosition);
           }
 
+          if (hasContent(pro.description)) {
+            yPosition += 5;
+            doc.setFont("Poppins_reg");
+            doc.setFontSize(9);
+            const desc = doc.splitTextToSize(pro.description, contentWidth - 5);
+            checkAddPage(desc.length * 4);
+            doc.text(desc, leftMargin, yPosition);
+            yPosition += desc.length * 4;
+          }
+
           if (hasContent(pro.projectLink)) {
-            yPosition += 6;
+            yPosition += 4;
             doc.setFontSize(8);
             doc.setFont("Poppins_reg");
-            doc.text(pro.projectLink, leftMargin, yPosition);
+            doc.setTextColor(0, 102, 204);
+            doc.textWithLink(pro.projectLink, leftMargin, yPosition, { url: pro.projectLink });
+            doc.setTextColor(0, 0, 0);
           }
 
           yPosition += 8;

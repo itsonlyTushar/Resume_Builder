@@ -21,6 +21,18 @@ export const Template10 = ({ formData }) => {
     let leftYPosition = 20;
     let rightYPosition = 20;
     const pageWidth = doc.internal.pageSize.width;
+    const pageHeight = doc.internal.pageSize.height;
+    const bottomMargin = 20;
+
+    const checkRightPage = (extraSpace = 0) => {
+      if (rightYPosition + extraSpace > pageHeight - bottomMargin) {
+        doc.addPage();
+        doc.setFillColor(9, 18, 44);
+        doc.rect(0, 0, leftColumnWidth, 297, "F");
+        doc.setTextColor(9, 18, 44);
+        rightYPosition = 20;
+      }
+    };
 
     // Helper function to check if a string has meaningful content
     // This ensures we only display fields that have actual text
@@ -98,10 +110,11 @@ export const Template10 = ({ formData }) => {
       leftYPosition += 6;
 
       doc.setFont("merium_reg");
-      validSkills.forEach((skill) => {
-        doc.text(`• ${skill.skillName}`, 10, leftYPosition);
-        leftYPosition += 5;
-      });
+      doc.setFontSize(8);
+      const skillsList = validSkills.map(s => s.skillName).join(" \u2022 ");
+      const skillsWrapped = doc.splitTextToSize(skillsList, leftColumnWidth - 15);
+      doc.text(skillsWrapped, 10, leftYPosition);
+      leftYPosition += skillsWrapped.length * 3.5;
     }
 
     // Right Column Content - Switch to dark blue text
@@ -113,6 +126,7 @@ export const Template10 = ({ formData }) => {
 
       formData.experienceDetails.forEach((exp) => {
         if (hasContent(exp.role) || hasContent(exp.companyName)) {
+          checkRightPage(25);
           doc.setFont("merium_bol");
           doc.setFontSize(11);
           if (hasContent(exp.role)) {
@@ -133,12 +147,14 @@ export const Template10 = ({ formData }) => {
           rightYPosition += 6;
 
           if (hasContent(exp.description)) {
-            const desc = doc.splitTextToSize(
-              exp.description,
-              pageWidth - rightColumnStart - 15
-            );
-            doc.text(desc, rightColumnStart, rightYPosition);
-            rightYPosition += desc.length * 5 + 5;
+            const bullets = exp.description.split("•").filter(s => s.trim().length > 0);
+            bullets.forEach((bullet) => {
+              const bulletText = doc.splitTextToSize(`• ${bullet.trim()}`, pageWidth - rightColumnStart - 20);
+              checkRightPage(bulletText.length * 5);
+              doc.text(bulletText, rightColumnStart, rightYPosition);
+              rightYPosition += bulletText.length * 5;
+            });
+            rightYPosition += 5;
           }
         }
       });
@@ -209,6 +225,7 @@ export const Template10 = ({ formData }) => {
 
       formData.projectDetails.forEach((pro) => {
         if (hasContent(pro.projectName)) {
+          checkRightPage(25);
           doc.setFont("merium_bol");
           doc.setFontSize(12);
           doc.text(pro.projectName, rightColumnStart, rightYPosition);
@@ -223,7 +240,9 @@ export const Template10 = ({ formData }) => {
           doc.setFontSize(9);
 
           if (hasContent(pro.projectLink)) {
-            doc.text(pro.projectLink, rightColumnStart, rightYPosition);
+            doc.setTextColor(0, 102, 204);
+            doc.textWithLink(pro.projectLink, rightColumnStart, rightYPosition, { url: pro.projectLink });
+            doc.setTextColor(9, 18, 44);
             rightYPosition += 6;
           }
 
@@ -234,6 +253,15 @@ export const Template10 = ({ formData }) => {
               rightColumnStart,
               rightYPosition
             );
+            rightYPosition += 5;
+          }
+
+          if (hasContent(pro.description)) {
+            doc.setFontSize(9);
+            const desc = doc.splitTextToSize(pro.description, pageWidth - rightColumnStart - 15);
+            checkRightPage(desc.length * 4);
+            doc.text(desc, rightColumnStart, rightYPosition);
+            rightYPosition += desc.length * 4;
           }
 
           rightYPosition += 8;

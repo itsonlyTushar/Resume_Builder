@@ -23,6 +23,15 @@ export const Template04 = ({ formData }) => {
     const leftMargin = 20;
     let yPosition = 15;
     const pageWidth = doc.internal.pageSize.width;
+    const pageHeight = doc.internal.pageSize.height;
+    const bottomMargin = 20;
+
+    const checkAddPage = (extraSpace = 0) => {
+      if (yPosition + extraSpace > pageHeight - bottomMargin) {
+        doc.addPage();
+        yPosition = 20;
+      }
+    };
 
     // Get personal details
     const details = formData.personalDetails?.[0] || {};
@@ -99,6 +108,7 @@ export const Template04 = ({ formData }) => {
       );
 
       validEducation.forEach((edu) => {
+        checkAddPage(20);
         yPosition += 8;
         doc.setFont("Playfair", "bold");
         doc.setFontSize(12);
@@ -153,6 +163,7 @@ export const Template04 = ({ formData }) => {
       );
 
       validExperiences.forEach((exp) => {
+        checkAddPage(25);
         yPosition += 8;
         doc.setFont("Playfair", "bold");
         doc.setFontSize(12);
@@ -182,12 +193,13 @@ export const Template04 = ({ formData }) => {
 
         if (hasContent(exp.description)) {
           yPosition += 6;
-          const description = doc.splitTextToSize(
-            exp.description,
-            pageWidth - 2 * leftMargin
-          );
-          doc.text(description, leftMargin, yPosition);
-          yPosition += description.length * 5;
+          const bullets = exp.description.split("•").filter(s => s.trim().length > 0);
+          bullets.forEach((bullet) => {
+            const bulletText = doc.splitTextToSize(`• ${bullet.trim()}`, pageWidth - 2 * leftMargin - 5);
+            checkAddPage(bulletText.length * 5);
+            doc.text(bulletText, leftMargin + 3, yPosition);
+            yPosition += bulletText.length * 5;
+          });
         }
       });
     }
@@ -211,6 +223,7 @@ export const Template04 = ({ formData }) => {
       );
 
       certifications.forEach((cert) => {
+        checkAddPage(15);
         yPosition += 8;
         doc.setFont("Playfair", "bold");
         doc.setFontSize(12);
@@ -252,6 +265,7 @@ export const Template04 = ({ formData }) => {
       );
 
       validProjects.forEach((project) => {
+        checkAddPage(25);
         yPosition += 8;
         doc.setFont("Playfair", "bold");
         doc.setFontSize(12);
@@ -273,6 +287,7 @@ export const Template04 = ({ formData }) => {
             project.description,
             pageWidth - 2 * leftMargin
           );
+          checkAddPage(description.length * 5);
           doc.text(description, leftMargin, yPosition);
           yPosition += description.length * 5;
         }
@@ -285,9 +300,10 @@ export const Template04 = ({ formData }) => {
 
         if (hasContent(project.projectLink)) {
           doc.setFont("Playfair", "normal");
-
           yPosition += 5;
-          doc.text(`Link: ${project.projectLink}`, leftMargin, yPosition);
+          doc.setTextColor(0, 102, 204);
+          doc.textWithLink(`Link: ${project.projectLink}`, leftMargin, yPosition, { url: project.projectLink });
+          doc.setTextColor(0, 0, 0);
         }
       });
     }

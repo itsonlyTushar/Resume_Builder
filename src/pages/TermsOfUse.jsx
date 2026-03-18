@@ -543,10 +543,6 @@ function TermsOfUse() {
               </section>
             </div>
           </div>
-
-          <div className="absolute p-2 top-24 px-10 ">
-            <button onClick={() => document.getElementById('thirdparty')?.scrollIntoView({ behavior: 'smooth' })}>Third-Party Services</button>
-          </div>
         </div>
         <Footer />
       </div>

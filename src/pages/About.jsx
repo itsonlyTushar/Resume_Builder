@@ -49,11 +49,9 @@ function About() {
               Hey i build this !
             </h2>
             <p className="max-w-xl text-justify text-xl">
-              I’m Tushar Soni — a web developer and the person behind Resumate,
-              a professional resume builder. I built this with a simple goal in
+              I’m Tushar Soni, a web developer.I built this with a simple goal in
               mind: to make creating resumes quicker, easier, and more modern.
-              As someone who loves building things that solve everyday problems,
-              this project is close to my heart. It's all about helping job
+              As someone who loves building things that solve everyday problems,It's all about helping job
               seekers craft professional resumes effortlessly and giving them a
               smoother experience during their job search.
             </p>

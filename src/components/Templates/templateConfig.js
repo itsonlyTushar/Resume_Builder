@@ -14,6 +14,10 @@ import { Template13 } from "./Template13";
 import { Template15 } from "./Template15";
 import { Template16 } from "./Template16";
 import { Template17 } from "./Template17";
+import { Template18 } from "./Template18";
+import { Template19 } from "./Template19";
+import { Template20 } from "./Template20";
+import { Template21 } from "./Template21";
 
 const TEMPLATE_REGISTRY = {
   101: Template01,
@@ -32,7 +36,11 @@ const TEMPLATE_REGISTRY = {
   113: Template13,
   115: Template15,
   116: Template16,
-  117: Template17
+  117: Template17,
+  118: Template18,
+  119: Template19,
+  120: Template20,
+  121: Template21
 };
 
 // generates template on selected templates
@@ -51,71 +59,39 @@ export const generatePDF = ({ formData }) => {
 
 export const devTemplate = {
   id: 117,
-  image: `https://res.cloudinary.com/dartdvch1/image/upload/v1752485028/wbice_page-0001_vijpwg.jpg`,
+  image: `https://res.cloudinary.com/dartdvch1/image/upload/v1773821899/18-03-2026_page-0001_lo2dlh.jpg`,
 };
 
 
 // templates are stored in cloudinary
 export const templateImgs = [
   {
-    id: 101,
-    image: `https://res.cloudinary.com/dartdvch1/image/upload/v1746337100/Template_01_page-0001_euwkh8.jpg`,
-  },
-  {
-    id: 102,
-    image: `https://res.cloudinary.com/dartdvch1/image/upload/v1746337099/Template_02_page-0001_dc788l.jpg`,
-  },
-  {
-    id: 103,
-    image: `https://res.cloudinary.com/dartdvch1/image/upload/v1746337100/Template_03_page-0001_enli5c.jpg`,
-  },
-  {
-    id: 104,
-    image: `https://res.cloudinary.com/dartdvch1/image/upload/v1751364481/template4_page-0001_ux8fxx.jpg`,
-  },
-  {
-    id: 105,
-    image: `https://res.cloudinary.com/dartdvch1/image/upload/v1751364791/template5_page-0001_zra0kl.jpg`,
-  },
-  {
     id: 106,
-    image: `https://res.cloudinary.com/dartdvch1/image/upload/v1751364480/template6_page-0001_uwa6f9.jpg`,
+    image: `https://res.cloudinary.com/dartdvch1/image/upload/v1773830381/wsdtd_page-0001_le27ky.jpg`,
   },
   {
     id: 107,
-    image: `https://res.cloudinary.com/dartdvch1/image/upload/v1751364791/template7_page-0001_hmwryb.jpg`,
-  },
-  {
-    id: 108,
-    image: `https://res.cloudinary.com/dartdvch1/image/upload/v1751365012/template8_page-0001_x2fkii.jpg`,
+    image: `https://res.cloudinary.com/dartdvch1/image/upload/v1773830490/wv0rt_page-0001_m9zl2z.jpg`,
   },
 
   {
     id: 109,
-    image: `https://res.cloudinary.com/dartdvch1/image/upload/v1751364331/Temaplate9_page-0001_quahye.jpg`,
-  },
-  {
-    id: 110,
-    image: `https://res.cloudinary.com/dartdvch1/image/upload/v1751364331/template10_page-0001_ix5okb.jpg`,
-  },
-  {
-    id: 111,
-    image: `https://res.cloudinary.com/dartdvch1/image/upload/v1751365012/template11_page-0001_i6etpm.jpg`,
-  },
-  {
-    id: 112,
-    image: `https://res.cloudinary.com/dartdvch1/image/upload/v1751364330/Template12_page-0001_ho4ccc.jpg`,
-  },
-  {
-    id: 113,
-    image: `https://res.cloudinary.com/dartdvch1/image/upload/v1751366592/Template13_page-0001_a3azmv.jpg`,
+    image: `https://res.cloudinary.com/dartdvch1/image/upload/v1773830560/ww8eo_page-0001_kizhls.jpg`,
   },
   {
     id: 115,
-    image: `https://res.cloudinary.com/dartdvch1/image/upload/v1751369183/fy71d_page-0001_wjcvja.jpg`,
+    image: `https://res.cloudinary.com/dartdvch1/image/upload/v1773830650/wyfmr_page-0001_gi8eyz.jpg`,
   },
   {
-    id: 116,
-    image: `https://res.cloudinary.com/dartdvch1/image/upload/v1751370803/template16_page-0001_rtpyfx.jpg`,
+    id: 118,
+    image: `https://res.cloudinary.com/dartdvch1/image/upload/v1773830740/x0j1x_page-0001_ruemop.jpg`,
+  },
+  {
+    id: 119,
+    image: `https://res.cloudinary.com/dartdvch1/image/upload/v1773830794/x1i6h_page-0001_c5qwrs.jpg`,
+  },
+  {
+    id: 121,
+    image: `https://res.cloudinary.com/dartdvch1/image/upload/v1773830895/x3pn0_page-0001_rckwfj.jpg`,
   },
 ];

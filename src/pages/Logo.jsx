@@ -1,21 +1,22 @@
 import { useLocation, useNavigate } from "react-router";
+import { useAuth } from "../context/AuthContext";
 
 function Logo() {
   const navigate = useNavigate();
   const current_location = useLocation();
+  const { currentUser } = useAuth();
 
-  const handleNavigation = (targetpath) => {
-
-    if(current_location.pathname === targetpath) {
-      return
+  const handleNavigation = () => {
+    const targetpath = currentUser ? "/select_template" : "/";
+    if (current_location.pathname === targetpath) {
+      return;
     }
-    navigate(targetpath)
-
-  }
+    navigate(targetpath);
+  };
 
   return (
     <h1 className={`sm:text-3xl text-2xl font-bold`}>
-      <button onClick={() => handleNavigation('/')}>
+      <button onClick={handleNavigation}>
         <i className="ri-attachment-2"></i>ResuMate
       </button>
     </h1>

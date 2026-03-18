@@ -136,14 +136,18 @@ export const Template13 = ({ formData }) => {
         // Job description
         if (checkStr(exp.description)) {
           pdf.setFont("roboto_reg");
-          pdf.setFontSize(7); // Lowered from 9
+          pdf.setFontSize(7);
           pdf.setTextColor(55, 65, 81);
-          const description = pdf.splitTextToSize(exp.description, contentWidth - 10);
-
-          checkPageOverflow(description.length * 3 + 3);
-          pdf.text("•", leftMargin + 5, yPosition);
-          pdf.text(description, leftMargin + 10, yPosition);
-          yPosition += (description.length * 3) + 2;
+          const bullets = exp.description.split("•").filter(s => s.trim().length > 0);
+          bullets.forEach((bullet) => {
+            const bulletText = pdf.splitTextToSize(`• ${bullet.trim()}`, contentWidth - 15);
+            checkPageOverflow(bulletText.length * 3 + 2);
+            bulletText.forEach((line) => {
+              pdf.text(line, leftMargin + 5, yPosition);
+              yPosition += 3;
+            });
+          });
+          yPosition += 2;
         }
       });
     }
@@ -217,16 +221,31 @@ export const Template13 = ({ formData }) => {
         // Tech stack
         if (checkStr(project.techStack)) {
           pdf.setFont("roboto_reg");
-          pdf.setFontSize(7); // Lowered from 9
+          pdf.setFontSize(7);
           pdf.setTextColor(52, 152, 219);
           pdf.text(`Technologies: ${project.techStack}`, leftMargin, yPosition);
-          yPosition += 3;
+          yPosition += 4;
+        }
+
+        // Project description
+        if (checkStr(project.description)) {
+          pdf.setFont("roboto_reg");
+          pdf.setFontSize(7);
+          pdf.setTextColor(55, 65, 81);
+          const descLines = pdf.splitTextToSize(project.description, contentWidth - 10);
+          descLines.forEach((line) => {
+            checkPageOverflow(3);
+            pdf.text(line, leftMargin + 5, yPosition);
+            yPosition += 3;
+          });
+          yPosition += 1;
         }
 
         // Project link
         if (checkStr(project.projectLink)) {
+          checkPageOverflow(6);
           pdf.setFont("roboto_reg");
-          pdf.setFontSize(7); // Lowered from 9
+          pdf.setFontSize(7);
           pdf.setTextColor(74, 84, 102);
           pdf.textWithLink(`View Project: ${project.projectLink}`, leftMargin, yPosition, {
             url: project.projectLink,

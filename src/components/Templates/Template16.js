@@ -129,7 +129,7 @@ export const Template16 = ({ formData }) => {
       educationDetails.forEach((edu, index) => {
         checkAddPage(20);
         
-        if (index > 0) yPosition += 8;
+        if (index > 0) yPosition += 5;
         
         // Year/duration on left
         pdf.setFont("helvetica", "normal");
@@ -144,7 +144,7 @@ export const Template16 = ({ formData }) => {
         pdf.setFontSize(11);
         pdf.setTextColor(0, 0, 0);
         if (edu.course) {
-          pdf.text(edu.course, leftMargin + 45, yPosition);
+          pdf.text(edu.course, leftMargin + 35, yPosition);
         }
         
         yPosition += 5;
@@ -158,13 +158,13 @@ export const Template16 = ({ formData }) => {
           collegeInfo += ` - ${edu.location}`;
         }
         if (collegeInfo) {
-          pdf.text(collegeInfo, leftMargin + 45, yPosition);
+          pdf.text(collegeInfo, leftMargin + 35, yPosition);
         }
         
         yPosition += 3;
       });
       
-      yPosition += 12;
+      yPosition += 6;
     }
 
     // 3. WORK EXPERIENCE SECTION
@@ -175,9 +175,9 @@ export const Template16 = ({ formData }) => {
       addSectionHeader("Work Experience", 3);
       
       experienceDetails.forEach((exp, index) => {
-        checkAddPage(35);
+        checkAddPage(25);
         
-        if (index > 0) yPosition += 12;
+        if (index > 0) yPosition += 6;
         
         // Year/duration
         pdf.setFont("helvetica", "normal");
@@ -192,7 +192,7 @@ export const Template16 = ({ formData }) => {
         pdf.setFontSize(11);
         pdf.setTextColor(0, 0, 0);
         if (exp.role) {
-          pdf.text(exp.role, leftMargin + 45, yPosition);
+          pdf.text(exp.role, leftMargin + 35, yPosition);
         }
         
         yPosition += 5;
@@ -206,10 +206,10 @@ export const Template16 = ({ formData }) => {
           companyInfo += ` - ${exp.location}`;
         }
         if (companyInfo) {
-          pdf.text(companyInfo, leftMargin + 45, yPosition);
+          pdf.text(companyInfo, leftMargin + 35, yPosition);
         }
         
-        yPosition += 7;
+        yPosition += 5;
         
         // Description with bullets
         if (exp.description) {
@@ -217,31 +217,28 @@ export const Template16 = ({ formData }) => {
           pdf.setFontSize(9);
           pdf.setTextColor(0, 0, 0);
           
-          // Split description into bullet points if it contains line breaks or is long
-          const descLines = exp.description.split(/[.\n]/).filter(line => line.trim().length > 0);
+          const descLines = exp.description.split("•").filter(line => line.trim().length > 0);
           
-          descLines.forEach((line, lineIndex) => {
+          descLines.forEach((line) => {
             const trimmedLine = line.trim();
             if (trimmedLine) {
               checkAddPage(5);
-              // Add bullet point
-              pdf.text("•", leftMargin + 45, yPosition);
+              pdf.text("•", leftMargin + 35, yPosition);
               
-              // Wrap text properly
-              const wrappedText = pdf.splitTextToSize(trimmedLine, contentWidth - 55);
+              const wrappedText = pdf.splitTextToSize(trimmedLine, contentWidth - 40);
               wrappedText.forEach((wrappedLine, wrapIndex) => {
-                pdf.text(wrappedLine, leftMargin + 50, yPosition);
+                pdf.text(wrappedLine, leftMargin + 40, yPosition);
                 if (wrapIndex < wrappedText.length - 1) yPosition += 4;
               });
-              yPosition += 5;
+              yPosition += 4;
             }
           });
         }
         
-        yPosition += 5;
+        yPosition += 2;
       });
       
-      yPosition += 12;
+      yPosition += 6;
     }
 
     // 4. SKILLS SECTION
@@ -291,9 +288,9 @@ export const Template16 = ({ formData }) => {
       addSectionHeader("Certificates", 5);
       
       certification.forEach((cert, index) => {
-        checkAddPage(15);
+        checkAddPage(12);
         
-        if (index > 0) yPosition += 6;
+        if (index > 0) yPosition += 4;
         
         // Year
         pdf.setFont("helvetica", "normal");
@@ -308,9 +305,9 @@ export const Template16 = ({ formData }) => {
         pdf.setFontSize(10);
         pdf.setTextColor(0, 0, 0);
         if (cert.certiName) {
-          const certText = pdf.splitTextToSize(cert.certiName, contentWidth - 50);
+          const certText = pdf.splitTextToSize(cert.certiName, contentWidth - 40);
           certText.forEach((line, lineIndex) => {
-            pdf.text(line, leftMargin + 45, yPosition);
+            pdf.text(line, leftMargin + 35, yPosition);
             if (lineIndex < certText.length - 1) yPosition += 4;
           });
         }
@@ -318,7 +315,7 @@ export const Template16 = ({ formData }) => {
         yPosition += 3;
       });
       
-      yPosition += 12;
+      yPosition += 6;
     }
 
     // 6. PROJECTS SECTION (if needed)
@@ -328,7 +325,7 @@ export const Template16 = ({ formData }) => {
       projectDetails.forEach((project, index) => {
         checkAddPage(20);
         
-        if (index > 0) yPosition += 8;
+        if (index > 0) yPosition += 5;
         
         // Year
         pdf.setFont("helvetica", "normal");
@@ -343,7 +340,7 @@ export const Template16 = ({ formData }) => {
         pdf.setFontSize(11);
         pdf.setTextColor(0, 0, 0);
         if (project.projectName) {
-          pdf.text(project.projectName, leftMargin + 45, yPosition);
+          pdf.text(project.projectName, leftMargin + 35, yPosition);
         }
         
         yPosition += 5;
@@ -353,20 +350,35 @@ export const Template16 = ({ formData }) => {
           pdf.setFont("helvetica", "normal");
           pdf.setFontSize(9);
           pdf.setTextColor(0, 0, 0);
-          pdf.text(`Tech: ${project.techStack}`, leftMargin + 45, yPosition);
+          pdf.text(`Tech: ${project.techStack}`, leftMargin + 35, yPosition);
           yPosition += 4;
         }
-        
+
+        // Project description
+        if (project.description) {
+          pdf.setFont("helvetica", "normal");
+          pdf.setFontSize(9);
+          pdf.setTextColor(0, 0, 0);
+          const descLines = pdf.splitTextToSize(project.description, contentWidth - 40);
+          descLines.forEach((line) => {
+            checkAddPage(4);
+            pdf.text(line, leftMargin + 35, yPosition);
+            yPosition += 4;
+          });
+        }
+
         // Project link
         if (project.projectLink) {
+          checkAddPage(5);
           pdf.setFont("helvetica", "normal");
           pdf.setFontSize(9);
           pdf.setTextColor(0, 102, 204);
-          pdf.text(project.projectLink, leftMargin + 45, yPosition);
-          yPosition += 4;
+          pdf.textWithLink(project.projectLink, leftMargin + 35, yPosition, { url: project.projectLink });
+          pdf.setTextColor(0, 0, 0);
+          yPosition += 5;
         }
         
-        yPosition += 3;
+        yPosition += 2;
       });
     }
 

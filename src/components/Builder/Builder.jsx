@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";
 import { resetFormData } from "../../features/templateSlice";
 import Tooltip from "../UI/Tooltip";
+import SectionOrderPanel from "./SectionOrderPanel";
 import {
   Button,
   Dialog,
@@ -26,8 +27,11 @@ import {
 } from "@mui/material";
 import { detectRefresh } from "../../utils/refreshDetect";
 
+const DEV_TEMPLATE_ID = 117;
+
 function Builder() {
   const formData = useSelector((state) => state.resumeBuilder.form_data);
+  const isDevTemplate = formData.selected_template === DEV_TEMPLATE_ID;
   const [openDialog, setOpenDialog] = useState(false);
   const methods = useForm({
     defaultValues: {
@@ -255,26 +259,33 @@ function Builder() {
             </form>
           </FormProvider>
         </div>
-        <div className="flex">
-          <button
-            className="bg-black text-white px-5 mx-2 py-2 rounded-2xl text-lg"
-            type={activeStep === steps.length - 1 ? "submit" : "button"}
-            onClick={
-              activeStep === steps.length - 1
-                ? methods.handleSubmit(onSubmit)
-                : methods.handleSubmit(handleNext)
-            }
-          >
-            {activeStep === steps.length - 1 ? "Submit" : "Next"}
-            <i className="ri-arrow-right-s-line text-sm"></i>
-          </button>
-          <button
-            hidden={activeStep === 0 ? true : false}
-            className="text-black px-5 mx-2 py-2 rounded-2xl text-lg bg-[#EEEFEF]"
-            onClick={handleBack}
-          >
-            Back
-          </button>
+        <div className="flex flex-col items-center gap-4 p-2">
+          <div className="flex gap-2">
+            <button
+              className="bg-black text-white px-5 mx-2 py-2 rounded-2xl text-lg"
+              type={activeStep === steps.length - 1 ? "submit" : "button"}
+              onClick={
+                activeStep === steps.length - 1
+                  ? methods.handleSubmit(onSubmit)
+                  : methods.handleSubmit(handleNext)
+              }
+            >
+              {activeStep === steps.length - 1 ? "Submit" : "Next"}
+              <i className="ri-arrow-right-s-line text-sm"></i>
+            </button>
+            <button
+              hidden={activeStep === 0 ? true : false}
+              className="text-black px-5 mx-2 py-2 rounded-2xl text-lg bg-[#EEEFEF]"
+              onClick={handleBack}
+            >
+              Back
+            </button>
+          </div>
+          {isDevTemplate && (
+            <div className="w-56">
+              <SectionOrderPanel />
+            </div>
+          )}
         </div>
       </div>
       <Dialog

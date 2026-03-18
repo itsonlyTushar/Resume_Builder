@@ -22,6 +22,15 @@ export const Template06 = ({ formData }) => {
     const leftMargin = 20;
     let yPosition = 12;
     const pageWidth = doc.internal.pageSize.width;
+    const pageHeight = doc.internal.pageSize.height;
+    const bottomMargin = 20;
+
+    const checkAddPage = (extraSpace = 0) => {
+      if (yPosition + extraSpace > pageHeight - bottomMargin) {
+        doc.addPage();
+        yPosition = 20;
+      }
+    };
 
     // Add custom fonts to the document
     doc.addFont(merium_reg, "merium_reg", "normal");
@@ -111,6 +120,7 @@ export const Template06 = ({ formData }) => {
       doc.line(leftMargin, yPosition, pageWidth - leftMargin, yPosition);
 
       validExperiences.forEach((exp) => {
+        checkAddPage(20);
         yPosition += 5;
 
         // Role and Company - Only display if role exists
@@ -154,8 +164,7 @@ export const Template06 = ({ formData }) => {
             const wrappedText = doc.splitTextToSize(
               `• ${desc.trim()}`,
               pageWidth - 2 * leftMargin - 5
-            );
-            doc.text(wrappedText, leftMargin + 5, yPosition);
+            );            checkAddPage(wrappedText.length * 5);            doc.text(wrappedText, leftMargin + 5, yPosition);
             yPosition += wrappedText.length * 5;
           });
         }
@@ -187,6 +196,7 @@ export const Template06 = ({ formData }) => {
       doc.line(leftMargin, yPosition, pageWidth - leftMargin, yPosition);
 
       validProjects.forEach((project) => {
+        checkAddPage(20);
         yPosition += 5;
 
         // Project Name and Year - Only display if they exist
@@ -215,6 +225,18 @@ export const Template06 = ({ formData }) => {
           doc.link(leftMargin, yPosition - 3, doc.getTextWidth(clickText), 5, {
             url: project.projectLink,
           });
+        }
+
+        // Project Description - Only display if it exists
+        if (hasContent(project.description)) {
+          yPosition += 5;
+          doc.setFont("merium_reg");
+          doc.setFontSize(10);
+          doc.setTextColor(60, 60, 60);
+          const desc = doc.splitTextToSize(project.description, pageWidth - 2 * leftMargin - 5);
+          checkAddPage(desc.length * 5);
+          doc.text(desc, leftMargin + 5, yPosition);
+          yPosition += desc.length * 5;
         }
 
         // Tech Stack - Only display if it exists
@@ -252,6 +274,7 @@ export const Template06 = ({ formData }) => {
       doc.line(leftMargin, yPosition, pageWidth - leftMargin, yPosition);
 
       validEducation.forEach((edu) => {
+        checkAddPage(15);
         yPosition += 5;
 
         // Degree and Course - Only display if course exists
@@ -302,6 +325,7 @@ export const Template06 = ({ formData }) => {
       );
 
       certifications.forEach((cert) => {
+        checkAddPage(15);
         yPosition += 8;
         doc.setFont("merium_reg");
         doc.setFontSize(10);

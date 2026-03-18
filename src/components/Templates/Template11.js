@@ -109,6 +109,7 @@ export const Template11 = ({ formData }) => {
       doc.setFontSize(10);
 
       skillGroups.forEach((row) => {
+        checkAddPage(6);
         row.forEach((skill, colIndex) => {
           const xPos = leftMargin + colIndex * columnWidth;
           doc.text(skill.skillName, xPos, yPosition);
@@ -135,6 +136,7 @@ export const Template11 = ({ formData }) => {
       addSectionHeader("PROFESSIONAL EXPERIENCE");
 
       validExperiences.forEach((exp) => {
+        checkAddPage(20);
         if (hasContent(exp.companyName)) {
           doc.setFont("Arvo_bol");
           doc.setFontSize(11);
@@ -163,6 +165,7 @@ export const Template11 = ({ formData }) => {
               bulletText,
               contentWidth - 5
             );
+            checkAddPage(wrappedBullet.length * 5);
             doc.text(wrappedBullet, leftMargin + 5, yPosition);
             yPosition += wrappedBullet.length * 5;
           });
@@ -185,6 +188,7 @@ export const Template11 = ({ formData }) => {
       addSectionHeader("EDUCATION");
 
       validEducation.forEach((edu) => {
+        checkAddPage(15);
         if (hasContent(edu.collegeName)) {
           doc.setFontSize(11);
           doc.setFont("Arvo_bol");
@@ -254,32 +258,50 @@ export const Template11 = ({ formData }) => {
       addSectionHeader("PROJECTS");
 
       validProjects.forEach((proj) => {
-        checkAddPage(8); // Estimate space needed for each project
+        checkAddPage(20);
         if (hasContent(proj.projectName)) {
           doc.setFont("Arvo_bol");
+          doc.setFontSize(11);
           doc.text(proj.projectName, leftMargin, yPosition);
+
+          if (hasContent(proj.year)) {
+            doc.setFont("Arvo_reg");
+            doc.setFontSize(10);
+            doc.text(proj.year, pageWidth - leftMargin, yPosition, {
+              align: "right",
+            });
+          }
           yPosition += 6;
         }
 
         if (hasContent(proj.techStack)) {
           checkAddPage(6);
           doc.setFont("Arvo_reg");
+          doc.setFontSize(10);
           doc.text(proj.techStack, leftMargin, yPosition);
           yPosition += 6;
         }
 
+        if (hasContent(proj.description)) {
+          doc.setFont("Arvo_reg");
+          doc.setFontSize(10);
+          const descLines = doc.splitTextToSize(proj.description, contentWidth - 5);
+          descLines.forEach((line) => {
+            checkAddPage(5);
+            doc.text(line, leftMargin + 5, yPosition);
+            yPosition += 5;
+          });
+        }
+
         if (hasContent(proj.projectLink)) {
           checkAddPage(8);
-          doc.setFontSize(10);
-          doc.text(proj.projectLink, leftMargin, yPosition);
-
-          if (hasContent(proj.year)) {
-            doc.text(proj.year, pageWidth - leftMargin, yPosition, {
-              align: "right",
-            });
-          }
-          yPosition += 8;
+          doc.setFontSize(9);
+          doc.setTextColor(0, 102, 204);
+          doc.textWithLink(proj.projectLink, leftMargin, yPosition, { url: proj.projectLink });
+          doc.setTextColor(0, 0, 0);
+          yPosition += 6;
         }
+        yPosition += 2;
       });
     }
 

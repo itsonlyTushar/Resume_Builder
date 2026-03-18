@@ -215,29 +215,9 @@ function Landing() {
           </div>
         </section>
 
-        <section className="bg-gray-100 grid grid-cols-1 sm:grid-cols-2 place-items-center py-36">
-          <div className="relative w-full max-w-[700px] mx-auto px-4">
-            <iframe
-              className="w-full aspect-video rounded-lg border-none"
-              src={`${laptopVideo}&controls=false&autoplay=true&loop=true&muted=true`}
-              allow="autoplay; fullscreen; picture-in-picture"
-              title="Laptop Video"
-            ></iframe>
-          </div>
-
-          <div data-aos="fade-up" className="p-10 max-w-2xl">
-            <h1 className="text-5xl font-semibold py-2">
-              Effortless Resume Creation
-            </h1>
-            <p className="text-gray-400">
-              Experience an intuitive platform that makes building your resume
-              quick, easy, and stress-free.
-            </p>
-          </div>
-        </section>
 
         {/* AI Resume Reviewer Section */}
-        <section className="bg-white rounded-3xl py-16 px-4 sm:px-6 lg:px-8 text-black">
+        <section className="bg-white rounded-3xl py-40 px-4 sm:px-6 lg:px-8 text-black">
           <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
             <div data-aos="fade-up">
               <span className="inline-block bg-[#EEEFEF] text-[#717985] font-mono px-4 py-1 rounded-full text-sm">
@@ -335,9 +315,9 @@ function Landing() {
           >
             <CardSwap
               skewAmount={1}
-              cardDistance={40}
-              verticalDistance={10}
-              delay={2000}
+              cardDistance={25}
+              verticalDistance={8}
+              delay={3000}
               pauseOnHover={false}
             >
               {templateImgs.slice(0, 10).map((img) => (
