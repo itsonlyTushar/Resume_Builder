@@ -25,6 +25,11 @@ Summary is generic. In 2026, AI-driven ATS look for "Problem-Solvers" rather tha
 [Project Weight]: "FastMenu" is your strongest asset; move the tech stack to its own line and expand on the "freelance" nature to make it look like a professional engagement rather than a hobby.
 [ADVICE_END]
 
+[PROMPT_START]
+Create a custom prompt that the user can copy and paste into an AI (like ChatGPT/Claude) to rewrite their resume. Make it specific to the feedback provided. Example:
+"Based on the following review, please create a new, improved resume for me. Ensure you fix the grammar issues, add metrics to my projects, and use stronger keywords related to [specific tech]. Here is my current resume text for you to update: "
+[PROMPT_END]
+
 ---
 
 GUIDELINES:
@@ -70,7 +75,7 @@ Now analyze this resume: `;
 const ReviewPrompt = ({ answer, score }) => {
   // Parse the AI response
   const parseResponse = (text) => {
-    if (!text) return { grammar: [], improvements: [], advice: [] };
+    if (!text) return { grammar: [], improvements: [], advice: [], aiPrompt: "" };
 
     const grammarMatch = text.match(
       /\[GRAMMAR_START\]([\s\S]*?)\[GRAMMAR_END\]/
@@ -79,6 +84,7 @@ const ReviewPrompt = ({ answer, score }) => {
       /\[IMPROVEMENTS_START\]([\s\S]*?)\[IMPROVEMENTS_END\]/
     );
     const adviceMatch = text.match(/\[ADVICE_START\]([\s\S]*?)\[ADVICE_END\]/);
+    const promptMatch = text.match(/\[PROMPT_START\]([\s\S]*?)\[PROMPT_END\]/);
 
     const grammar = grammarMatch
       ? grammarMatch[1]
@@ -98,11 +104,12 @@ const ReviewPrompt = ({ answer, score }) => {
           .split("\n")
           .filter((line) => line.trim())
       : [];
+    const aiPrompt = promptMatch ? promptMatch[1].trim() : "";
 
-    return { grammar, improvements, advice };
+    return { grammar, improvements, advice, aiPrompt };
   };
 
-  const { grammar, improvements, advice } = parseResponse(answer);
+  const { grammar, improvements, advice, aiPrompt } = parseResponse(answer);
 
   return (
     <section className="">
@@ -226,6 +233,34 @@ const ReviewPrompt = ({ answer, score }) => {
                     );
                   })}
                 </div>
+              </div>
+            )}
+
+            {/* Prompt Card */}
+            {aiPrompt && (
+              <div className="mt-6 border border-black/10 rounded-2xl p-5 bg-indigo-50/50 shadow-[0_6px_18px_rgba(0,0,0,0.04)] relative group">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-2">
+                    <i className="ri-robot-line text-indigo-600 text-xl"></i>
+                    <h3 className="text-base font-semibold tracking-tight text-indigo-900">
+                      Update Resume Prompt
+                    </h3>
+                  </div>
+                  <button
+                    onClick={() => {
+                      navigator.clipboard.writeText(aiPrompt);
+                      import("react-hot-toast").then((module) => {
+                        module.default.success("Copied to clipboard!");
+                      });
+                    }}
+                    className="text-indigo-600 hover:text-indigo-800 text-sm font-medium flex items-center gap-1 bg-white px-3 py-1.5 rounded-lg shadow-sm border border-indigo-100 transition-all active:scale-95"
+                  >
+                    <i className="ri-clipboard-line"></i> Copy Prompt
+                  </button>
+                </div>
+                <p className="text-sm text-indigo-900/80 leading-relaxed font-mono whitespace-pre-wrap bg-white/50 p-4 rounded-xl border border-indigo-100/50">
+                  {aiPrompt}
+                </p>
               </div>
             )}
           </div>
