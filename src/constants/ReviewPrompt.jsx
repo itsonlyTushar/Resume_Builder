@@ -111,6 +111,20 @@ const ReviewPrompt = ({ answer, score }) => {
 
   const { grammar, improvements, advice, aiPrompt } = parseResponse(answer);
 
+  const renderFormattedText = (text) => {
+    // Clean up any leading bullet points so we don't get double bullets
+    const cleanText = text.replace(/^[•*\-]\s*/, "");
+    
+    // Split by ** for bold detection
+    const parts = cleanText.split(/\*\*(.*?)\*\*/g);
+    return parts.map((part, index) => {
+      if (index % 2 === 1) {
+        return <strong key={index} className="font-bold text-black">{part}</strong>;
+      }
+      return <span key={index}>{part}</span>;
+    });
+  };
+
   return (
     <section className="">
       <div className="mt-6 flex justify-center">
@@ -168,7 +182,7 @@ const ReviewPrompt = ({ answer, score }) => {
                             •
                           </span>
                           <span className="text-black/80 leading-6">
-                            {item.replace(/^•\s*/, "")}
+                            {renderFormattedText(item)}
                           </span>
                         </li>
                       ))}
@@ -194,7 +208,7 @@ const ReviewPrompt = ({ answer, score }) => {
                         •
                       </span>
                       <span className="text-black/80 leading-6 text-sm">
-                        {item}
+                        {renderFormattedText(item)}
                       </span>
                     </li>
                   ))}
@@ -218,7 +232,7 @@ const ReviewPrompt = ({ answer, score }) => {
                             {match[1]}
                           </div>
                           <p className="text-sm text-black/80 leading-6 flex-1">
-                            {match[2]}
+                            {renderFormattedText(match[2])}
                           </p>
                         </div>
                       );
@@ -228,7 +242,7 @@ const ReviewPrompt = ({ answer, score }) => {
                         key={index}
                         className="text-sm text-black/80 leading-6"
                       >
-                        {item}
+                        {renderFormattedText(item)}
                       </p>
                     );
                   })}

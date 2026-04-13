@@ -19,6 +19,7 @@ import {
   ListItemText,
   useTheme,
   useMediaQuery,
+  Divider,
 } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
@@ -149,23 +150,72 @@ function Navbar() {
       transformOrigin={{ vertical: "top", horizontal: "right" }}
       open={isNotificationMenuOpen}
       onClose={handleMenuClose}
-      sx={{ marginTop: isMobile ? "-60px" : "-5px" }}
+      sx={{ marginTop: isMobile ? "-60px" : "15px" }}
+      PaperProps={{
+        elevation: 0,
+        sx: {
+          overflow: "visible",
+          filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.1))",
+          mt: 1.5,
+          borderRadius: "12px",
+          minWidth: "280px",
+          "&:before": {
+            content: '""',
+            display: "block",
+            position: "absolute",
+            top: 0,
+            right: 14,
+            width: 10,
+            height: 10,
+            bgcolor: "background.paper",
+            transform: "translateY(-50%) rotate(45deg)",
+            zIndex: 0,
+          },
+        },
+      }}
     >
-      <div className="flex justify-between items-center gap-10 mx-2 px-4">
-        <h3 className="font-semibold">Notifications</h3>
-        <span className="text-gray-600 cursor-pointer text-xs ">
+      <div className="flex justify-between items-center px-4 py-2 border-b border-gray-100">
+        <h3 className="font-bold text-gray-800 text-base">Notifications</h3>
+        <span className="text-blue-600 hover:text-blue-800 transition-colors font-medium cursor-pointer text-xs">
           Mark all as read
         </span>
       </div>
-      <List sx={{ width: "250px", maxWidth: "100vw" }}>
-        {notifications.map((notification) => (
-          <ListItem key={notification.id} sx={{ py: 1 }}>
-            <ListItemText>
-              <i className="ri-arrow-drop-right-fill"></i>
-              {notification.message}
-            </ListItemText>
+      <List sx={{ width: "100%", maxWidth: "320px", p: 0 }}>
+        {notifications.length > 0 ? (
+          notifications.map((notification, index) => (
+            <React.Fragment key={notification.id}>
+              <ListItem 
+                sx={{ 
+                  py: 1.5, 
+                  px: 2, 
+                  transition: "background-color 0.2s ease",
+                  '&:hover': { backgroundColor: '#f9fafb' },
+                  display: "flex",
+                  alignItems: "flex-start",
+                  gap: 1.5
+                }}
+              >
+                <div className={`mt-1.5 flex-shrink-0 w-2 h-2 rounded-full ${!notification.isRead ? 'bg-blue-500' : 'bg-gray-300'}`}></div>
+                <ListItemText
+                  primary={notification.message}
+                  primaryTypographyProps={{ 
+                    variant: "body2",
+                    color: "text.primary",
+                    fontWeight: !notification.isRead ? 500 : 400,
+                  }}
+                />
+              </ListItem>
+              {index < notifications.length - 1 && <Divider component="li" />}
+            </React.Fragment>
+          ))
+        ) : (
+          <ListItem sx={{ py: 3, justifyContent: "center" }}>
+            <ListItemText
+               primary="No new notifications"
+               primaryTypographyProps={{ align: "center", color: "text.secondary" }}
+             />
           </ListItem>
-        ))}
+        )}
       </List>
     </Menu>
   );
