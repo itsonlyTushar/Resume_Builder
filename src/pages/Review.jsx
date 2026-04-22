@@ -6,6 +6,8 @@ import toast, { Toaster } from "react-hot-toast";
 import AiLoader from "../components/UI/AiLoader";
 import { auth } from "../auth/firebase";
 import { fallBackModel } from "../constants/fallbackModel";
+import { fetchUserResumes } from "../backend/resumeOperations";
+import { Dialog, DialogTitle, DialogContent, Button } from "@mui/material";
 
 // Set up PDF.js worker for Vite - using CDN
 pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
@@ -17,6 +19,55 @@ const Review = () => {
   const [answer, setAnswer] = useState("");
   const [findScore, setFindScore] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [resumes, setResumes] = useState([]);
+  const [isResumeModalOpen, setIsResumeModalOpen] = useState(false);
+  const [isLoadingResumes, setIsLoadingResumes] = useState(false);
+
+  useEffect(() => {
+    const loadResumes = async () => {
+      const user = auth.currentUser;
+      if (user) {
+        setIsLoadingResumes(true);
+        try {
+          const userResumes = await fetchUserResumes(user.uid);
+          setResumes(userResumes);
+        } catch (error) {
+          console.error("Error loading resumes:", error);
+        } finally {
+          setIsLoadingResumes(false);
+        }
+      }
+    };
+    
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        loadResumes();
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  const handleSelectSavedResume = async (resume) => {
+    const loadingToast = toast.loading("Loading resume...");
+    try {
+      const response = await fetch(resume.downloadUrl);
+      if (!response.ok) throw new Error("Network response was not ok");
+      const blob = await response.blob();
+      const date = new Date(resume.$createdAt);
+      const formattedDate = date.toLocaleDateString("en-GB").replace(/\//g, '-');
+      const file = new File([blob], `Saved_Resume_${formattedDate}.pdf`, { type: "application/pdf" });
+      
+      setPdfFile(file);
+      setExtractedText("");
+      setIsResumeModalOpen(false);
+      toast.success("Resume selected successfully", { id: loadingToast });
+    } catch (error) {
+      console.error("Error fetching resume:", error);
+      toast.error("Failed to load resume. Please try again.", { id: loadingToast });
+    }
+  };
+
 
   const sendResumeToReview = async (e) => {
     // Text pdf Extraction
@@ -131,6 +182,28 @@ const Review = () => {
                 </div>
               </label>
 
+              {/* Select Saved Resume Option */}
+              {!pdfFile && (
+                <div className="mt-6 flex flex-col items-center justify-center space-y-4">
+                  <div className="flex items-center w-full max-w-xs">
+                    <div className="flex-1 border-t border-black/10"></div>
+                    <span className="px-4 text-xs font-bold text-black/40 uppercase tracking-widest">
+                      Or
+                    </span>
+                    <div className="flex-1 border-t border-black/10"></div>
+                  </div>
+                  
+                  <button
+                    type="button"
+                    onClick={() => setIsResumeModalOpen(true)}
+                    className="px-6 py-3 rounded-xl border-2 border-black/10 hover:border-black/30 hover:bg-black/5 text-[#1D1F24] font-semibold transition-all duration-300 flex items-center gap-2"
+                  >
+                    <i className="ri-folder-user-line text-lg"></i>
+                    Select from Saved Resumes
+                  </button>
+                </div>
+              )}
+
               <button
                 className={`mt-10 w-full py-4 px-6 rounded-2xl text-lg font-bold text-white
                 flex items-center justify-center gap-3 transition-all duration-500
@@ -204,6 +277,78 @@ const Review = () => {
           )}
         </div>
       </main>
+
+      {/* Saved Resumes Modal */}
+      <Dialog
+        open={isResumeModalOpen}
+        onClose={() => setIsResumeModalOpen(false)}
+        maxWidth="sm"
+        fullWidth
+        PaperProps={{
+          style: {
+            borderRadius: "1.5rem",
+            padding: "1rem",
+          },
+        }}
+      >
+        <DialogTitle className="text-center pb-2">
+          <span className="text-2xl font-bold text-[#1D1F24]">Your Saved Resumes</span>
+        </DialogTitle>
+        <DialogContent className="pt-4">
+          {isLoadingResumes ? (
+            <div className="flex justify-center items-center py-8">
+              <i className="ri-loader-4-line text-3xl animate-spin text-black/50"></i>
+            </div>
+          ) : resumes.length === 0 ? (
+            <div className="text-center py-8 text-gray-500">
+              <i className="ri-file-list-3-line text-5xl text-gray-300 mb-4 block"></i>
+              <p>No saved resumes found.</p>
+              <p className="text-sm mt-2">Build a resume first to use this feature.</p>
+            </div>
+          ) : (
+            <div className="grid gap-4 mt-2">
+              {resumes.map((resume) => {
+                const date = new Date(resume.$createdAt);
+                const formattedDate = date.toLocaleDateString("en-GB");
+                const isExpired = resume.downloadsLeft <= 0;
+
+                return (
+                  <div
+                    key={resume.$id}
+                    className="flex items-center justify-between p-4 border border-black/10 rounded-2xl hover:border-black/30 transition-all group"
+                  >
+                    <div className="flex items-center gap-4">
+                      <div className="w-12 h-12 bg-black/5 rounded-xl flex items-center justify-center text-black/50 group-hover:text-black transition-colors">
+                        <i className="ri-file-text-line text-2xl"></i>
+                      </div>
+                      <div>
+                        <h4 className="font-bold text-[#1D1F24]">Saved Resume</h4>
+                        <p className="text-sm text-gray-500">Created: {formattedDate}</p>
+                      </div>
+                    </div>
+                    <Button
+                      variant="contained"
+                      disabled={isExpired}
+                      onClick={() => handleSelectSavedResume(resume)}
+                      sx={{
+                        backgroundColor: '#1D1F24',
+                        borderRadius: '0.75rem',
+                        textTransform: 'none',
+                        fontWeight: 600,
+                        '&:hover': {
+                          backgroundColor: 'black'
+                        }
+                      }}
+                    >
+                      {isExpired ? 'Expired' : 'Select'}
+                    </Button>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
 
       <style
         dangerouslySetInnerHTML={{
