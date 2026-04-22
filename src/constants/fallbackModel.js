@@ -12,10 +12,10 @@ const GEMINI_FLASH_LATEST = genAI.getGenerativeModel({model: 'gemini-flash-lates
 
 const modelArr = [GEMINI3_FLASH_MODEL, GEMINI3_PRO_MODEL, GEMINI_FLASH_LATEST]
 
-export const fallBackModel = async (rawText) => {
+export const fallBackModel = async (rawText, customPrompt = prompt) => {
   for (const elem of modelArr) {
     try {
-      const result = await elem.generateContent(`${prompt} ${rawText}`);
+      const result = await elem.generateContent(`${customPrompt} ${rawText}`);
       // If successful, return immediately
       return result;
     } catch (error) {

@@ -18,10 +18,6 @@ const Review = () => {
   const [findScore, setFindScore] = useState(0);
   const [loading, setLoading] = useState(false);
 
-  const onDocumentLoadSuccess = ({ numPages }) => {
-    setNumPages(numPages);
-  };
-
   const sendResumeToReview = async (e) => {
     // Text pdf Extraction
     e.preventDefault();
@@ -80,16 +76,18 @@ const Review = () => {
             Elevate Your Resume.
           </h1>
           <p className="text-gray-500 text-lg md:text-xl max-w-2xl mx-auto font-medium">
-            Strict, actionable feedback based on modern ATS standards. 
-            Upload your resume to uncover what recruiters actually see.
+            Strict, actionable feedback based on modern ATS standards. Upload
+            your resume to uncover what recruiters actually see.
           </p>
         </div>
 
         {/* Upload Form */}
-        <div className="relative z-10 w-full max-w-2xl mx-auto mb-20 animate-fade-in-up" style={{ animationDelay: "100ms" }}>
+        <div
+          className="relative z-10 w-full max-w-2xl mx-auto mb-20 animate-fade-in-up"
+          style={{ animationDelay: "100ms" }}
+        >
           <form onSubmit={sendResumeToReview}>
             <div className="bg-white rounded-[2rem] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.05)] border border-black/5 p-8 md:p-12 transition-all duration-500 hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.1)] relative group">
-              
               <label className="block w-full cursor-pointer">
                 <div
                   className={`w-full border-[1.5px] border-dashed rounded-2xl transition-all duration-300 flex flex-col items-center justify-center gap-6 px-6 py-16
@@ -189,9 +187,13 @@ const Review = () => {
                 </div>
 
                 <div className="grayscale">
-                  <ReviewPrompt answer={answer} score={findScore} pdf={pdfFile} />
+                  <ReviewPrompt
+                    answer={answer}
+                    score={findScore}
+                    pdf={pdfFile}
+                  />
                 </div>
-                
+
                 <div className="mt-8 pt-6 border-t border-black/5 text-center">
                   <p className="text-[10px] text-black/30 font-bold uppercase tracking-[0.15em]">
                     AI-generated reviews may vary with each generation.
@@ -202,8 +204,10 @@ const Review = () => {
           )}
         </div>
       </main>
-      
-      <style dangerouslySetInnerHTML={{__html: `
+
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
         @keyframes fade-in-up {
           0% { opacity: 0; transform: translateY(30px); }
           100% { opacity: 1; transform: translateY(0); }
@@ -211,7 +215,9 @@ const Review = () => {
         .animate-fade-in-up {
           animation: fade-in-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
-      `}} />
+      `,
+        }}
+      />
     </div>
   );
 };

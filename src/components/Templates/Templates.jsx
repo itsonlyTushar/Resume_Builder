@@ -6,15 +6,21 @@ import Button from "@mui/material/Button";
 import CardMedia from "@mui/material/CardMedia";
 import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, LinearProgress } from "@mui/material";
 import Grid2 from "@mui/material/Grid2";
 import { useDispatch } from "react-redux";
-import { catch_template } from "../../features/templateSlice";
+import { catch_template, setFormData } from "../../features/templateSlice";
 import Loader from "../UI/Loader";
 import Navbar from "../Navbar/Navbar";
 import Footer from "../Footer/Footer";
 import { devTemplate, templateImgs } from "./templateConfig";
-import Tooltip from '../UI/Tooltip'
+import Tooltip from '../UI/Tooltip';
+import { fallBackModel } from "../../constants/fallbackModel";
+import { autofillPrompt } from "../../constants/AutofillPrompt";
+import { pdfjs } from "react-pdf";
+import toast, { Toaster } from "react-hot-toast";
+
+pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 
 // Memoized Template Card Component
 const TemplateCard = memo(({ template, onOpenModal }) => (
@@ -71,13 +77,84 @@ TemplateCard.displayName = 'TemplateCard';
 function Templates() {
   const [loading, setLoading] = useState(true);
   const [selectedTemplate, setSelectedTemplate] = useState(null);
+  const [optionsModalOpen, setOptionsModalOpen] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [uploadStatus, setUploadStatus] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleTemplateSelect = useCallback((templateId) => {
     dispatch(catch_template(templateId));
+    setOptionsModalOpen(true);
+    setSelectedTemplate(null);
+  }, [dispatch]);
+
+  const handleBuilderOption = () => {
+    setOptionsModalOpen(false);
     navigate("/builder");
-  }, [dispatch, navigate]);
+  };
+
+  const handleFileUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file || file.type !== "application/pdf") {
+      toast.error("Please upload a valid PDF file.");
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error("File size should not exceed 5MB.");
+      return;
+    }
+    
+    setIsUploading(true);
+    setUploadProgress(10);
+    setUploadStatus("Reading PDF file...");
+    try {
+      const pdf = await pdfjs.getDocument(URL.createObjectURL(file)).promise;
+      let rawText = "";
+      for (let i = 1; i <= pdf.numPages; i++) {
+        const page = await pdf.getPage(i);
+        const textContent = await page.getTextContent();
+        rawText += textContent.items.map((item) => item.str).join(" ") + " ";
+        setUploadProgress(10 + Math.floor((i / pdf.numPages) * 30));
+      }
+
+      setUploadStatus("AI is analyzing your resume...");
+      
+      const interval = setInterval(() => {
+        setUploadProgress(prev => prev < 90 ? prev + 1 : prev);
+      }, 300);
+
+      const result = await fallBackModel(rawText, autofillPrompt);
+      const response = await result.response;
+      let text = response.text();
+
+      clearInterval(interval);
+      setUploadProgress(95);
+      setUploadStatus("Formatting data...");
+
+      text = text.replace(/```json/g, "").replace(/```/g, "").trim();
+
+      const parsedData = JSON.parse(text);
+      dispatch(setFormData(parsedData));
+
+      setUploadProgress(100);
+      setUploadStatus("Done!");
+      toast.success("Resume data loaded successfully!");
+      setTimeout(() => {
+        setOptionsModalOpen(false);
+        setIsUploading(false);
+        navigate("/builder");
+      }, 600);
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to extract data from the PDF.");
+      setIsUploading(false);
+    } finally {
+      e.target.value = null;
+    }
+  };
 
   const handleOpenModal = useCallback((template) => {
     setSelectedTemplate(template);
@@ -96,6 +173,7 @@ function Templates() {
 
   return (
     <>
+      <Toaster position="top-center" reverseOrder={false} />
       <Navbar />
       {loading ? (
         <Loader />
@@ -230,6 +308,138 @@ function Templates() {
               </Box>
             </>
           )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Options Modal */}
+      <Dialog
+        open={optionsModalOpen}
+        onClose={() => !isUploading && setOptionsModalOpen(false)}
+        maxWidth="sm"
+        fullWidth
+        PaperProps={{
+          sx: {
+            borderRadius: "24px",
+            minHeight: "400px",
+            display: "flex",
+            justifyContent: "center",
+          }
+        }}
+      >
+        <DialogContent sx={{ textAlign: "center", padding: "40px 24px", display: "flex", flexDirection: "column", justifyContent: "center" }}>
+          <Typography variant="h4" sx={{ fontWeight: "bold", mb: 5, color: "#333" }}>
+            {isUploading ? "Uploading Resume" : "How would you like to start?"}
+          </Typography>
+          <Box display="flex" flexDirection={{ xs: "column", sm: "row" }} gap={3} alignItems="stretch">
+            {/* Option 1: Start from Scratch */}
+            {!isUploading && (
+              <Box 
+                onClick={handleBuilderOption}
+                sx={{
+                  flex: 1,
+                  border: "2px solid #eaeaea",
+                  borderRadius: "16px",
+                  padding: "32px 24px",
+                  cursor: "pointer",
+                  transition: "all 0.2s ease-in-out",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: 2,
+                  "&:hover": {
+                    borderColor: "black",
+                    backgroundColor: "rgba(0,0,0,0.02)",
+                    transform: "translateY(-4px)"
+                  }
+                }}
+              >
+                <div className="w-16 h-16 rounded-full bg-gray-100 text-black flex items-center justify-center mb-2">
+                  <i className="ri-file-edit-line text-3xl"></i>
+                </div>
+                <Typography variant="h6" sx={{ fontWeight: "bold", fontSize: "1.1rem" }}>
+                  Start from Scratch
+                </Typography>
+                <Typography variant="body2" color="textSecondary" sx={{ lineHeight: 1.6 }}>
+                  Build your resume step-by-step using our manual builder.
+                </Typography>
+              </Box>
+            )}
+
+            {/* Option 2: Upload Resume */}
+            <Box 
+              sx={{
+                flex: 1,
+                position: "relative",
+                display: "flex",
+                flexDirection: "column"
+              }}
+            >
+              <input
+                type="file"
+                accept=".pdf"
+                id="resume-upload"
+                onChange={handleFileUpload}
+                className="hidden"
+                disabled={isUploading}
+              />
+              <label htmlFor="resume-upload" style={{ flex: 1, display: "flex", flexDirection: "column", cursor: isUploading ? "default" : "pointer" }}>
+                <Box
+                  sx={{
+                    flex: 1,
+                    border: isUploading ? "none" : "2px dashed #eaeaea",
+                    borderRadius: "16px",
+                    padding: isUploading ? "0px" : "32px 24px",
+                    cursor: "inherit",
+                    transition: "all 0.2s ease-in-out",
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: 2,
+                    "&:hover": {
+                      borderColor: isUploading ? "transparent" : "black",
+                      backgroundColor: isUploading ? "transparent" : "rgba(0,0,0,0.02)",
+                      transform: isUploading ? "none" : "translateY(-4px)"
+                    }
+                  }}
+                >
+                  <div className="w-16 h-16 rounded-full bg-gray-100 text-black flex items-center justify-center mb-2">
+                    {isUploading ? (
+                      <i className="ri-loader-4-line animate-spin text-3xl"></i>
+                    ) : (
+                      <i className="ri-upload-cloud-2-line text-3xl"></i>
+                    )}
+                  </div>
+                  <Typography variant="h6" sx={{ fontWeight: "bold", fontSize: "1.1rem" }}>
+                    {isUploading ? uploadStatus : "Upload to Autofill"}
+                  </Typography>
+                  
+                  {isUploading ? (
+                    <Box sx={{ width: '80%', mt: 2 }}>
+                      <LinearProgress 
+                        variant="determinate" 
+                        value={uploadProgress} 
+                        sx={{ 
+                          height: 8, 
+                          borderRadius: 4, 
+                          backgroundColor: '#eaeaea', 
+                          '& .MuiLinearProgress-bar': { backgroundColor: 'black' } 
+                        }} 
+                      />
+                      <Typography variant="body2" color="textSecondary" sx={{ mt: 1, fontWeight: "bold" }}>
+                        {uploadProgress}%
+                      </Typography>
+                    </Box>
+                  ) : (
+                    <Typography variant="body2" color="textSecondary" sx={{ lineHeight: 1.6 }}>
+                      Upload your existing PDF resume and let AI fill in the details.
+                    </Typography>
+                  )}
+                </Box>
+              </label>
+            </Box>
+          </Box>
         </DialogContent>
       </Dialog>
 

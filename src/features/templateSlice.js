@@ -102,6 +102,13 @@ const resumeBuilder = createSlice({
     resetFormData: (state) => {
       state.form_data = initialState.form_data;
     },
+    // sets the entire form data
+    setFormData: (state, action) => {
+      state.form_data = {
+        ...state.form_data,
+        ...action.payload
+      };
+    },
   },
 });
 
@@ -114,6 +121,7 @@ export const {
   removeFields,
   updateSectionOrder,
   resetFormData,
+  setFormData,
 } = resumeBuilder.actions;
 
 export default resumeBuilder.reducer;
