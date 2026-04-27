@@ -98,10 +98,34 @@ export const updateUserReviewCount = async (userId) => {
   }
 }
 
+// ─── localStorage helpers for formData ───────────────────────────────────────
+const LS_PREFIX = 'resume_formdata_';
+
+export const saveFormDataLocally = (documentId, formData) => {
+  try {
+    localStorage.setItem(LS_PREFIX + documentId, JSON.stringify(formData));
+  } catch (e) {
+    console.warn('Could not save formData to localStorage:', e);
+  }
+};
+
+export const loadFormDataLocally = (documentId) => {
+  try {
+    const raw = localStorage.getItem(LS_PREFIX + documentId);
+    return raw ? JSON.parse(raw) : null;
+  } catch (e) {
+    return null;
+  }
+};
+
+export const deleteFormDataLocally = (documentId) => {
+  localStorage.removeItem(LS_PREFIX + documentId);
+};
+// ─────────────────────────────────────────────────────────────────────────────
 
 // Uploads the resume to appwrite
 
-export const uploadResume = async (pdfDoc, userId) => {
+export const uploadResume = async (pdfDoc, userId, formData = null) => {
   const loadingToast = toast.loading('Saving Resume...');
   try {
 
@@ -130,7 +154,7 @@ export const uploadResume = async (pdfDoc, userId) => {
     const documentData = {
       userId: shortUserId,
       fileId: shortFileId,
-      down: '2'
+      down: '2',
     };
 
     const dbResponse = await databases.createDocument(
@@ -140,12 +164,73 @@ export const uploadResume = async (pdfDoc, userId) => {
       documentData
     );
 
+    // Store formData in localStorage so it can be reloaded for editing
+    if (formData) {
+      saveFormDataLocally(dbResponse.$id, formData);
+    }
+
     toast.success('Resume saved successfully!', { id: loadingToast });
     return { fileId: shortFileId, documentId: dbResponse.$id };
 
   } catch (error) {
     console.error('Upload error:', error);
     toast.error(`Failed to save resume: ${error.message}`, { id: loadingToast });
+    throw error;
+  }
+};
+
+// Replaces an existing resume file and updates the DB record
+export const updateResume = async (documentId, oldFileId, pdfDoc, formData = null) => {
+  const loadingToast = toast.loading('Updating Resume...');
+  try {
+    // 1. Upload the new file
+    const pdfBlob = pdfDoc.output('blob');
+    const timestamp = Date.now().toString(36).slice(-5);
+    const pdfFile = new File([pdfBlob], `${timestamp}.pdf`, { type: 'application/pdf' });
+    const newFileId = timestamp.padStart(5, '0');
+
+    const fileResponse = await storage.createFile(
+      STORAGE_BUCKET,
+      newFileId,
+      pdfFile
+    );
+
+    if (!fileResponse?.$id) {
+      throw new Error('New file upload failed');
+    }
+
+    // 2. Update the DB document with new fileId and reset downloads
+    const updateData = {
+      fileId: newFileId,
+      down: '2',
+    };
+
+    await databases.updateDocument(
+      DATABASE_ID,
+      RESUMES_COLLECTION,
+      documentId,
+      updateData
+    );
+
+    // 3. Delete the old file from storage
+    try {
+      await storage.deleteFile(STORAGE_BUCKET, oldFileId);
+    } catch (deleteErr) {
+      // Non-fatal: old file may already be gone
+      console.warn('Could not delete old file:', deleteErr);
+    }
+
+    // Update formData in localStorage for the same document ID
+    if (formData) {
+      saveFormDataLocally(documentId, formData);
+    }
+
+    toast.success('Resume updated successfully!', { id: loadingToast });
+    return { fileId: newFileId, documentId };
+
+  } catch (error) {
+    console.error('Update error:', error);
+    toast.error(`Failed to update resume: ${error.message}`, { id: loadingToast });
     throw error;
   }
 };
@@ -172,7 +257,9 @@ export const fetchUserResumes = async (userId) => {
       ...doc,
       previewUrl: storage.getFileView(STORAGE_BUCKET, doc.fileId),
       downloadUrl: storage.getFileDownload(STORAGE_BUCKET, doc.fileId),
-      downloadsLeft: parseInt(doc.down)
+      downloadsLeft: parseInt(doc.down),
+      // formData is stored in localStorage (not Appwrite) to avoid schema changes
+      parsedFormData: loadFormDataLocally(doc.$id),
     }));
     
     return resumesWithUrls;
@@ -209,6 +296,9 @@ export const deleteResume = async (documentId, fileId) => {
       RESUMES_COLLECTION,
       documentId
     );
+
+    // Clean up localStorage formData
+    deleteFormDataLocally(documentId);
 
     toast.success('Resume deleted successfully', { id: loadingToast });
     return true;

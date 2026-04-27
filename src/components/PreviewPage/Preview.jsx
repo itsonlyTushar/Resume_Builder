@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import Footer from "../Footer/Footer";
 import Navbar from "../Navbar/Navbar";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { auth } from "../../auth/firebase";
-import { uploadResume, downloadResume } from "../../backend/resumeOperations";
+import { uploadResume, downloadResume, updateResume } from "../../backend/resumeOperations";
 import { Document, Page, pdfjs } from "react-pdf";
 import "react-pdf/dist/Page/TextLayer.css";
 import "react-pdf/dist/Page/AnnotationLayer.css";
@@ -14,6 +14,7 @@ import Logo from "../../pages/Logo";
 import { PizzaIcon } from "lucide-react";
 import qr from '../../assets/qr.png'
 import { generatePDF } from "../Templates/templateConfig";
+import { setEditingResume } from "../../features/templateSlice";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 
@@ -26,9 +27,11 @@ function Preview() {
   const [isLoading, setIsLoading] = useState(false);
   const [uploadDoc, setUploadDoc] = useState(null);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const user = auth.currentUser;
 
   const formData = useSelector((state) => state.resumeBuilder.form_data);
+  const editingResume = useSelector((state) => state.resumeBuilder.editingResume);
 
   useEffect(() => {
     const generatePreview = async () => {
@@ -73,18 +76,27 @@ function Preview() {
     const loadingToast = toast.loading("Processing...");
 
     try {
-      const uploadResult = await uploadResume(uploadDoc, user.uid);
-      if (!uploadResult) {
-        throw new Error("Failed to save resume");
+      let result;
+
+      if (editingResume) {
+        // --- EDIT MODE: replace the existing resume ---
+        result = await updateResume(
+          editingResume.documentId,
+          editingResume.fileId,
+          uploadDoc,
+          formData
+        );
+        if (!result) throw new Error("Failed to update resume");
+        // Clear editing context
+        dispatch(setEditingResume(null));
+      } else {
+        // --- NEW RESUME: upload fresh ---
+        result = await uploadResume(uploadDoc, user.uid, formData);
+        if (!result) throw new Error("Failed to save resume");
       }
 
-      const downloadUrl = await downloadResume(
-        uploadResult.documentId,
-        uploadResult.fileId
-      );
-      if (!downloadUrl) {
-        throw new Error("Failed to get download URL");
-      }
+      const downloadUrl = await downloadResume(result.documentId, result.fileId);
+      if (!downloadUrl) throw new Error("Failed to get download URL");
 
       const link = document.createElement("a");
       link.href = downloadUrl;
@@ -93,9 +105,12 @@ function Preview() {
       link.click();
       document.body.removeChild(link);
 
-      toast.success("Resume saved and downloaded successfully", {
-        id: loadingToast,
-      });
+      toast.success(
+        editingResume
+          ? "Resume updated and downloaded successfully"
+          : "Resume saved and downloaded successfully",
+        { id: loadingToast }
+      );
 
       setopen(true);
     } catch (error) {
@@ -111,9 +126,17 @@ function Preview() {
   return (
     <>
       <Navbar />
-      <h2 className="mt-5 sm:text-2xl text-3xl md:text-2xl lg:text-4xl font-bold mb-5 text-center">
+      <h2 className="mt-5 sm:text-2xl text-3xl md:text-2xl lg:text-4xl font-bold mb-3 text-center">
         Resume Preview
       </h2>
+      {editingResume && (
+        <div className="flex justify-center mb-5">
+          <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 text-sm font-semibold">
+            <i className="ri-edit-line"></i>
+            Edit Mode — saving will replace your existing resume
+          </span>
+        </div>
+      )}
 
       <div className="container mx-auto px-4 mb-10">
         <div className="flex flex-col lg:flex-row gap-8 items-start">
@@ -140,7 +163,9 @@ function Preview() {
               }`}
             >
               <i className="ri-download-2-fill mr-1"></i>
-              {isLoading ? "Saving..." : "Save & Download"}
+              {isLoading
+                ? editingResume ? "Updating..." : "Saving..."
+                : editingResume ? "Update & Download" : "Save & Download"}
             </button>
 
             <button

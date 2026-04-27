@@ -7,6 +7,7 @@ import Footer from "../Footer/Footer.jsx";
 import ResumeList from "./ResumeList";
 import { fetchUserResumes } from "../../backend/resumeOperations.js";
 import { useDispatch } from "react-redux";
+import { setFormData, setEditingResume } from "../../features/templateSlice";
 import {
   Button,
   Dialog as MuiDialog,
@@ -79,6 +80,18 @@ function User() {
       setResumes(userResumes);
     };
     loadResumes();
+  };
+
+  const handleResumeEdit = (resume) => {
+    if (!resume.parsedFormData) {
+      toast.error("This resume cannot be edited (no form data stored).");
+      return;
+    }
+    // Load the saved form data back into Redux
+    dispatch(setFormData(resume.parsedFormData));
+    // Store which resume we're updating so Preview replaces it
+    dispatch(setEditingResume({ documentId: resume.$id, fileId: resume.fileId }));
+    navigate("/builder");
   };
 
   const initials = displayName
@@ -250,6 +263,7 @@ function User() {
                   <ResumeList
                     resumes={resumes}
                     onResumeClick={handleResumeClick}
+                    onEdit={handleResumeEdit}
                     onDelete={handleResumeDelete}
                   />
                 )}

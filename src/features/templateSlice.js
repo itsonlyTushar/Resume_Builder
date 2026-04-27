@@ -54,6 +54,7 @@ const initialState = {
     selected_template: null,
     sectionOrder: ["description", "education", "projects", "experience", "skills"],
   },
+  editingResume: null, // { documentId, fileId } when editing an existing resume
 };
 const resumeBuilder = createSlice({
   name: "resumeBuilder",
@@ -109,6 +110,10 @@ const resumeBuilder = createSlice({
         ...action.payload
       };
     },
+    // sets the resume being edited (pass { documentId, fileId } or null to clear)
+    setEditingResume: (state, action) => {
+      state.editingResume = action.payload;
+    },
   },
 });
 
@@ -122,6 +127,7 @@ export const {
   updateSectionOrder,
   resetFormData,
   setFormData,
+  setEditingResume,
 } = resumeBuilder.actions;
 
 export default resumeBuilder.reducer;
