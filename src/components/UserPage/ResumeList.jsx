@@ -72,8 +72,8 @@ function ResumeList({ resumes, onResumeClick, onEdit, onDelete }) {
                         onClick={() => onResumeClick(resume)}
                         disabled={isExpired}
                         className={`p-2 rounded-lg transition-all duration-200 ${isExpired
-                            ? "text-gray-300 cursor-not-allowed"
-                            : "text-gray-400 hover:text-blue-600 hover:bg-blue-50"
+                          ? "text-gray-300 cursor-not-allowed"
+                          : "text-gray-400 hover:text-blue-600 hover:bg-blue-50"
                           }`}
                         title={isExpired ? "No downloads left" : "View Resume"}
                       >
@@ -85,8 +85,8 @@ function ResumeList({ resumes, onResumeClick, onEdit, onDelete }) {
                         onClick={() => canEdit && onEdit(resume)}
                         disabled={!canEdit}
                         className={`p-2 rounded-lg transition-all duration-200 ${!canEdit
-                            ? "text-gray-300 cursor-not-allowed"
-                            : "text-gray-400 hover:text-emerald-600 hover:bg-emerald-50"
+                          ? "text-gray-300 cursor-not-allowed"
+                          : "text-gray-400 hover:text-emerald-600 hover:bg-emerald-50"
                           }`}
                         title={
                           canEdit
@@ -112,8 +112,8 @@ function ResumeList({ resumes, onResumeClick, onEdit, onDelete }) {
                 {/* Status pill */}
                 <div
                   className={`w-full py-2 px-4 rounded-xl text-sm font-semibold text-center ${isExpired
-                      ? "bg-gray-100 text-gray-400"
-                      : "bg-black/5 text-gray-700"
+                    ? "bg-gray-100 text-gray-400"
+                    : "bg-black/5 text-gray-700"
                     }`}
                 >
                   {isExpired

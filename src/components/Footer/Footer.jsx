@@ -13,112 +13,119 @@ function Footer() {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const handleClick = () => {
-    if (!errors.email) {
-      setClicked(true);
-      toast.success("thanks for subscribing to our newsletter!");
-      setTimeout(() => {
-        setClicked(false);
-      }, 1000);
-    } else {
-      toast.error(errors.email.message);
-    }
+
+  const onSubmit = () => {
+    setClicked(true);
+    toast.success("Thanks for subscribing to our newsletter!");
+    setTimeout(() => {
+      setClicked(false);
+    }, 2000);
   };
+
   return (
     <>
       <Toaster />
-      <footer className="bg-black text-white py-14 grid sm:grid-cols-4 gap-28 ">
-        <div className="mx-4">
-          <Logo />
-          <h1 className="text-4xl font-bold mb-3 mt-6">Stay Updated</h1>
-          <p className="mb-4 text-[#858B96]">
-            Get updates on new features and improvements
-          </p>
-          <form onSubmit={handleSubmit(handleClick)}>
-            <div className="sm:flex">
-              <input
-                type="email"
-                className="rounded-full px-4 py-2 bg-transparent text-white outline-none"
-                placeholder="Enter email..."
-                {...register("email", {
-                  required: true,
-                  pattern: {
-                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                    message: "Enter a valid email",
-                  },
-                })}
-              />
+      <footer className="bg-gradient-to-b from-[#0B0F19] to-[#04060B] text-white pt-16 pb-16 border-t border-zinc-900 w-full">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12">
 
-              <button
-                type="submit"
-                className="ml-4 rounded-full flex p-4 mt-4 bg-gradient-to-r from-[#865f28] via-[#575f1c] to-[#736138] "
-                disabled={!!errors.email}
-              >
-                {clicked && <i className="ri-loader-line spin"></i>}
-                Subscribe
-              </button>
-            </div>
-            {errors.email && (
-              <p>
-                <i className="ri-error-warning-line"></i> Enter email to
-                subscribe
+            {/* Column 1: Brand details (Takes 5 columns) */}
+            <div className="md:col-span-5 space-y-4">
+              <Logo />
+              <p className="text-zinc-400 text-sm leading-relaxed max-w-sm">
+                Create professional, standout resumes in minutes. ResuMate handles formatting and styling to showcase your unique career journey.
               </p>
-            )}
-          </form>
-        </div>
-        <div className="ml-3 text-center">
-          <ul>
-            <li className="font-bold text-lg">Company</li>
-            <div className="text-[#858B96] cursor-pointer hover:text-[#c7cdd9] transition-all ease-in-out hover:transition-all">
-              <li className="my-3 hover:text-[#858B96]">
-                <a href="mailto:tushargsoni17@gmail.com" target="_blank" rel="noopener noreferrer">Email</a>
-              </li>
-              <li className="my-3 hover:text-[#858B96]">
-                <Contact />
-              </li>
-              <li className="my-3 hover:text-[#858B96]">
-                <button onClick={() => transtionNavigate('/about')} >About Us</button>
-              </li>
+            </div>
 
-              
+            {/* Column 2: Company links (Takes 2 columns) */}
+            <div className="md:col-span-2 md:mt-2">
+              <ul className="space-y-3">
+                <li className="font-semibold text-white text-sm uppercase tracking-wider mb-4">Company</li>
+                <li>
+                  <a
+                    href="mailto:tushargsoni17@gmail.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-zinc-400 hover:text-white flex items-center gap-2 inline-flex transition-colors duration-200"
+                  >
+                    <i className="ri-mail-line text-zinc-500"></i> Email Us
+                  </a>
+                </li>
+                <li className="text-zinc-400 hover:text-white flex items-center gap-2 cursor-pointer transition-colors duration-200">
+                  <i className="ri-contacts-line text-zinc-500"></i> <Contact />
+                </li>
+                <li>
+                  <button
+                    onClick={() => transtionNavigate('/about')}
+                    className="text-zinc-400 hover:text-white flex items-center gap-2 text-left w-full transition-colors duration-200"
+                  >
+                    <i className="ri-user-line text-zinc-500"></i> About Us
+                  </button>
+                </li>
+              </ul>
             </div>
-          </ul>
-        </div>
 
-        <div className="ml-3 text-center">
-          <ul>
-            <li className="font-bold text-lg">Read</li>
-            <div className="text-[#858B96] cursor-pointer hover:text-[#c7cdd9] transition-all ease-in-out hover:transition-all">
-              <li className="my-3 hover:text-[#858B96]">
-                <button onClick={() => transtionNavigate('/privacy')} >Privacy Policy</button>
-              </li>
-              <li className="my-3 hover:text-[#858B96]">
-                <button onClick={() => transtionNavigate('/terms')} >Terms of Use</button>
-              </li>
-              
+            {/* Column 3: Legal links (Takes 2 columns) */}
+            <div className="md:col-span-2 md:mt-2">
+              <ul className="space-y-3">
+                <li className="font-semibold text-white text-sm uppercase tracking-wider mb-4">Legal</li>
+                <li>
+                  <button
+                    onClick={() => transtionNavigate('/privacy')}
+                    className="text-zinc-400 hover:text-white flex items-center gap-2 text-left w-full transition-colors duration-200"
+                  >
+                    <i className="ri-shield-keyhole-line text-zinc-500"></i> Privacy Policy
+                  </button>
+                </li>
+                <li>
+                  <button
+                    onClick={() => transtionNavigate('/terms')}
+                    className="text-zinc-400 hover:text-white flex items-center gap-2 text-left w-full transition-colors duration-200"
+                  >
+                    <i className="ri-file-text-line text-zinc-500"></i> Terms of Use
+                  </button>
+                </li>
+              </ul>
             </div>
-          </ul>
-        </div>
-        <div className="ml-3 text-center">
-          <ul>
-            <li className="font-bold text-lg">Socials</li>
-            <div className="text-[#858B96]">
-              <li className="my-3">
-                <i className="fa-brands fa-x-twitter mr-2 "></i>
-                <a href="https://x.com/ts28_7">Twitter</a>
-              </li>
-              <li className="my-3">
-                <i className="fa-brands fa-instagram mr-2"></i>
-                <a href="https://www.instagram.com/tushar_28.7">Instagram</a>
-              </li>
-              <li>
-                <i className="fa-brands fa-linkedin mr-2"></i>
-                <a href="https://www.linkedin.com/in/tushar-soni-b0426022b/">
-                  Linkedin
-                </a>
-              </li>
+
+            {/* Column 4: Socials (Takes 3 columns) */}
+            <div className="md:col-span-3 md:mt-2">
+              <ul className="space-y-3">
+                <li className="font-semibold text-white text-sm uppercase tracking-wider mb-4">Connect</li>
+                <li>
+                  <a
+                    href="https://x.com/ts28_7"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-zinc-400 hover:text-white flex items-center gap-2 inline-flex transition-colors duration-200"
+                  >
+                    <i className="fa-brands fa-x-twitter text-zinc-500"></i> Twitter
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="https://www.instagram.com/tushar_28.7"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-zinc-400 hover:text-white flex items-center gap-2 inline-flex transition-colors duration-200"
+                  >
+                    <i className="fa-brands fa-instagram text-[#E1306C]"></i> Instagram
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="https://www.linkedin.com/in/tushar-soni-b0426022b/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-zinc-400 hover:text-white flex items-center gap-2 inline-flex transition-colors duration-200"
+                  >
+                    <i className="fa-brands fa-linkedin"></i> LinkedIn
+                  </a>
+                </li>
+              </ul>
             </div>
-          </ul>
+
+          </div>
         </div>
       </footer>
     </>
