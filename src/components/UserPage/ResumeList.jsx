@@ -109,13 +109,6 @@ function ResumeList({ resumes, onResumeClick, onEdit, onDelete }) {
                   </div>
                 </div>
 
-                {/* Status pill */}
-                <div
-                  className="w-full py-2 px-4 rounded-xl text-sm font-semibold text-center bg-black/5 text-gray-700"
-                >
-                  Unlimited Downloads
-                </div>
-
                 {/* Legacy hint */}
                 {!canEdit && (
                   <p className="mt-2 text-center text-xs text-gray-400">
