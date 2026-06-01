@@ -40,6 +40,7 @@ function Builder() {
       experienceDetails: formData.experienceDetails || [],
       projectDetails: formData.projectDetails || [],
       skills: formData.skills || [],
+      certification: formData.certification || [],
     },
   });
 
@@ -50,8 +51,17 @@ function Builder() {
       experienceDetails: formData.experienceDetails || [],
       projectDetails: formData.projectDetails || [],
       skills: formData.skills || [],
+      certification: formData.certification || [],
     });
-  }, [formData.personalDetails, formData.educationDetails, formData.experienceDetails, formData.projectDetails, formData.skills, methods]);
+  }, [
+    formData.personalDetails,
+    formData.educationDetails,
+    formData.experienceDetails,
+    formData.projectDetails,
+    formData.skills,
+    formData.certification,
+    methods,
+  ]);
 
   const [loading, setIsLoading] = useState(true);
   const [activeStep, setActiveStep] = useState(() => {
@@ -168,6 +178,7 @@ function Builder() {
         },
       ],
       skills: [{ skillName: "", level: "", id: 1 }],
+      certification: [{ certiName: "", year: "", id: 1 }],
     });
     handleCloseDialog();
     setActiveStep(0);

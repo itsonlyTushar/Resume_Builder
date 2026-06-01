@@ -436,7 +436,7 @@ export const Template17 = ({ formData }) => {
         ) || [];
       if (certifications.length === 0) return;
 
-      addSectionHeader("CERTIFICATIONS & ACHIVEMENTS");
+      addSectionHeader("CERTIFICATIONS & ACHIEVEMENTS");
       certifications.forEach((cert) => {
         checkPageBreak(10);
         doc.setFont("EB_reg", "normal");

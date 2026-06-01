@@ -38,7 +38,7 @@ const Review = () => {
         }
       }
     };
-    
+
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
         loadResumes();
@@ -57,7 +57,7 @@ const Review = () => {
       const date = new Date(resume.$createdAt);
       const formattedDate = date.toLocaleDateString("en-GB").replace(/\//g, '-');
       const file = new File([blob], `Saved_Resume_${formattedDate}.pdf`, { type: "application/pdf" });
-      
+
       setPdfFile(file);
       setExtractedText("");
       setIsResumeModalOpen(false);
@@ -117,19 +117,11 @@ const Review = () => {
         {/* Header Section */}
         <div className="relative z-10 text-center mb-16 lg:mb-20 animate-fade-in-up">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-transparent border border-black/10 text-black text-[11px] font-bold mb-8 uppercase tracking-[0.2em]">
-            <span className="relative flex h-1.5 w-1.5">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-black opacity-50"></span>
-              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-black"></span>
-            </span>
             AI Analysis
           </div>
           <h1 className="text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tighter text-[#1D1F24] mb-6 leading-tight">
             Elevate Your Resume.
           </h1>
-          <p className="text-gray-500 text-lg md:text-xl max-w-2xl mx-auto font-medium">
-            Strict, actionable feedback based on modern ATS standards. Upload
-            your resume to uncover what recruiters actually see.
-          </p>
         </div>
 
         {/* Upload Form */}
@@ -142,23 +134,20 @@ const Review = () => {
               <label className="block w-full cursor-pointer">
                 <div
                   className={`w-full border-[1.5px] border-dashed rounded-2xl transition-all duration-300 flex flex-col items-center justify-center gap-6 px-6 py-16
-                  ${
-                    pdfFile
+                  ${pdfFile
                       ? "border-black bg-black/5"
                       : "border-black/20 bg-gray-50/30 hover:bg-gray-50 hover:border-black/40"
-                  }`}
+                    }`}
                 >
                   <div
-                    className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-all duration-500 ease-out ${
-                      pdfFile
-                        ? "bg-black text-white scale-110 shadow-lg shadow-black/10"
-                        : "bg-white text-black shadow-sm border border-black/10 group-hover:-translate-y-1 group-hover:shadow-md"
-                    }`}
+                    className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-all duration-500 ease-out ${pdfFile
+                      ? "bg-black text-white scale-110 shadow-lg shadow-black/10"
+                      : "bg-white text-black shadow-sm border border-black/10 group-hover:-translate-y-1 group-hover:shadow-md"
+                      }`}
                   >
                     <i
-                      className={`text-2xl ${
-                        pdfFile ? "ri-file-pdf-2-fill" : "ri-upload-2-line"
-                      }`}
+                      className={`text-2xl ${pdfFile ? "ri-file-pdf-2-fill" : "ri-upload-2-line"
+                        }`}
                     ></i>
                   </div>
 
@@ -192,7 +181,7 @@ const Review = () => {
                     </span>
                     <div className="flex-1 border-t border-black/10"></div>
                   </div>
-                  
+
                   <button
                     type="button"
                     onClick={() => setIsResumeModalOpen(true)}
@@ -207,11 +196,10 @@ const Review = () => {
               <button
                 className={`mt-10 w-full py-4 px-6 rounded-2xl text-lg font-bold text-white
                 flex items-center justify-center gap-3 transition-all duration-500
-                ${
-                  !pdfFile
+                ${!pdfFile
                     ? "bg-gray-200 text-gray-400 cursor-not-allowed"
                     : "bg-[#1D1F24] hover:bg-black shadow-[0_10px_20px_-10px_rgba(0,0,0,0.5)] hover:shadow-[0_15px_25px_-10px_rgba(0,0,0,0.6)] hover:-translate-y-1 active:translate-y-0"
-                }`}
+                  }`}
                 type="submit"
                 disabled={!pdfFile || loading}
               >

@@ -106,7 +106,7 @@ function Templates() {
       toast.error("File size should not exceed 5MB.");
       return;
     }
-    
+
     setIsUploading(true);
     setUploadProgress(10);
     setUploadStatus("Reading PDF file...");
@@ -121,7 +121,7 @@ function Templates() {
       }
 
       setUploadStatus("AI is analyzing your resume...");
-      
+
       const interval = setInterval(() => {
         setUploadProgress(prev => prev < 90 ? prev + 1 : prev);
       }, 300);
@@ -179,20 +179,20 @@ function Templates() {
         <Loader />
       ) : (
         <div className="p-4 mt-5 mb-24">
-          <h1 className="text-center text-3xl sm:text-2xl md:text-2xl lg:text-3xl xl:text-4xl font-bold py-6 text-gray-800">
+          <h1 className="text-center text-3xl sm:text-2xl md:text-2xl lg:text-3xl xl:text-5xl font-extrabold tracking-tight py-6 text-gray-800">
             Select a Template
           </h1>
 
           {/* Developer Friendly */}
           <div className="flex items-center gap-2">
 
-          <h3 className="text-3xl font-bold text-start text-gray-800 ">
-            Developer Friendly
-          </h3>
-          
-          <Tooltip title={"The Developer Friendly resume template is clean, minimal, and tailored for showcasing technical skills and projects."}>
-            <i className="ri-question-line font-medium"></i>
-          </Tooltip>
+            <h3 className="text-3xl font-bold text-start text-gray-800 ">
+              Developer Friendly
+            </h3>
+
+            <Tooltip title={"The Developer Friendly resume template is clean, minimal, and tailored for showcasing technical skills and projects."}>
+              <i className="ri-question-line font-medium"></i>
+            </Tooltip>
           </div>
           <div className="h-[2px] bg-black w-full max-w-sm mb-6"></div>
 
@@ -250,16 +250,16 @@ function Templates() {
           <div className="h-[2px] bg-black w-full max-w-sm mb-6"></div>
 
           <div className="bg-gray-100 p-5 rounded-3xl">
-          
-          <Grid2 container spacing={3} justifyContent="center">
-            {templateImgs.map((template) => (
-              <TemplateCard 
-                key={template.id} 
-                template={template} 
-                onOpenModal={handleOpenModal}
-              />
-            ))}
-          </Grid2>
+
+            <Grid2 container spacing={3} justifyContent="center">
+              {templateImgs.map((template) => (
+                <TemplateCard
+                  key={template.id}
+                  template={template}
+                  onOpenModal={handleOpenModal}
+                />
+              ))}
+            </Grid2>
 
           </div>
         </div>
@@ -333,7 +333,7 @@ function Templates() {
           <Box display="flex" flexDirection={{ xs: "column", sm: "row" }} gap={3} alignItems="stretch">
             {/* Option 1: Start from Scratch */}
             {!isUploading && (
-              <Box 
+              <Box
                 onClick={handleBuilderOption}
                 sx={{
                   flex: 1,
@@ -367,7 +367,7 @@ function Templates() {
             )}
 
             {/* Option 2: Upload Resume */}
-            <Box 
+            <Box
               sx={{
                 flex: 1,
                 position: "relative",
@@ -414,18 +414,18 @@ function Templates() {
                   <Typography variant="h6" sx={{ fontWeight: "bold", fontSize: "1.1rem" }}>
                     {isUploading ? uploadStatus : "Upload to Autofill"}
                   </Typography>
-                  
+
                   {isUploading ? (
                     <Box sx={{ width: '80%', mt: 2 }}>
-                      <LinearProgress 
-                        variant="determinate" 
-                        value={uploadProgress} 
-                        sx={{ 
-                          height: 8, 
-                          borderRadius: 4, 
-                          backgroundColor: '#eaeaea', 
-                          '& .MuiLinearProgress-bar': { backgroundColor: 'black' } 
-                        }} 
+                      <LinearProgress
+                        variant="determinate"
+                        value={uploadProgress}
+                        sx={{
+                          height: 8,
+                          borderRadius: 4,
+                          backgroundColor: '#eaeaea',
+                          '& .MuiLinearProgress-bar': { backgroundColor: 'black' }
+                        }}
                       />
                       <Typography variant="body2" color="textSecondary" sx={{ mt: 1, fontWeight: "bold" }}>
                         {uploadProgress}%

@@ -240,7 +240,7 @@ function OtherDetails() {
       </h1>
 
       {certification.map((detail, index) => (
-        <div key={detail.certiName}>
+        <div key={detail.id}>
           <div className="grid grid-cols-2 sm:grid-cols-1">
             <div className="p-2 ml-2 grid grid-cols-1 sm:flex items-center gap-6">
               <div>
@@ -301,12 +301,12 @@ function OtherDetails() {
                         "certification",
                       ),
                   })}
-                  {...(errors.certification?.[index]?.year && (
-                    <p className="text-red-400 mt-1">
-                      <i className="mr-1 ri-alert-line"></i>Enter a valid input
-                    </p>
-                  ))}
                 />
+                {errors.certification?.[index]?.year && (
+                  <p className="text-red-400 mt-1">
+                    <i className="mr-1 ri-alert-line"></i>Enter a valid input
+                  </p>
+                )}
               </div>
 
               {certification.length > 1 && (
