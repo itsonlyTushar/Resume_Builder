@@ -179,7 +179,7 @@ function Templates() {
         <Loader />
       ) : (
         <div className="p-4 mt-5 mb-24">
-          <h1 className="text-center text-3xl sm:text-2xl md:text-2xl lg:text-3xl xl:text-5xl font-extrabold tracking-tight py-6 text-gray-800">
+          <h1 className="text-center text-3xl sm:text-2xl md:text-2xl lg:text-3xl xl:text-5xl font-extrabold tracking-tight py-6 text-[#1D1F24]">
             Select a Template
           </h1>
 

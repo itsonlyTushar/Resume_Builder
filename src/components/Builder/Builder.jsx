@@ -204,7 +204,7 @@ function Builder() {
   return (
     <>
       <Navbar />
-      <h1 className="text-center text-5xl pt-10 font-semibold">Builder Form</h1>
+      <h1 className="text-center text-5xl pt-10 font-extrabold text-[#1D1F24]">Builder Form</h1>
       <div className="relative flex flex-col md:flex sm:flex-row justify-center items-center px-0 z-10 mb-32 mt-6">
         <div className="p-2">
           <div className="rounded-3xl flex-wrap overflow-hidden border  py-6 sm:px-10  sm:py-28 shadow-sm">

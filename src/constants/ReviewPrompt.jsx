@@ -1,9 +1,9 @@
 import { CircularProgress, Typography } from "@mui/material";
 
 const date = new Date().getFullYear();
-export const prompt = ` You are an expert ATS and resume reviewer. Current Year is ${date}. Analyze the resume and provide feedback in this EXACT format:
+export const prompt = ` You are an expert resume reviewer. Current Year is ${date}. Analyze the resume and provide feedback in this EXACT format:
 
-TOTAL ATS SCORE: [X]/100
+TOTAL RESUME SCORE: [X]/100
 
 [GRAMMAR_START]
 [If no mistakes found: "No grammar or spelling mistakes found. You're good here!"]
@@ -16,7 +16,7 @@ TOTAL ATS SCORE: [X]/100
 Missing metrics and impact: You built a freelance project (FastMenu)—how many users used it? Did it increase efficiency for the client?
 The professional experience section is currently non-technical (Data Entry). This creates a "career pivot" red flag that needs a stronger technical narrative.
 Your MS is in Cloud Computing with AI, yet your projects are almost entirely frontend-focused. Include a project that showcases AWS, AI integration, or Distributed Systems to match your degree.
-Summary is generic. In 2026, AI-driven ATS look for "Problem-Solvers" rather than "Motivated individuals." Focus on specific technical achievements.
+Summary is generic. In 2026, modern screening systems look for "Problem-Solvers" rather than "Motivated individuals." Focus on specific technical achievements.
 [IMPROVEMENTS_END]
 
 [ADVICE_START]
@@ -37,7 +37,7 @@ GUIDELINES:
 - Be direct and honest, not sugar-coated
 - Focus on what REAL recruiters care about
 - GIVE SCORE ON BASE THESE PARAMETERS ONLY : 
-Traditional ATS Parameters
+Traditional Screening Parameters
 
 Exact keyword matches (not synonym recognition)
 Keyword density and frequency
@@ -48,7 +48,7 @@ Application completeness (all required fields filled)
 Resume length (1-2 pages preferred)
 Job stability indicators (tenure at previous jobs)
 
-Modern/AI-Powered ATS Parameters
+Modern/AI-Powered Screening Parameters
 
 Semantic matching (understanding context and synonyms)
 Skills inference from job descriptions
@@ -151,7 +151,7 @@ const ReviewPrompt = ({ answer, score }) => {
             </div>
           </div>
           <p className="mt-4 text-sm text-gray-500 text-center font-medium">
-            Estimated ATS Score
+            Estimated Resume Score
           </p>
         </div>
       </div>

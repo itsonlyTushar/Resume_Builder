@@ -27,11 +27,11 @@ function Landing() {
         <title>ResuMate | Resume Builder - Make Your Resume in Minutes</title>
         <meta
           name="description"
-          content="Create professional, ATS-friendly resumes for free with ResuMate. Choose from industry-approved templates and build your resume in minutes."
+          content="Create professional, industry-approved resumes for free with ResuMate. Choose from curated templates and build your resume in minutes."
         />
         <meta
           name="keywords"
-          content="resume builder, free resume, ATS resume, professional resume, online resume, resume templates, career, job application"
+          content="resume builder, free resume, professional resume, online resume, resume templates, career, job application"
         />
         <meta name="robots" content="index, follow" />
         <meta property="og:title" content="ResuMate | Free Resume Builder" />
@@ -47,7 +47,7 @@ function Landing() {
         <meta name="twitter:title" content="ResuMate | Free Resume Builder" />
         <meta
           name="twitter:description"
-          content="Create professional, ATS-friendly resumes for free in minutes with ResuMate."
+          content="Create professional, industry-approved resumes for free in minutes with ResuMate."
         />
         <meta name="twitter:image" content="https://resumate.shop/og-img.png" />
         <meta name="twitter:url" content="https://resumate.shop" />
@@ -120,7 +120,7 @@ function Landing() {
           </div>
           <div>
             <i className="fa-solid fa-file text-6xl sm:text-8xl mb-2 mt-3 text-[#10141F]"></i>
-            <p className="text-2xl sm:text-4xl font-bold">ATS Friendly</p>
+            <p className="text-2xl sm:text-4xl font-bold">Industry Standard</p>
           </div>
         </section>
 
@@ -230,13 +230,13 @@ function Landing() {
                 Resume Reviewer
               </h2>
               <p className="text-gray-600 mb-6">
-                Upload your resume and get an instant ATS score, targeted
+                Upload your resume and get an instant AI review score, targeted
                 suggestions, and clear next steps to land more interviews.
               </p>
               <ul className="text-gray-600 space-y-3 mb-6">
                 <li>
-                  <i className="fa-solid fa-check mr-3 text-green-400"></i>ATS
-                  compatibility scoring and detailed breakdown
+                  <i className="fa-solid fa-check mr-3 text-green-400"></i>AI-powered
+                  scoring and detailed analytical breakdown
                 </li>
                 <li>
                   <i className="fa-solid fa-check mr-3 text-green-400"></i>
@@ -262,35 +262,8 @@ function Landing() {
             </div>
 
             <div data-aos="fade-down" className="flex justify-center">
-              <div className="w-full max-w-md bg-[#1C2029] rounded-2xl p-6 text-white shadow-lg">
-                <div className="flex items-center justify-between mb-3">
-                  <h3 className="text-lg font-semibold">Report Analysis</h3>
-                  <div className="text-sm text-gray-400">PDF • AI</div>
-                </div>
-                <div className="flex items-center gap-4">
-                  <div className="flex items-center justify-center w-24 h-24 rounded-full bg-gradient-to-tr from-yellow-400 to-green-400 text-black font-bold text-2xl">
-                    82
-                  </div>
-                  <div className="flex-1">
-                    <p className="text-sm text-gray-300">TOTAL ATS SCORE</p>
-                    <p className="text-white font-semibold mt-1">
-                      Strengths: Clean formatting, strong keywords
-                    </p>
-                    <div className="w-full bg-gray-700 h-2 rounded-full mt-3 overflow-hidden">
-                      <div
-                        className="h-2 rounded-full bg-gradient-to-r from-yellow-400 to-green-400"
-                        style={{ width: "82%" }}
-                      ></div>
-                    </div>
-                    <p className="text-gray-400 text-sm mt-3">
-                      Suggestions: Add measurable results and tailor to the job
-                      description.
-                    </p>
-                  </div>
-                </div>
-                <div className="mt-5 text-xs text-gray-400">
-                  We process files securely. Only you can view your report.
-                </div>
+              <div>
+                <img src="https://res.cloudinary.com/dartdvch1/image/upload/v1780319934/Macbook-Air-localhost_yasogj.png" alt="laptop" />
               </div>
             </div>
           </div>

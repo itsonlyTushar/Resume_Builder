@@ -85,7 +85,7 @@ const Review = () => {
       const response = await result.response;
       const text = response.text();
       // Extract Score
-      const scoreMatch = text.match(/TOTAL ATS SCORE: (\d+)\/100/);
+      const scoreMatch = text.match(/TOTAL (?:ATS|RESUME) SCORE: (\d+)\/100/i);
       const score = scoreMatch ? parseInt(scoreMatch[1], 10) : 0;
       setFindScore(score);
       setAnswer(text);

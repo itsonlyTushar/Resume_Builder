@@ -29,7 +29,7 @@ function TermsOfUse() {
           <div className="pt-32 pb-16 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto">
             <h1
               data-aos="fade-up"
-              className="text-4xl sm:text-6xl font-bold mb-6 text-center text-transparent bg-clip-text bg-gradient-to-l from-[#364050] via-[#171F2E] to-[#6b90cf]"
+              className="text-4xl sm:text-6xl font-bold mb-6 text-center text-[#1D1F24]"
             >
               Terms of Use
             </h1>

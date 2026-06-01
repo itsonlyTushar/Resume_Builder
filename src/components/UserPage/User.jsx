@@ -64,7 +64,7 @@ function User() {
     loadResumes();
   }, [userId]);
 
-  
+
   const handleResumeClick = async (resume) => {
     try {
       window.open(resume.downloadUrl, "_blank");
@@ -96,11 +96,11 @@ function User() {
 
   const initials = displayName
     ? displayName
-        .split(" ")
-        .map((n) => n[0])
-        .slice(0, 2)
-        .join("")
-        .toUpperCase()
+      .split(" ")
+      .map((n) => n[0])
+      .slice(0, 2)
+      .join("")
+      .toUpperCase()
     : "U";
 
   return (
@@ -114,19 +114,19 @@ function User() {
           <Toaster />
 
           <div className="p-5 max-w-7xl mx-auto">
-            <h1 className="text-center text-5xl pt-10 font-semibold mb-10">
+            <h1 className="text-center text-5xl tracking-tight pt-10 font-extrabold mb-10 text-[#1D1F24]">
               User Profile
             </h1>
-            
+
             {/* Profile Card */}
             <div className="border rounded-3xl p-8 sm:p-12 shadow-sm mb-8 bg-gradient-to-br from-white to-gray-50">
               <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
                 {/* Avatar and Info */}
                 <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6 flex-1">
-                  <Avatar 
-                    sx={{ 
-                      bgcolor: "#000000", 
-                      width: 96, 
+                  <Avatar
+                    sx={{
+                      bgcolor: "#000000",
+                      width: 96,
                       height: 96,
                       fontSize: '2rem',
                       fontWeight: 600,
@@ -148,7 +148,7 @@ function User() {
                     </div>
                   </div>
                 </div>
-                
+
                 {/* Action Buttons */}
                 <div className="flex flex-col gap-3 mt-4 sm:mt-0 w-full sm:w-auto">
                   <Button
@@ -227,7 +227,7 @@ function User() {
                   )}
                 </div>
               </div>
-              
+
               {/* Content */}
               <div className="sm:h-[60vh] h-[550px] overflow-y-auto p-6 scrollbar-hide">
                 {isLoadingResumes ? (
@@ -241,7 +241,7 @@ function User() {
                     </div>
                     <h3 className="text-2xl font-semibold mb-3">No resumes yet</h3>
                     <p className="text-gray-600 mb-6 max-w-md">Start building your professional resume with our easy-to-use builder</p>
-                    <Button 
+                    <Button
                       variant="contained"
                       sx={{
                         backgroundColor: 'black',

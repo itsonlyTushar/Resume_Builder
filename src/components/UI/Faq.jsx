@@ -10,9 +10,9 @@ function Faq() {
     },
     {
       id: 2,
-      question: "Will my resume be ATS-friendly?",
+      question: "Are the templates professionally formatted?",
       answer:
-        "Yes. All our templates are designed to be clean and compliant with Applicant Tracking Systems (ATS), ensuring your resume gets through the filters.",
+        "Yes. All our templates are designed to be clean, modern, and compliant with standard recruitment formats, ensuring your resume is easily readable by recruiters and hiring managers.",
     },
     {
       id: 3,

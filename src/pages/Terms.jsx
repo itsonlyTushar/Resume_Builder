@@ -17,7 +17,7 @@ function Terms() {
     <>
       <Navigation />
       <div className="relative pt-20">
-        <h1 className="text-5xl text-center mb-10 font-bold py-4">Terms of Use</h1>
+        <h1 className="text-5xl text-center mb-10 font-bold py-4 text-[#1D1F24]">Terms of Use</h1>
         
         <div className="absolute p-5">
           
