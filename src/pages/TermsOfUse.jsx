@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-import { Helmet } from "react-helmet";
 import AOS from "aos";
 import Navigation from "../components/Navbar/Navigation.jsx";
 import Footer from "../components/Footer/Footer";
@@ -14,15 +13,6 @@ function TermsOfUse() {
 
   return (
     <>
-      <Helmet>
-        <title>Terms of Use | ResuMate</title>
-        <meta
-          name="description"
-          content="Read the terms and conditions for using ResuMate's resume building service."
-        />
-        <meta name="robots" content="index, follow" />
-      </Helmet>
-
       <div className="min-h-screen bg-white">
         <Navigation />
         <div className="relative">

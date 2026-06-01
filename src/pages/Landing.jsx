@@ -8,7 +8,6 @@ import Navigation from "../components/Navbar/Navigation.jsx";
 import laptop from "../assets/laptop.png";
 import CardSwap, { Card } from "../components/CardSwap/CardSwap.jsx";
 import { templateImgs } from "../components/Templates/templateConfig.js";
-import { Helmet } from "react-helmet";
 import { laptopVideo } from "../constants/constant.js";
 
 function Landing() {
@@ -23,36 +22,6 @@ function Landing() {
 
   return (
     <>
-      <Helmet>
-        <title>ResuMate | Resume Builder - Make Your Resume in Minutes</title>
-        <meta
-          name="description"
-          content="Create professional, industry-approved resumes for free with ResuMate. Choose from curated templates and build your resume in minutes."
-        />
-        <meta
-          name="keywords"
-          content="resume builder, free resume, professional resume, online resume, resume templates, career, job application"
-        />
-        <meta name="robots" content="index, follow" />
-        <meta property="og:title" content="ResuMate | Free Resume Builder" />
-        <meta
-          property="og:description"
-          content="Build your resume for free with ResuMate. Choose templates, customize, and download instantly."
-        />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://resumate.shop" />
-        <meta property="og:image" content="https://resumate.shop/og-img.png" />
-        {/* Twitter Card */}
-        <meta name="twitter:card" content="https://resumate.shop/og-img.png" />
-        <meta name="twitter:title" content="ResuMate | Free Resume Builder" />
-        <meta
-          name="twitter:description"
-          content="Create professional, industry-approved resumes for free in minutes with ResuMate."
-        />
-        <meta name="twitter:image" content="https://resumate.shop/og-img.png" />
-        <meta name="twitter:url" content="https://resumate.shop" />
-      </Helmet>
-
       <div className="landing_page">
         <Navigation />
         <div className="pt-32 flex flex-col justify-center items-center px-4 sm:px-6 lg:px-8">

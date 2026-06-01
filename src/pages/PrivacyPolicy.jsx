@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-import { Helmet } from "react-helmet";
 import AOS from "aos";
 import Navigation from "../components/Navbar/Navigation.jsx";
 import Footer from "../components/Footer/Footer";
@@ -14,15 +13,6 @@ function PrivacyPolicy() {
 
   return (
     <>
-      <Helmet>
-        <title>Privacy Policy | ResuMate</title>
-        <meta
-          name="description"
-          content="Learn how ResuMate handles your data and protects your privacy."
-        />
-        <meta name="robots" content="index, follow" />
-      </Helmet>
-
       <div className="min-h-screen bg-white">
         <Navigation />
         
