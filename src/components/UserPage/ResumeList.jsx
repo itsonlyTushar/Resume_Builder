@@ -42,7 +42,7 @@ function ResumeList({ resumes, onResumeClick, onEdit, onDelete }) {
           const created_At = resume.$createdAt;
           const date = new Date(created_At);
           const formateDate = date.toLocaleDateString("en-GB");
-          const isExpired = resume.downloadsLeft <= 0;
+          const isExpired = false;
           const canEdit = !!resume.parsedFormData;
 
           return (
@@ -111,15 +111,9 @@ function ResumeList({ resumes, onResumeClick, onEdit, onDelete }) {
 
                 {/* Status pill */}
                 <div
-                  className={`w-full py-2 px-4 rounded-xl text-sm font-semibold text-center ${isExpired
-                    ? "bg-gray-100 text-gray-400"
-                    : "bg-black/5 text-gray-700"
-                    }`}
+                  className="w-full py-2 px-4 rounded-xl text-sm font-semibold text-center bg-black/5 text-gray-700"
                 >
-                  {isExpired
-                    ? "No Downloads Left"
-                    : `${resume.downloadsLeft} download${resume.downloadsLeft !== 1 ? "s" : ""
-                    } left`}
+                  Unlimited Downloads
                 </div>
 
                 {/* Legacy hint */}

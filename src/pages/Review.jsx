@@ -298,7 +298,7 @@ const Review = () => {
               {resumes.map((resume) => {
                 const date = new Date(resume.$createdAt);
                 const formattedDate = date.toLocaleDateString("en-GB");
-                const isExpired = resume.downloadsLeft <= 0;
+                const isExpired = false;
 
                 return (
                   <div

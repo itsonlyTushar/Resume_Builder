@@ -18,7 +18,7 @@ function Faq() {
       id: 3,
       question: "Can I create multiple resumes?",
       answer:
-        "Yes, you can create and download two resumes for different job applications.",
+        "Yes! You can create up to 4 resumes for different job applications and download them an unlimited number of times.",
     },
     {
       id: 4,

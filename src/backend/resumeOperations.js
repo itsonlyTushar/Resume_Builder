@@ -312,29 +312,7 @@ export const deleteResume = async (documentId, fileId) => {
 // download function to download resumes
 export const downloadResume = async (documentId, fileId) => {
   try {
-    const doc = await databases.getDocument(
-      DATABASE_ID,
-      RESUMES_COLLECTION,
-      documentId
-    );
-
-    const downloadsLeft = parseInt(doc.down);
-    if (downloadsLeft <= 0) {
-      toast.error('You have reached the maximum number of downloads for this resume');
-      return null;
-    }
-
-    await databases.updateDocument(
-      DATABASE_ID,
-      RESUMES_COLLECTION,
-      documentId,
-      {
-        down: (downloadsLeft - 1).toString()
-      }
-    );
-
     return storage.getFileDownload(STORAGE_BUCKET, fileId);
-
   } catch (error) {
     console.error('Download error:', error);
     return null;
