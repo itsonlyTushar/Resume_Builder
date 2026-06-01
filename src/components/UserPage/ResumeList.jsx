@@ -71,11 +71,10 @@ function ResumeList({ resumes, onResumeClick, onEdit, onDelete }) {
                       <button
                         onClick={() => onResumeClick(resume)}
                         disabled={isExpired}
-                        className={`p-2 rounded-lg transition-all duration-200 ${
-                          isExpired
+                        className={`p-2 rounded-lg transition-all duration-200 ${isExpired
                             ? "text-gray-300 cursor-not-allowed"
                             : "text-gray-400 hover:text-blue-600 hover:bg-blue-50"
-                        }`}
+                          }`}
                         title={isExpired ? "No downloads left" : "View Resume"}
                       >
                         <i className="ri-external-link-line text-xl"></i>
@@ -85,15 +84,14 @@ function ResumeList({ resumes, onResumeClick, onEdit, onDelete }) {
                       <button
                         onClick={() => canEdit && onEdit(resume)}
                         disabled={!canEdit}
-                        className={`p-2 rounded-lg transition-all duration-200 ${
-                          !canEdit
+                        className={`p-2 rounded-lg transition-all duration-200 ${!canEdit
                             ? "text-gray-300 cursor-not-allowed"
                             : "text-gray-400 hover:text-emerald-600 hover:bg-emerald-50"
-                        }`}
+                          }`}
                         title={
                           canEdit
                             ? "Edit Resume"
-                            : "Edit unavailable — legacy resume"
+                            : "Edit unavailable"
                         }
                       >
                         <i className="ri-edit-line text-xl"></i>
@@ -113,24 +111,22 @@ function ResumeList({ resumes, onResumeClick, onEdit, onDelete }) {
 
                 {/* Status pill */}
                 <div
-                  className={`w-full py-2 px-4 rounded-xl text-sm font-semibold text-center ${
-                    isExpired
+                  className={`w-full py-2 px-4 rounded-xl text-sm font-semibold text-center ${isExpired
                       ? "bg-gray-100 text-gray-400"
                       : "bg-black/5 text-gray-700"
-                  }`}
+                    }`}
                 >
                   {isExpired
                     ? "No Downloads Left"
-                    : `${resume.downloadsLeft} download${
-                        resume.downloadsLeft !== 1 ? "s" : ""
-                      } left`}
+                    : `${resume.downloadsLeft} download${resume.downloadsLeft !== 1 ? "s" : ""
+                    } left`}
                 </div>
 
                 {/* Legacy hint */}
                 {!canEdit && (
                   <p className="mt-2 text-center text-xs text-gray-400">
                     <i className="ri-information-line mr-1"></i>
-                    Edit unavailable — legacy resume
+                    Edit unavailable
                   </p>
                 )}
               </div>
