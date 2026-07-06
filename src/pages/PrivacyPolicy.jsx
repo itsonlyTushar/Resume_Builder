@@ -32,7 +32,7 @@ function PrivacyPolicy() {
             <section data-aos="fade-up" className="space-y-4">
               <h2 className="text-2xl font-bold text-[#171F2E]">1. Introduction</h2>
               <p className="leading-relaxed">
-                Welcome to ResuMate. We are committed to protecting your privacy and ensuring 
+                Welcome to <span style={{ fontFamily: "'Dancing Script', cursive", fontWeight: 700 }}>x</span><span style={{ fontFamily: "'Poppins', sans-serif", fontWeight: 800 }}>LPA</span>. We are committed to protecting your privacy and ensuring 
                 the security of your personal information. This Privacy Policy explains how we 
                 collect, use, and safeguard your data when you use our resume building service.
               </p>
@@ -180,7 +180,7 @@ function PrivacyPolicy() {
             <section data-aos="fade-up" className="bg-[#EEEFEF] p-6 rounded-lg mt-8">
               <h3 className="text-xl font-bold text-[#171F2E] mb-3">Summary</h3>
               <p className="leading-relaxed text-[#364050]">
-                ResuMate respects your privacy. Your data is only shared with:
+                <span style={{ fontFamily: "'Dancing Script', cursive", fontWeight: 700 }}>x</span><span style={{ fontFamily: "'Poppins', sans-serif", fontWeight: 800 }}>LPA</span> respects your privacy. Your data is only shared with:
               </p>
               <ul className="list-disc pl-6 mt-2 space-y-1 text-[#364050]">
                 <li><strong>Google Firebase</strong> - for secure authentication</li>

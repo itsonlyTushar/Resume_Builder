@@ -4,9 +4,9 @@ function Faq() {
   const questions = [
     {
       id: 1,
-      question: "Is ResuMate free to use?",
+      question: <>Is <span style={{ fontFamily: "'Dancing Script', cursive", fontWeight: 700 }}>x</span><span style={{ fontFamily: "'Poppins', sans-serif", fontWeight: 800 }}>LPA</span> free to use?</>,
       answer:
-        "Yes! ResuMate is completely free to use. You can build and download your resume without paying anything.",
+        <>Yes! <span style={{ fontFamily: "'Dancing Script', cursive", fontWeight: 700 }}>x</span><span style={{ fontFamily: "'Poppins', sans-serif", fontWeight: 800 }}>LPA</span> is completely free to use. You can build and download your resume without paying anything.</>,
     },
     {
       id: 2,

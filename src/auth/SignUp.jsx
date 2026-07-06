@@ -9,7 +9,7 @@ import Navigation from "../components/Navbar/Navigation";
 
 function SignUp() {
   const [loading, setLoading] = useState(false);
-  const [isHidden,setIsHidden] = useState(true);
+  const [isHidden, setIsHidden] = useState(true);
   const navigate = useNavigate();
   const {
     register,
@@ -36,17 +36,17 @@ function SignUp() {
   }
 
   return (
-    <section>
+    <section className="landing_page">
       <Navigation />
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="flex items-center justify-center min-h-screen p-5"
       >
-        <div className="border border-gray-200 rounded-3xl p-10 mt-24">
+        <div className="border border-gray-200 bg-white rounded-3xl p-10 mt-24">
           <div className="flex justify-center text-5xl ">
             <i className="ri-attachment-2"></i>
           </div>
-          <h1 className="text-xl font-bold mb-4 text-center">Sign Up With Resumate</h1>
+          <h1 className="text-xl font-bold mb-4 text-center">Sign Up With <span style={{ fontFamily: "'Dancing Script', cursive", fontWeight: 700 }}>x</span><span style={{ fontFamily: "'Poppins', sans-serif", fontWeight: 800 }}>LPA</span></h1>
           <div className="block">
             <input
               {...register("email", { required: "Email is required" })}
@@ -68,18 +68,18 @@ function SignUp() {
               <p className="text-red-500 text-sm">{errors.password.message}</p>
             )}
             <div className="relative">
-            <input
-            type={isHidden ? "password" : "text"}
-            className="mt-2 block py-2 border-slate-200 shadow-sm rounded-md w-full focus:border-black focus:ring-0 focus:outline-none"
-              {...register("confirmPassword", {
-                required: "Please Confirm Your Password",
+              <input
+                type={isHidden ? "password" : "text"}
+                className="mt-2 block py-2 border-slate-200 shadow-sm rounded-md w-full focus:border-black focus:ring-0 focus:outline-none"
+                {...register("confirmPassword", {
+                  required: "Please Confirm Your Password",
 
-                validate: (value) =>
-                  value === watch("password") || "Passwords do not match",
-              })}
-              placeholder="Confirm Password"
-            />
-            <button onClick={hidePassword} className="absolute right-3 top-1/2 transform -translate-y-1/2">{isHidden ? <i className="ri-eye-off-line"></i> : <i class="ri-eye-line"></i>}</button>
+                  validate: (value) =>
+                    value === watch("password") || "Passwords do not match",
+                })}
+                placeholder="Confirm Password"
+              />
+              <button onClick={hidePassword} className="absolute right-3 top-1/2 transform -translate-y-1/2">{isHidden ? <i className="ri-eye-off-line"></i> : <i class="ri-eye-line"></i>}</button>
             </div>
 
             {errors.confirmPassword && (
@@ -87,7 +87,7 @@ function SignUp() {
                 {errors.confirmPassword.message}
               </p>
             )}
-            
+
             <button
               type="submit"
               className="block bg-black text-white w-full py-2 rounded-md mt-3 text-md"

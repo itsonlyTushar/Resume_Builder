@@ -56,18 +56,18 @@ function SignIn() {
   };
 
   return (
-    <section>
+    <section className="landing_page">
       <Navigation />
       <form
         onSubmit={handleSignIn}
         className="flex items-center justify-center min-h-screen p-5"
       >
-        <div className="border border-gray-200 rounded-3xl p-10 mt-24">
+        <div className="border border-gray-200 bg-white rounded-3xl p-10 mt-24">
           <div className="flex justify-center text-5xl ">
             <i className="ri-attachment-2"></i>
           </div>
           <h1 className="text-xl font-bold mb-4 text-center">
-            Sign In With Resumate
+            Sign In With <span style={{ fontFamily: "'Dancing Script', cursive", fontWeight: 700 }}>x</span><span style={{ fontFamily: "'Poppins', sans-serif", fontWeight: 800 }}>LPA</span>
           </h1>
           <div className="block">
             <input

@@ -2,9 +2,9 @@
 ![Logo](https://i.postimg.cc/gc1Qhvxv/Screenshot-2024-12-24-230301.png)
 
 
-# ResuMate
+# xLPA
 
-Resumate is a powerful and user-friendly resume builder designed to help users create professional resumes with ease. Built with React and Redux, Resumate provides customizable templates, live previews, and export options to generate high-quality resumes.
+xLPA is a powerful and user-friendly resume builder designed to help users create professional resumes with ease. Built with React and Redux, xLPA provides customizable templates, live previews, and export options to generate high-quality resumes.
 
 
 ## Features

@@ -15,9 +15,9 @@ function Logo() {
   };
 
   return (
-    <h1 className={`sm:text-3xl text-2xl font-bold`}>
+    <h1 className={`sm:text-3xl text-2xl font-extrabold tracking-tight`}>
       <button onClick={handleNavigation}>
-        <i className="ri-attachment-2"></i>ResuMate
+        <span style={{ fontFamily: "'Dancing Script', cursive", fontWeight: 700, marginRight: '2px' }}>x</span><span style={{ fontFamily: "'Poppins', sans-serif", fontWeight: 800 }}>LPA</span>
       </button>
     </h1>
   );

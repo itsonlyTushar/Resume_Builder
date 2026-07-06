@@ -34,13 +34,13 @@ function TermsOfUse() {
                   1. Acceptance of Terms
                 </h2>
                 <p className="leading-relaxed">
-                  Welcome to ResuMate. By accessing or using our resume building
+                  Welcome to <span style={{ fontFamily: "'Dancing Script', cursive", fontWeight: 700 }}>x</span><span style={{ fontFamily: "'Poppins', sans-serif", fontWeight: 800 }}>LPA</span>. By accessing or using our resume building
                   service, you agree to be bound by these Terms of Use. If you
                   do not agree to these terms, please do not use our service.
                 </p>
                 <p className="leading-relaxed">
                   These terms constitute a legally binding agreement between you
-                  and ResuMate. We reserve the right to modify these terms at
+                  and <span style={{ fontFamily: "'Dancing Script', cursive", fontWeight: 700 }}>x</span><span style={{ fontFamily: "'Poppins', sans-serif", fontWeight: 800 }}>LPA</span>. We reserve the right to modify these terms at
                   any time, and continued use of the service after changes
                   constitutes acceptance of the modified terms.
                 </p>
@@ -51,7 +51,7 @@ function TermsOfUse() {
                   2. Service Description
                 </h2>
                 <p className="leading-relaxed">
-                  ResuMate provides a free, online resume building platform that
+                  <span style={{ fontFamily: "'Dancing Script', cursive", fontWeight: 700 }}>x</span><span style={{ fontFamily: "'Poppins', sans-serif", fontWeight: 800 }}>LPA</span> provides a free, online resume building platform that
                   allows users to:
                 </p>
                 <ul className="list-disc pl-6 space-y-2">
@@ -77,7 +77,7 @@ function TermsOfUse() {
                     3.1 Account Creation
                   </h3>
                   <p className="leading-relaxed">
-                    To use ResuMate, you must create an account using Google
+                    To use <span style={{ fontFamily: "'Dancing Script', cursive", fontWeight: 700 }}>x</span><span style={{ fontFamily: "'Poppins', sans-serif", fontWeight: 800 }}>LPA</span>, you must create an account using Google
                     Firebase Authentication. You agree to:
                   </p>
                   <ul className="list-disc pl-6 space-y-2">
@@ -93,7 +93,7 @@ function TermsOfUse() {
                     3.2 Account Eligibility
                   </h3>
                   <p className="leading-relaxed">
-                    You must be at least 13 years old to use ResuMate. By
+                    You must be at least 13 years old to use <span style={{ fontFamily: "'Dancing Script', cursive", fontWeight: 700 }}>x</span><span style={{ fontFamily: "'Poppins', sans-serif", fontWeight: 800 }}>LPA</span>. By
                     creating an account, you represent that you meet this age
                     requirement.
                   </p>
@@ -110,7 +110,7 @@ function TermsOfUse() {
                   </h3>
                   <p className="leading-relaxed">
                     You retain full ownership of all content you create and
-                    upload to ResuMate, including your resume information,
+                    upload to <span style={{ fontFamily: "'Dancing Script', cursive", fontWeight: 700 }}>x</span><span style={{ fontFamily: "'Poppins', sans-serif", fontWeight: 800 }}>LPA</span>, including your resume information,
                     personal details, and any other data you provide.
                   </p>
 
@@ -118,7 +118,7 @@ function TermsOfUse() {
                     4.2 License to Use Your Content
                   </h3>
                   <p className="leading-relaxed">
-                    By using our service, you grant ResuMate a limited,
+                    By using our service, you grant <span style={{ fontFamily: "'Dancing Script', cursive", fontWeight: 700 }}>x</span><span style={{ fontFamily: "'Poppins', sans-serif", fontWeight: 800 }}>LPA</span> a limited,
                     non-exclusive license to:
                   </p>
                   <ul className="list-disc pl-6 space-y-2">
@@ -164,7 +164,7 @@ function TermsOfUse() {
                     </h3>
                     <p className="leading-relaxed">
                       Our service uses Google Firebase for user authentication.
-                      By using ResuMate, you also agree to Google's Terms of
+                      By using <span style={{ fontFamily: "'Dancing Script', cursive", fontWeight: 700 }}>x</span><span style={{ fontFamily: "'Poppins', sans-serif", fontWeight: 800 }}>LPA</span>, you also agree to Google's Terms of
                       Service and Privacy Policy as they relate to Firebase
                       authentication.
                     </p>
@@ -278,7 +278,7 @@ function TermsOfUse() {
                     8.1 Our Property
                   </h3>
                   <p className="leading-relaxed">
-                    All aspects of the ResuMate service, including but not
+                    All aspects of the <span style={{ fontFamily: "'Dancing Script', cursive", fontWeight: 700 }}>x</span><span style={{ fontFamily: "'Poppins', sans-serif", fontWeight: 800 }}>LPA</span> service, including but not
                     limited to:
                   </p>
                   <ul className="list-disc pl-6 space-y-2">
@@ -289,7 +289,7 @@ function TermsOfUse() {
                     <li>User interface and design elements</li>
                   </ul>
                   <p className="leading-relaxed mt-2">
-                    are owned by ResuMate or its licensors and are protected by
+                    are owned by <span style={{ fontFamily: "'Dancing Script', cursive", fontWeight: 700 }}>x</span><span style={{ fontFamily: "'Poppins', sans-serif", fontWeight: 800 }}>LPA</span> or its licensors and are protected by
                     copyright, trademark, and other intellectual property laws.
                   </p>
 
@@ -316,7 +316,7 @@ function TermsOfUse() {
                     WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED.
                   </p>
                   <p className="leading-relaxed mt-3">
-                    ResuMate disclaims all warranties, including but not limited
+                    <span style={{ fontFamily: "'Dancing Script', cursive", fontWeight: 700 }}>x</span><span style={{ fontFamily: "'Poppins', sans-serif", fontWeight: 800 }}>LPA</span> disclaims all warranties, including but not limited
                     to:
                   </p>
                   <ul className="list-disc pl-6 space-y-2 mt-2">
@@ -335,7 +335,7 @@ function TermsOfUse() {
                 </h2>
                 <div className="bg-[#EEEFEF] p-6 rounded-lg">
                   <p className="leading-relaxed">
-                    TO THE MAXIMUM EXTENT PERMITTED BY LAW, RESUMATE SHALL NOT
+                    TO THE MAXIMUM EXTENT PERMITTED BY LAW, <span style={{ fontFamily: "'Dancing Script', cursive", fontWeight: 700 }}>x</span><span style={{ fontFamily: "'Poppins', sans-serif", fontWeight: 800 }}>LPA</span> SHALL NOT
                     BE LIABLE FOR ANY:
                   </p>
                   <ul className="list-disc pl-6 space-y-2 mt-2">
@@ -364,7 +364,7 @@ function TermsOfUse() {
                   11. Indemnification
                 </h2>
                 <p className="leading-relaxed">
-                  You agree to indemnify, defend, and hold harmless ResuMate,
+                  You agree to indemnify, defend, and hold harmless <span style={{ fontFamily: "'Dancing Script', cursive", fontWeight: 700 }}>x</span><span style={{ fontFamily: "'Poppins', sans-serif", fontWeight: 800 }}>LPA</span>,
                   its officers, directors, employees, and agents from any
                   claims, damages, losses, liabilities, and expenses (including
                   legal fees) arising from:
@@ -494,7 +494,7 @@ function TermsOfUse() {
                 </h2>
                 <p className="leading-relaxed">
                   These Terms of Use, together with our Privacy Policy,
-                  constitute the entire agreement between you and ResuMate
+                  constitute the entire agreement between you and <span style={{ fontFamily: "'Dancing Script', cursive", fontWeight: 700 }}>x</span><span style={{ fontFamily: "'Poppins', sans-serif", fontWeight: 800 }}>LPA</span>
                   regarding the use of the service and supersede all prior
                   agreements and understandings.
                 </p>
@@ -527,7 +527,7 @@ function TermsOfUse() {
                   Acknowledgment
                 </h3>
                 <p className="leading-relaxed text-[#364050]">
-                  BY USING RESUMATE, YOU ACKNOWLEDGE THAT YOU HAVE READ,
+                  BY USING <span style={{ fontFamily: "'Dancing Script', cursive", fontWeight: 700 }}>x</span><span style={{ fontFamily: "'Poppins', sans-serif", fontWeight: 800 }}>LPA</span>, YOU ACKNOWLEDGE THAT YOU HAVE READ,
                   UNDERSTOOD, AND AGREE TO BE BOUND BY THESE TERMS OF USE.
                 </p>
               </section>

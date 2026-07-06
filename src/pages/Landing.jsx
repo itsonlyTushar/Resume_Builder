@@ -245,7 +245,7 @@ function Landing() {
               Browse Unique Templates
             </h1>
             <p className="text-gray-400 text-sm max-w-sm text-start">
-              ResuMate offers a range of professionally designed templates so
+              <span style={{ fontFamily: "'Dancing Script', cursive", fontWeight: 700 }}>x</span><span style={{ fontFamily: "'Poppins', sans-serif", fontWeight: 800 }}>LPA</span> offers a range of professionally designed templates so
               you can make the right first impression no matter your industry or
               experience level.
             </p>

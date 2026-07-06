@@ -34,12 +34,12 @@ function Terms() {
         >
           <div className="max-w-4xl px-4 rounded-2xl">
             <h1 className="sm:text-4xl text-3xl font-semibold mb-6">
-              📄 Terms of Use – ResuMate
+              📄 Terms of Use – <span style={{ fontFamily: "'Dancing Script', cursive", fontWeight: 700 }}>x</span><span style={{ fontFamily: "'Poppins', sans-serif", fontWeight: 800 }}>LPA</span>
             </h1>
             <div className="text-lg text-gray-700 space-y-2">
               <p><strong>Effective Date:</strong> July 1, 2025</p>
               <p><strong>Owner:</strong> Tushar Soni</p>
-              <p><strong>Project:</strong> ResuMate – Professional Resume Builder</p>
+              <p><strong>Project:</strong> <span style={{ fontFamily: "'Dancing Script', cursive", fontWeight: 700 }}>x</span><span style={{ fontFamily: "'Poppins', sans-serif", fontWeight: 800 }}>LPA</span> – Professional Resume Builder</p>
             </div>
           </div>
         </section>
@@ -54,7 +54,7 @@ function Terms() {
               Acceptance of Terms
             </h2>
             <p className="text-lg text-gray-700 leading-relaxed">
-              By accessing or using <strong>ResuMate</strong>, you agree to be bound by these Terms of Use. If you do not agree to these terms, please do not use the application.
+              By accessing or using <strong><span style={{ fontFamily: "'Dancing Script', cursive", fontWeight: 700 }}>x</span><span style={{ fontFamily: "'Poppins', sans-serif", fontWeight: 800 }}>LPA</span></strong>, you agree to be bound by these Terms of Use. If you do not agree to these terms, please do not use the application.
             </p>
           </div>
 
@@ -65,7 +65,7 @@ function Terms() {
               Usage Eligibility
             </h2>
             <p className="text-lg text-gray-700 leading-relaxed">
-              You must be at least 13 years old to use ResuMate. By using the service, you confirm that you meet this requirement.
+              You must be at least 13 years old to use <span style={{ fontFamily: "'Dancing Script', cursive", fontWeight: 700 }}>x</span><span style={{ fontFamily: "'Poppins', sans-serif", fontWeight: 800 }}>LPA</span>. By using the service, you confirm that you meet this requirement.
             </p>
           </div>
 
@@ -82,7 +82,7 @@ function Terms() {
               </li>
               <li className="flex items-start">
                 <span className="text-red-500 mr-3 mt-1">•</span>
-                You agree not to use ResuMate for any illegal or unauthorized purposes.
+                You agree not to use <span style={{ fontFamily: "'Dancing Script', cursive", fontWeight: 700 }}>x</span><span style={{ fontFamily: "'Poppins', sans-serif", fontWeight: 800 }}>LPA</span> for any illegal or unauthorized purposes.
               </li>
               <li className="flex items-start">
                 <span className="text-red-500 mr-3 mt-1">•</span>
@@ -100,7 +100,7 @@ function Terms() {
             <ul className="text-lg text-gray-700 leading-relaxed space-y-3">
               <li className="flex items-start">
                 <span className="text-red-500 mr-3 mt-1">•</span>
-                ResuMate uses <strong className="mx-2"> Firebase Authentication </strong>  to manage user accounts securely.
+                <span style={{ fontFamily: "'Dancing Script', cursive", fontWeight: 700 }}>x</span><span style={{ fontFamily: "'Poppins', sans-serif", fontWeight: 800 }}>LPA</span> uses <strong className="mx-2"> Firebase Authentication </strong>  to manage user accounts securely.
               </li>
               <li className="flex items-start">
                 <span className="text-red-500 mr-3 mt-1">•</span>
@@ -118,7 +118,7 @@ function Terms() {
             <ul className="text-lg text-gray-700 leading-relaxed space-y-3">
               <li className="flex items-start">
                 <span className="text-red-500 mr-3 mt-1">•</span>
-                ResuMate stores user data via <strong className="mx-2">Appwrite</strong>.
+                <span style={{ fontFamily: "'Dancing Script', cursive", fontWeight: 700 }}>x</span><span style={{ fontFamily: "'Poppins', sans-serif", fontWeight: 800 }}>LPA</span> stores user data via <strong className="mx-2">Appwrite</strong>.
               </li>
               <li className="flex items-start">
                 <span className="text-red-500 mr-3 mt-1">•</span>
@@ -136,7 +136,7 @@ function Terms() {
             <ul className="text-lg text-gray-700 leading-relaxed space-y-3">
               <li className="flex items-start">
                 <span className="text-red-500 mr-3 mt-1">•</span>
-                ResuMate provides multiple resume templates for personal use only.
+                <span style={{ fontFamily: "'Dancing Script', cursive", fontWeight: 700 }}>x</span><span style={{ fontFamily: "'Poppins', sans-serif", fontWeight: 800 }}>LPA</span> provides multiple resume templates for personal use only.
               </li>
               <li className="flex items-start">
                 <span className="text-red-500 mr-3 mt-1">•</span>
@@ -176,7 +176,7 @@ function Terms() {
             <div className="text-lg text-gray-700 leading-relaxed space-y-3">
               <p className="flex items-start">
                 <span className="text-red-500 mr-3 mt-1">•</span>
-                ResuMate is provided "as is" without warranties of any kind.
+                <span style={{ fontFamily: "'Dancing Script', cursive", fontWeight: 700 }}>x</span><span style={{ fontFamily: "'Poppins', sans-serif", fontWeight: 800 }}>LPA</span> is provided "as is" without warranties of any kind.
               </p>
               <p>While we strive to keep the platform stable and secure, we are not liable for:</p>
               <ul className="ml-6 space-y-2">
@@ -244,7 +244,7 @@ function Terms() {
           {/* Back to top notice */}
           <div data-aos="fade-up" className="text-center bg-gray-50 p-6 rounded-xl">
             <p className="text-gray-600 text-lg">
-              Thank you for using <strong className="text-blackBg">ResuMate</strong>! 
+              Thank you for using <strong className="text-blackBg"><span style={{ fontFamily: "'Dancing Script', cursive", fontWeight: 700 }}>x</span><span style={{ fontFamily: "'Poppins', sans-serif", fontWeight: 800 }}>LPA</span></strong>! 
               We're committed to helping you build professional resumes with ease and security.
             </p>
           </div>

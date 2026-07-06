@@ -33,7 +33,7 @@ function Footer() {
             <div className="md:col-span-5 space-y-4">
               <Logo />
               <p className="text-zinc-400 text-sm leading-relaxed max-w-sm">
-                Create professional, standout resumes in minutes. ResuMate handles formatting and styling to showcase your unique career journey.
+                Create professional, standout resumes in minutes. <span style={{ fontFamily: "'Dancing Script', cursive", fontWeight: 700 }}>x</span><span style={{ fontFamily: "'Poppins', sans-serif", fontWeight: 800 }}>LPA</span> handles formatting and styling to showcase your unique career journey.
               </p>
             </div>
 
