@@ -8,11 +8,12 @@ export default async function handler(req, res) {
 
   const apiKey = process.env.GEMINI_API_KEY || process.env.VITE_GOOGLE_GEMINI_API_KEY;
   if (!apiKey) {
-    return res.status(500).json({ error: "Gemini API key is not configured on the server." });
+    return res.status(500).json({
+      error: "Gemini API key is not configured on the server. Please add GEMINI_API_KEY to your Vercel Environment Variables."
+    });
   }
 
   try {
-    // Parse body if required (for express-like serverless runtimes)
     const body = typeof req.body === "string" ? JSON.parse(req.body) : req.body || {};
     const { rawText, customPrompt } = body;
 
@@ -22,9 +23,11 @@ export default async function handler(req, res) {
 
     const genAI = new GoogleGenerativeAI(apiKey);
 
+    // Primary fast models followed by fallbacks
     const modelNames = [
-      "gemini-3-flash-preview",
-      "gemini-3-pro-preview",
+      "gemini-1.5-flash",
+      "gemini-2.0-flash",
+      "gemini-1.5-pro",
       "gemini-flash-latest"
     ];
 
@@ -40,18 +43,13 @@ export default async function handler(req, res) {
       } catch (err) {
         lastError = err;
         console.warn(`Model ${modelName} failed on server:`, err.message);
-        if (
-          err.status === 429 ||
-          err.message?.includes("429") ||
-          err.message?.includes("Too Many Requests")
-        ) {
-          continue;
-        }
+        // Continue to next model on error
+        continue;
       }
     }
 
     return res.status(500).json({
-      error: "All Gemini models failed or were rate-limited.",
+      error: "All Gemini models failed or rate-limited.",
       details: lastError?.message || "Unknown error"
     });
   } catch (error) {
