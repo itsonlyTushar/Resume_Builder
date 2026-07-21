@@ -1,5 +1,3 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
-
 // Notifications 
 export const notifications = [
   { id: 1, message: "Check out new AI Resume Reviewer", isRead: false },
