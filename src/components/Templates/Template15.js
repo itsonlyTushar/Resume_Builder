@@ -2,9 +2,9 @@ import jsPDF from "jspdf";
 import noto_reg from "../../assets/fonts/noto/NotoSans-Regular.ttf";
 import noto_bol from "../../assets/fonts/noto/NotoSans-Bold.ttf";
 import noto_semi from "../../assets/fonts/noto/NotoSans-SemiBold.ttf";
-import PlayFair from "../../assets/fonts/playfair/PlayfairDisplay-VariableFont_wght.ttf";
 import toast from "react-hot-toast";
-import { checkEach, checkStr } from "../../utils/helpers";
+import { checkStr } from "../../utils/helpers";
+import { drawLeftRight, splitBullets, toHref, wrapItems } from "./templateHelpers";
 
 export const Template15 = ({ formData }) => {
   const pdf = new jsPDF({
@@ -17,6 +17,8 @@ export const Template15 = ({ formData }) => {
     const pageWidth = pdf.internal.pageSize.width;
     const pageHeight = pdf.internal.pageSize.height;
     const margin = 15;
+    const rightX = pageWidth - margin;
+    const contentWidth = rightX - margin;
     const bottomMargin = 20;
     let y = 20;
 
@@ -33,21 +35,50 @@ export const Template15 = ({ formData }) => {
     pdf.addFont(noto_semi, "NotoSans", "semibold");
     pdf.setFont("NotoSans", "normal");
 
-    const drawSectionHeader = (title, yPosition) => {
-      checkAddPage(12);
+    // Draws a heading bar at the current y, keeping it with the first lines below
+    const drawSectionHeader = (title) => {
+      checkAddPage(22);
       pdf.setFillColor(173, 255, 168);
-      pdf.rect(margin, yPosition, pageWidth - margin * 2, 8, "F");
+      pdf.rect(margin, y, pageWidth - margin * 2, 8, "F");
       pdf.setTextColor(0);
       pdf.setFont("NotoSans", "bold");
       pdf.setFontSize(12);
-      pdf.text(title, margin + 2, yPosition + 5.5);
+      pdf.text(title, margin + 2, y + 5.5);
       pdf.setFont("NotoSans", "normal");
-      return yPosition + 12;
+      return y + 12;
     };
+
+    // Text on the left, date on the right; returns the lines the text took
+    const drawTitleRow = (title, date, setTitleFont, lineHeight) =>
+      drawLeftRight(pdf, {
+        left: checkStr(title || "") ? title.trim() : "",
+        right: checkStr(date || "") ? date.trim() : "",
+        x: margin,
+        rightX,
+        y,
+        lineHeight,
+        setLeftFont: setTitleFont,
+        setRightFont: () => {
+          pdf.setFont("NotoSans", "normal");
+          pdf.setFontSize(8);
+        },
+      });
+
+    // Wrapped lines at the current y, moving y down by lineHeight per line
+    const drawLines = (text, lineHeight) => {
+      pdf.splitTextToSize(text, contentWidth).forEach((line) => {
+        checkAddPage(lineHeight);
+        pdf.text(line, margin, y);
+        y += lineHeight;
+      });
+    };
+
+    const hasAny = (items, fields) =>
+      (items || []).filter((item) => item && fields.some((f) => checkStr(item[f] || "")));
 
     const addMultiLine = (text, x, yStart, maxWidth, lineHeight = 5) => {
       const lines = pdf.splitTextToSize(text || "", maxWidth);
-      lines.forEach((line, idx) => {
+      lines.forEach((line) => {
         checkAddPage(lineHeight);
         pdf.text(line, x, y);
         y += lineHeight;
@@ -56,37 +87,54 @@ export const Template15 = ({ formData }) => {
     };
 
     const personal = formData.personalDetails?.[0] || {};
-    const linkedin = checkStr(personal.linkedin) ? personal.linkedin : "";
-    const name = `${checkStr(personal.firstName) ? personal.firstName : ""} ${checkStr(personal.lastName) ? personal.lastName : ""}`;
-    const phone = checkStr(personal.phoneNumber) ? personal.phoneNumber : "";
-    const email = checkStr(personal.email) ? personal.email : "";
+    const linkedin = checkStr(personal.linkedin || "") ? personal.linkedin : "";
+    const name = `${checkStr(personal.firstName || "") ? personal.firstName : ""} ${checkStr(personal.lastName || "") ? personal.lastName : ""}`;
+    const phone = checkStr(personal.phoneNumber || "") ? personal.phoneNumber : "";
+    const email = checkStr(personal.email || "") ? personal.email : "";
 
     // Header
     pdf.setFont("NotoSans", "semibold");
     pdf.setFontSize(20);
     pdf.setTextColor(0);
-    pdf.text(name.trim(), margin, y);
+    pdf.splitTextToSize(name.trim(), contentWidth).forEach((line, i) => {
+      if (i > 0) y += 8;
+      pdf.text(line, margin, y);
+    });
 
     pdf.setFont("NotoSans", "normal");
     pdf.setFontSize(9);
     pdf.setTextColor(100);
-    pdf.text(linkedin, margin, y + 6);
-    pdf.text(phone, pageWidth / 2, y + 6, { align: "center" });
-    pdf.text(email, pageWidth - margin, y + 6, { align: "right" });
+    const gap = 6;
+    const [linkedinW, phoneW, emailW] = [linkedin, phone, email].map((t) => pdf.getTextWidth(t));
+    const spreadFits =
+      margin + linkedinW + gap <= pageWidth / 2 - phoneW / 2 &&
+      pageWidth / 2 + phoneW / 2 + gap <= rightX - emailW;
+    if (spreadFits) {
+      pdf.text(linkedin, margin, y + 6);
+      pdf.text(phone, pageWidth / 2, y + 6, { align: "center" });
+      pdf.text(email, rightX, y + 6, { align: "right" });
+    } else {
+      // too long to spread out: list them, wrapping between items
+      const items = [linkedin, phone, email].filter(Boolean);
+      wrapItems(pdf, items, "  |  ", contentWidth).forEach((line, i) => {
+        if (i > 0) y += 4.5;
+        pdf.text(line, margin, y + 6);
+      });
+    }
     y += 16;
 
     // Summary
-    if (checkStr(personal.about)) {
-      y = drawSectionHeader("Professional summary", y);
+    if (checkStr(personal.about || "")) {
+      y = drawSectionHeader("Professional summary");
       pdf.setFontSize(9);
       y = addMultiLine(personal.about, margin, y, pageWidth - margin * 2);
     }
 
     // Skills
-    if (checkEach(formData.skills, "skillName")) {
-      y = drawSectionHeader("Skills", y);
+    if (hasAny(formData.skills, ["skillName"]).length > 0) {
+      y = drawSectionHeader("Skills");
       const skillList = formData.skills
-        .map((s) => checkStr(s.skillName) && s.skillName)
+        .map((s) => checkStr(s.skillName || "") && s.skillName.trim())
         .filter(Boolean)
         .join(" • ");
       pdf.setFontSize(9);
@@ -94,10 +142,16 @@ export const Template15 = ({ formData }) => {
     }
 
     // Work History
-    if (checkEach(formData.experienceDetails, "companyName")) {
-      y = drawSectionHeader("Work history", y);
-      formData.experienceDetails.forEach((exp) => {
-        if (!exp) return;
+    const experiences = hasAny(formData.experienceDetails, [
+      "role",
+      "companyName",
+      "location",
+      "year",
+      "description",
+    ]);
+    if (experiences.length > 0) {
+      y = drawSectionHeader("Work history");
+      experiences.forEach((exp) => {
         checkAddPage(20);
 
         const {
@@ -108,40 +162,29 @@ export const Template15 = ({ formData }) => {
           description,
         } = exp;
 
-        if (checkStr(role)) {
+        pdf.setTextColor(0);
+        const roleLines = drawTitleRow(role, year, () => {
           pdf.setFont("NotoSans", "bold");
           pdf.setFontSize(10);
           pdf.setTextColor(0);
-          pdf.text(role, margin, y);
-        }
+        }, 4.5);
+        y += (roleLines - 1) * 4.5 + 4;
 
-        if (checkStr(year)) {
-          pdf.setFont("NotoSans", "normal");
-          pdf.setFontSize(8);
-          pdf.text(year, pageWidth - margin, y, { align: "right" });
-        }
-
-        y += 4;
-
-        if (checkStr(companyName)) {
+        const companyLine = [companyName, location].filter((s) => checkStr(s || "")).join(", ");
+        if (companyLine) {
           pdf.setFont("NotoSans", "semibold");
           pdf.setFontSize(8);
           pdf.setTextColor(80);
-          pdf.text(
-            `${companyName}${checkStr(location) ? ", " + location : ""}`,
-            margin,
-            y
-          );
-          y += 5;
+          drawLines(companyLine, 4);
+          y += 1;
         }
 
-        if (checkStr(description)) {
+        if (checkStr(description || "")) {
           pdf.setFont("NotoSans", "normal");
           pdf.setTextColor(60);
           pdf.setFontSize(8);
-          const bullets = description.split("•").filter(s => s.trim().length > 0);
-          bullets.forEach((bullet) => {
-            const bulletText = pdf.splitTextToSize(`• ${bullet.trim()}`, pageWidth - margin * 2 - 5);
+          splitBullets(description).forEach((bullet) => {
+            const bulletText = pdf.splitTextToSize(`• ${bullet}`, pageWidth - margin * 2 - 5);
             bulletText.forEach((line) => {
               checkAddPage(5);
               pdf.text(line, margin + 3, y);
@@ -154,99 +197,110 @@ export const Template15 = ({ formData }) => {
     }
 
     // Education
-    if (checkEach(formData.educationDetails, "collegeName")) {
-      y = drawSectionHeader("Education", y);
-      formData.educationDetails.forEach((edu) => {
-        if (!edu) return;
+    const educations = hasAny(formData.educationDetails, ["collegeName", "course", "location", "year"]);
+    if (educations.length > 0) {
+      y = drawSectionHeader("Education");
+      educations.forEach((edu) => {
         checkAddPage(15);
 
-        if (checkStr(edu.course)) {
+        if (checkStr(edu.course || "")) {
           pdf.setFont("NotoSans", "bold");
           pdf.setFontSize(10);
-          pdf.text(edu.course, margin, y);
+          pdf.splitTextToSize(edu.course, contentWidth).forEach((line, i) => {
+            if (i > 0) y += 4.5;
+            pdf.text(line, margin, y);
+          });
         }
         y += 4;
 
-        if (checkStr(edu.collegeName)) {
+        const collegeLine = [edu.collegeName, edu.location].filter((s) => checkStr(s || "")).join(", ");
+        const collegeLines = drawTitleRow(collegeLine, edu.year, () => {
           pdf.setFont("NotoSans", "semibold");
           pdf.setFontSize(8);
-          pdf.text(
-            `${edu.collegeName}${checkStr(edu.location) ? ", " + edu.location : ""}`,
-            margin,
-            y
-          );
-        }
-
-        if (checkStr(edu.year)) {
-          pdf.setFont("NotoSans", "normal");
-          pdf.text(edu.year, pageWidth - margin, y, { align: "right" });
-        }
-
-        y += 8;
+        }, 4);
+        y += (collegeLines - 1) * 4 + 8;
       });
     }
 
     // Projects
-    if (checkEach(formData.projectDetails, "projectName")) {
-      y = drawSectionHeader("Projects", y);
-      formData.projectDetails.forEach((pro) => {
-        if (!pro) return;
+    const projects = hasAny(formData.projectDetails, [
+      "projectName",
+      "techStack",
+      "projectLink",
+      "year",
+      "description",
+    ]);
+    if (projects.length > 0) {
+      y = drawSectionHeader("Projects");
+      projects.forEach((pro) => {
         checkAddPage(15);
 
-        if (checkStr(pro.projectName)) {
-          pdf.setFont("NotoSans", "bold");
-          pdf.setFontSize(10);
+        if (checkStr(pro.projectName || "") || checkStr(pro.year || "")) {
           pdf.setTextColor(0);
-          pdf.text(pro.projectName, margin, y);
-
-          if (checkStr(pro.year)) {
-            pdf.setFont("NotoSans", "normal");
-            pdf.setFontSize(8);
-            pdf.text(pro.year, pageWidth - margin, y, { align: "right" });
-          }
-          y += 4;
+          const nameLines = drawTitleRow(pro.projectName, pro.year, () => {
+            pdf.setFont("NotoSans", "bold");
+            pdf.setFontSize(10);
+            pdf.setTextColor(0);
+          }, 4.5);
+          y += (nameLines - 1) * 4.5 + 4;
         }
 
-        if (checkStr(pro.techStack)) {
+        if (checkStr(pro.techStack || "")) {
           pdf.setFont("NotoSans", "semibold");
           pdf.setFontSize(8);
           pdf.setTextColor(80);
-          pdf.text(pro.techStack, margin, y);
-          y += 4;
+          drawLines(pro.techStack, 4);
         }
 
-        if (checkStr(pro.description)) {
+        if (checkStr(pro.description || "")) {
           pdf.setFont("NotoSans", "normal");
           pdf.setFontSize(8);
           pdf.setTextColor(60);
           y = addMultiLine(pro.description, margin, y, pageWidth - margin * 2);
         }
 
-        if (checkStr(pro.projectLink)) {
-          checkAddPage(5);
+        if (checkStr(pro.projectLink || "")) {
           pdf.setFont("NotoSans", "normal");
           pdf.setFontSize(8);
           pdf.setTextColor(0, 102, 204);
-          pdf.textWithLink(pro.projectLink, margin, y, { url: pro.projectLink });
+          const url = toHref(pro.projectLink.trim());
+          pdf.splitTextToSize(pro.projectLink.trim(), contentWidth).forEach((line) => {
+            checkAddPage(5);
+            pdf.textWithLink(line, margin, y, { url });
+            y += 4;
+          });
           pdf.setTextColor(0);
-          y += 5;
+          y += 1;
         }
         y += 3;
       });
     }
 
     // Awards
-    const awardCerts = formData.certification?.filter(c => checkStr(c.certiName));
+    const awardCerts = hasAny(formData.certification, ["certiName", "year"]);
     if (awardCerts.length > 0) {
-      y = drawSectionHeader("Certifications", y);
+      y = drawSectionHeader("Certifications");
       awardCerts.forEach((a) => {
-        if (!a || !checkStr(a.certiName)) return;
         checkAddPage(5);
-        pdf.setFont("NotoSans", "normal");
-        pdf.setFontSize(9);
+        pdf.setTextColor(0);
         pdf.circle(margin + 1, y - 1, 0.7, "F");
-        pdf.text(a.certiName, margin + 5, y);
-        y += 5;
+        const certLines = drawLeftRight(pdf, {
+          left: checkStr(a.certiName || "") ? a.certiName.trim() : "",
+          right: checkStr(a.year || "") ? a.year.trim() : "",
+          x: margin + 5,
+          rightX,
+          y,
+          lineHeight: 4.5,
+          setLeftFont: () => {
+            pdf.setFont("NotoSans", "normal");
+            pdf.setFontSize(9);
+          },
+          setRightFont: () => {
+            pdf.setFont("NotoSans", "normal");
+            pdf.setFontSize(8);
+          },
+        });
+        y += (certLines - 1) * 4.5 + 5;
       });
     }
 

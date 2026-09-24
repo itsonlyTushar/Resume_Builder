@@ -1,6 +1,7 @@
 import Poppins_reg from "../../assets/fonts/poppins/Poppins_Regular.ttf";
 import Poppins_bol from "../../assets/fonts/poppins/Poppins_SemiBold.ttf";
 import jsPDF from "jspdf";
+import { drawLeftRight, splitBullets, toHref, wrapItems } from "./templateHelpers";
 
 export const Template09 = ({ formData }) => {
   const doc = new jsPDF({
@@ -20,6 +21,7 @@ export const Template09 = ({ formData }) => {
     let yPosition = 15;
     const pageWidth = doc.internal.pageSize.width;
     const contentWidth = pageWidth - 2 * leftMargin;
+    const rightX = pageWidth - leftMargin;
     const bottomMargin = 20;
     const pageHeight = doc.internal.pageSize.height;
 
@@ -50,7 +52,7 @@ export const Template09 = ({ formData }) => {
 
     // Helper function for section headers with gray background
     const addSectionHeader = (title) => {
-      checkAddPage(17); // Estimate space for header
+      checkAddPage(30); // header plus the first entry below it
       doc.setFillColor(240, 240, 240);
       doc.rect(
         leftMargin - 5,
@@ -66,6 +68,34 @@ export const Template09 = ({ formData }) => {
       yPosition += 12;
     };
 
+    // Bold title on the left, date on the right; returns the lines the title took
+    const drawTitleRow = (title, date) =>
+      drawLeftRight(doc, {
+        left: hasContent(title) ? title.trim() : "",
+        right: hasContent(date) ? date.trim() : "",
+        x: leftMargin,
+        rightX,
+        y: yPosition,
+        lineHeight: 5.5,
+        setLeftFont: () => {
+          doc.setFont("Poppins_bol");
+          doc.setFontSize(11);
+        },
+        setRightFont: () => {
+          doc.setFont("Poppins_bol");
+          doc.setFontSize(11);
+        },
+      });
+
+    // Wrapped lines, each starting `gap` mm below the previous one
+    const drawLines = (text, gap) => {
+      doc.splitTextToSize(text, contentWidth).forEach((line) => {
+        yPosition += gap;
+        checkAddPage(0);
+        doc.text(line, leftMargin, yPosition);
+      });
+    };
+
     const details = formData.personalDetails?.[0] || {};
 
     // Header Section - Only display if name exists
@@ -78,19 +108,25 @@ export const Template09 = ({ formData }) => {
         .filter(hasContent)
         .join(" ")
         .toUpperCase();
-      doc.text(fullName, leftMargin, yPosition);
+      doc.splitTextToSize(fullName, contentWidth).forEach((line, i) => {
+        if (i > 0) yPosition += 10;
+        doc.text(line, leftMargin, yPosition);
+      });
 
       // Contact Information - Only display if any contact info exists
-      const contactInfo = [details.address, details.email, details.linkedin]
+      const contactItems = [details.phoneNumber, details.email, details.linkedin]
         .filter(hasContent)
-        .join(" | ");
+        .map((item) => item.trim());
 
-      if (contactInfo) {
+      if (contactItems.length > 0) {
         yPosition += 8;
         checkAddPage(8);
         doc.setFont("Poppins_reg");
         doc.setFontSize(10);
-        doc.text(contactInfo, leftMargin, yPosition);
+        wrapItems(doc, contactItems, " | ", contentWidth).forEach((line, i) => {
+          if (i > 0) yPosition += 5;
+          doc.text(line, leftMargin, yPosition);
+        });
       }
     }
 
@@ -130,20 +166,26 @@ export const Template09 = ({ formData }) => {
       doc.setTextColor(0, 0, 0);
 
       const columnWidth = contentWidth / 3;
-      const maxRows = Math.max(...skillGroups.map((g) => g.length));
-      checkAddPage(maxRows * 6 + 5);
+      const columns = skillGroups.map((group) =>
+        group.map((skill) => doc.splitTextToSize(skill.skillName.trim(), columnWidth - 4)),
+      );
+      // each skill takes its wrapped lines at 4.5mm plus the original 6mm step
+      const columnHeight = (column) =>
+        column.reduce((sum, lines) => sum + (lines.length - 1) * 4.5 + 6, 0);
+      const skillsHeight = Math.max(...columns.map(columnHeight));
+      checkAddPage(skillsHeight + 5);
 
-      skillGroups.forEach((group, index) => {
+      columns.forEach((column, index) => {
         const xPos = leftMargin + index * columnWidth;
         let localY = yPosition;
 
-        group.forEach((skill) => {
-          doc.text(skill.skillName, xPos, localY);
-          localY += 6;
+        column.forEach((lines) => {
+          lines.forEach((line, i) => doc.text(line, xPos, localY + i * 4.5));
+          localY += (lines.length - 1) * 4.5 + 6;
         });
       });
 
-      yPosition += maxRows * 6 + 5;
+      yPosition += skillsHeight + 5;
     }
 
     // Professional Experience Section - Only display if valid experience exists
@@ -155,36 +197,35 @@ export const Template09 = ({ formData }) => {
       formData.experienceDetails.forEach((exp) => {
         if (hasContent(exp.role) || hasContent(exp.companyName)) {
           checkAddPage(20);
-          doc.setFont("Poppins_bol");
-          doc.setFontSize(11);
-          if (hasContent(exp.role)) {
-            doc.text(exp.role, leftMargin, yPosition);
-          }
-          if (hasContent(exp.year)) {
-            doc.text(exp.year, pageWidth - leftMargin, yPosition, {
-              align: "right",
-            });
-          }
+          yPosition += (drawTitleRow(exp.role, exp.year) - 1) * 5.5;
 
           if (hasContent(exp.companyName)) {
-            yPosition += 6;
-            checkAddPage(6);
             doc.setFont("Poppins_reg");
-            doc.text(exp.companyName, leftMargin, yPosition);
+            doc.setFontSize(11);
+            drawLines(exp.companyName, 6);
+          }
+
+          if (hasContent(exp.location)) {
+            doc.setFont("Poppins_reg");
+            doc.setFontSize(10);
+            drawLines(exp.location, 5);
           }
 
           if (hasContent(exp.description)) {
             yPosition += 6;
-            const bullets = exp.description.split("•").filter(hasContent);
-            bullets.forEach((bullet) => {
-              const bulletText = `• ${bullet.trim()}`;
+            doc.setFont("Poppins_reg");
+            doc.setFontSize(11);
+            splitBullets(exp.description).forEach((bullet) => {
+              const bulletText = `• ${bullet}`;
               const wrappedBullet = doc.splitTextToSize(
                 bulletText,
                 contentWidth - 5
               );
-              checkAddPage(wrappedBullet.length * 5);
-              doc.text(wrappedBullet, leftMargin + 5, yPosition);
-              yPosition += wrappedBullet.length * 5;
+              wrappedBullet.forEach((line) => {
+                checkAddPage(5);
+                doc.text(line, leftMargin + 5, yPosition);
+                yPosition += 5;
+              });
             });
           }
           yPosition += 5;
@@ -201,29 +242,18 @@ export const Template09 = ({ formData }) => {
       formData.educationDetails.forEach((edu) => {
         if (hasContent(edu.course) || hasContent(edu.collegeName)) {
           checkAddPage(19);
-          doc.setFont("Poppins_bol");
-          doc.setFontSize(11);
-          if (hasContent(edu.course)) {
-            doc.text(edu.course, leftMargin, yPosition);
-          }
-          if (hasContent(edu.year)) {
-            doc.text(edu.year, pageWidth - leftMargin, yPosition, {
-              align: "right",
-            });
-          }
+          yPosition += (drawTitleRow(edu.course, edu.year) - 1) * 5.5;
 
           if (hasContent(edu.collegeName)) {
-            yPosition += 6;
-            checkAddPage(6);
             doc.setFont("Poppins_reg");
-            doc.text(edu.collegeName, leftMargin, yPosition);
+            doc.setFontSize(11);
+            drawLines(edu.collegeName, 6);
           }
 
           if (hasContent(edu.location)) {
-            yPosition += 5;
-            checkAddPage(5);
+            doc.setFont("Poppins_reg");
             doc.setFontSize(10);
-            doc.text(edu.location, leftMargin, yPosition);
+            drawLines(edu.location, 5);
           }
 
           yPosition += 8;
@@ -240,22 +270,12 @@ export const Template09 = ({ formData }) => {
       formData.projectDetails.forEach((pro) => {
         if (hasContent(pro.projectName)) {
           checkAddPage(19);
-          doc.setFont("Poppins_bol");
-          doc.setFontSize(11);
-          doc.text(pro.projectName, leftMargin, yPosition);
-
-          if (hasContent(pro.year)) {
-            doc.text(pro.year, pageWidth - leftMargin, yPosition, {
-              align: "right",
-            });
-          }
+          yPosition += (drawTitleRow(pro.projectName, pro.year) - 1) * 5.5;
 
           if (hasContent(pro.techStack)) {
-            yPosition += 5;
-            checkAddPage(5);
             doc.setFont("Poppins_reg");
             doc.setFontSize(9);
-            doc.text(pro.techStack, leftMargin, yPosition);
+            drawLines(pro.techStack, 5);
           }
 
           if (hasContent(pro.description)) {
@@ -269,11 +289,14 @@ export const Template09 = ({ formData }) => {
           }
 
           if (hasContent(pro.projectLink)) {
-            yPosition += 4;
             doc.setFontSize(8);
             doc.setFont("Poppins_reg");
             doc.setTextColor(0, 102, 204);
-            doc.textWithLink(pro.projectLink, leftMargin, yPosition, { url: pro.projectLink });
+            const url = toHref(pro.projectLink.trim());
+            doc.splitTextToSize(pro.projectLink.trim(), contentWidth).forEach((line) => {
+              yPosition += 4;
+              doc.textWithLink(line, leftMargin, yPosition, { url });
+            });
             doc.setTextColor(0, 0, 0);
           }
 
@@ -291,15 +314,7 @@ export const Template09 = ({ formData }) => {
       formData.certification.forEach((cert) => {
         if (hasContent(cert.certiName)) {
           checkAddPage(19);
-          doc.setFont("Poppins_bol");
-          doc.setFontSize(11);
-          doc.text(cert.certiName, leftMargin, yPosition);
-
-          if (hasContent(cert.year)) {
-            doc.text(cert.year, pageWidth - leftMargin, yPosition, {
-              align: "right",
-            });
-          }
+          yPosition += (drawTitleRow(cert.certiName, cert.year) - 1) * 5.5;
 
           yPosition += 8;
         }

@@ -1,6 +1,7 @@
 import merium_bol from "../../assets/fonts/merrium/Merriweather_Bold.ttf";
 import merium_reg from "../../assets/fonts/merrium/Merriweather_Regular.ttf";
 import jsPDF from "jspdf";
+import { drawLeftRight, splitBullets, toHref, wrapItems } from "./templateHelpers";
 
 export const Template06 = ({ formData }) => {
   try {
@@ -23,6 +24,8 @@ export const Template06 = ({ formData }) => {
     let yPosition = 12;
     const pageWidth = doc.internal.pageSize.width;
     const pageHeight = doc.internal.pageSize.height;
+    const rightX = pageWidth - leftMargin;
+    const contentWidth = rightX - leftMargin;
     const bottomMargin = 20;
 
     const checkAddPage = (extraSpace = 0) => {
@@ -66,8 +69,10 @@ export const Template06 = ({ formData }) => {
       doc.setFont("merium_reg");
       doc.setFontSize(9);
       doc.setTextColor(80, 80, 80);
-      const contactInfo = contactFields.join(" • ");
-      doc.text(contactInfo, pageWidth / 2, yPosition, { align: "center" });
+      wrapItems(doc, contactFields, " • ", contentWidth).forEach((line, i) => {
+        if (i > 0) yPosition += 4.5;
+        doc.text(line, pageWidth / 2, yPosition, { align: "center" });
+      });
     }
 
     // Summary Section - Only display if about text exists
@@ -109,6 +114,7 @@ export const Template06 = ({ formData }) => {
 
     if (validExperiences.length > 0) {
       yPosition += 12;
+      checkAddPage(20);
       doc.setFont("merium_bol");
       doc.setFontSize(12);
       doc.setTextColor(0, 0, 0);
@@ -123,32 +129,35 @@ export const Template06 = ({ formData }) => {
         checkAddPage(20);
         yPosition += 5;
 
-        // Role and Company - Only display if role exists
-        if (hasContent(exp.role)) {
-          doc.setFont("merium_bol");
-          doc.setFontSize(11);
-          doc.setTextColor(0, 0, 0);
-          doc.text(exp.role, leftMargin, yPosition);
-        }
-
-        // Location and Date - Only display if either exists
-        if (hasContent(exp.location) || hasContent(exp.year)) {
-          const dateLocation = [exp.location, exp.year]
-            .filter(hasContent)
-            .join(" • ");
-          doc.setFont("merium_reg", "normal");
-          doc.setFontSize(10);
-          doc.text(dateLocation, pageWidth - leftMargin, yPosition, {
-            align: "right",
-          });
-        }
+        // Role on the left, location and date on the right
+        const roleLines = drawLeftRight(doc, {
+          left: hasContent(exp.role) ? exp.role.trim() : "",
+          right: [exp.location, exp.year].filter(hasContent).join(" • "),
+          x: leftMargin,
+          rightX,
+          y: yPosition,
+          lineHeight: 5,
+          setLeftFont: () => {
+            doc.setFont("merium_bol");
+            doc.setFontSize(11);
+            doc.setTextColor(0, 0, 0);
+          },
+          setRightFont: () => {
+            doc.setFont("merium_reg", "normal");
+            doc.setFontSize(10);
+            doc.setTextColor(0, 0, 0);
+          },
+        });
+        yPosition += (roleLines - 1) * 5;
 
         // Company Name - Only display if it exists
         if (hasContent(exp.companyName)) {
-          yPosition += 5;
           doc.setFont("merium_reg");
           doc.setFontSize(10);
-          doc.text(exp.companyName, leftMargin, yPosition);
+          doc.splitTextToSize(exp.companyName, contentWidth).forEach((line) => {
+            yPosition += 5;
+            doc.text(line, leftMargin, yPosition);
+          });
         }
 
         // Description with bullet points - Only display if description exists
@@ -156,15 +165,15 @@ export const Template06 = ({ formData }) => {
           yPosition += 6;
           doc.setFont("merium_reg");
           doc.setTextColor(60, 60, 60);
-          const descriptions = exp.description
-            .split("•")
-            .filter((desc) => hasContent(desc));
+          const descriptions = splitBullets(exp.description);
 
           descriptions.forEach((desc) => {
             const wrappedText = doc.splitTextToSize(
               `• ${desc.trim()}`,
               pageWidth - 2 * leftMargin - 5
-            );            checkAddPage(wrappedText.length * 5);            doc.text(wrappedText, leftMargin + 5, yPosition);
+            );
+            checkAddPage(wrappedText.length * 5);
+            doc.text(wrappedText, leftMargin + 5, yPosition);
             yPosition += wrappedText.length * 5;
           });
         }
@@ -185,6 +194,7 @@ export const Template06 = ({ formData }) => {
 
     if (validProjects.length > 0) {
       yPosition += 12;
+      checkAddPage(20);
       doc.setFont("merium_bol");
       doc.setFontSize(12);
       doc.setTextColor(0, 0, 0);
@@ -200,20 +210,24 @@ export const Template06 = ({ formData }) => {
         yPosition += 5;
 
         // Project Name and Year - Only display if they exist
-        if (hasContent(project.projectName)) {
-          doc.setFont("merium_bol");
-          doc.setTextColor(0, 0, 0);
-          doc.setFontSize(11);
-          doc.text(project.projectName, leftMargin, yPosition);
-        }
-
-        if (hasContent(project.year)) {
-          doc.setFont("merium_reg");
-          doc.setFontSize(10);
-          doc.text(project.year, pageWidth - leftMargin, yPosition, {
-            align: "right",
-          });
-        }
+        const nameLines = drawLeftRight(doc, {
+          left: hasContent(project.projectName) ? project.projectName.trim() : "",
+          right: hasContent(project.year) ? project.year.trim() : "",
+          x: leftMargin,
+          rightX,
+          y: yPosition,
+          lineHeight: 5,
+          setLeftFont: () => {
+            doc.setFont("merium_bol");
+            doc.setTextColor(0, 0, 0);
+            doc.setFontSize(11);
+          },
+          setRightFont: () => {
+            doc.setFont("merium_reg");
+            doc.setFontSize(10);
+          },
+        });
+        yPosition += (nameLines - 1) * 5;
 
         // Project Link - Only display if it exists
         if (hasContent(project.projectLink)) {
@@ -223,7 +237,7 @@ export const Template06 = ({ formData }) => {
           doc.setFont("merium_bol");
           doc.text(clickText, leftMargin, yPosition);
           doc.link(leftMargin, yPosition - 3, doc.getTextWidth(clickText), 5, {
-            url: project.projectLink,
+            url: toHref(project.projectLink.trim()),
           });
         }
 
@@ -263,6 +277,7 @@ export const Template06 = ({ formData }) => {
 
     if (validEducation.length > 0) {
       yPosition += 12;
+      checkAddPage(20);
       doc.setFont("merium_bol");
       doc.setFontSize(12);
       doc.setTextColor(0, 0, 0);
@@ -277,30 +292,36 @@ export const Template06 = ({ formData }) => {
         checkAddPage(15);
         yPosition += 5;
 
-        // Degree and Course - Only display if course exists
-        if (hasContent(edu.course)) {
-          doc.setFont("merium_bol");
-          doc.setFontSize(11);
-          doc.text(edu.course, leftMargin, yPosition);
-        }
-
-        // Year - Only display if it exists
-        if (hasContent(edu.year)) {
-          doc.setFont("merium_reg");
-          doc.setFontSize(10);
-          doc.text(edu.year, pageWidth - leftMargin, yPosition, {
-            align: "right",
-          });
-        }
+        // Degree/course on the left, year on the right
+        const courseLines = drawLeftRight(doc, {
+          left: hasContent(edu.course) ? edu.course.trim() : "",
+          right: hasContent(edu.year) ? edu.year.trim() : "",
+          x: leftMargin,
+          rightX,
+          y: yPosition,
+          lineHeight: 5,
+          setLeftFont: () => {
+            doc.setFont("merium_bol");
+            doc.setFontSize(11);
+          },
+          setRightFont: () => {
+            doc.setFont("merium_reg");
+            doc.setFontSize(10);
+          },
+        });
+        yPosition += (courseLines - 1) * 5;
 
         // College and Location - Only display if either exists
         if (hasContent(edu.collegeName) || hasContent(edu.location)) {
-          yPosition += 5;
           doc.setFont("merium_reg");
+          doc.setFontSize(10);
           const eduLocation = [edu.collegeName, edu.location]
             .filter(hasContent)
             .join(", ");
-          doc.text(eduLocation, leftMargin, yPosition);
+          doc.splitTextToSize(eduLocation, contentWidth).forEach((line) => {
+            yPosition += 5;
+            doc.text(line, leftMargin, yPosition);
+          });
           yPosition += 4;
         }
       });
@@ -314,6 +335,7 @@ export const Template06 = ({ formData }) => {
 
     if (certifications.length > 0) {
       yPosition += 7;
+      checkAddPage(20);
       doc.setFont("merium_bol");
       doc.setFontSize(12);
       doc.text("Certifications", leftMargin, yPosition);
@@ -327,18 +349,21 @@ export const Template06 = ({ formData }) => {
       certifications.forEach((cert) => {
         checkAddPage(15);
         yPosition += 8;
-        doc.setFont("merium_reg");
-        doc.setFontSize(10);
-
-        if (hasContent(cert.certiName)) {
-          doc.text(cert.certiName, leftMargin, yPosition);
-        }
-
-        if (hasContent(cert.year)) {
-          doc.text(cert.year, pageWidth - leftMargin, yPosition, {
-            align: "right",
-          });
-        }
+        const setCertFont = () => {
+          doc.setFont("merium_reg");
+          doc.setFontSize(10);
+        };
+        const certLines = drawLeftRight(doc, {
+          left: hasContent(cert.certiName) ? cert.certiName.trim() : "",
+          right: hasContent(cert.year) ? cert.year.trim() : "",
+          x: leftMargin,
+          rightX,
+          y: yPosition,
+          lineHeight: 5,
+          setLeftFont: setCertFont,
+          setRightFont: setCertFont,
+        });
+        yPosition += (certLines - 1) * 5;
       });
     }
 
@@ -348,6 +373,7 @@ export const Template06 = ({ formData }) => {
 
     if (validSkills.length > 0) {
       yPosition += 12;
+      checkAddPage(20);
       doc.setFont("merium_bol");
       doc.setFontSize(12);
       doc.setTextColor(0, 0, 0);
@@ -371,6 +397,7 @@ export const Template06 = ({ formData }) => {
         skillList,
         pageWidth - 2 * leftMargin
       );
+      checkAddPage(wrappedSkills.length * 5);
       doc.text(wrappedSkills, leftMargin, yPosition);
       yPosition += wrappedSkills.length * 5;
     }

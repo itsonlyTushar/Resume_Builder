@@ -1,6 +1,7 @@
 import jsPDF from "jspdf";
 import mont_reg from "../../assets/fonts/montserrat/Montserrat-Regular.ttf";
 import mont_bol from "../../assets/fonts/montserrat/Montserrat-Bold.ttf";
+import { drawLeftRight, splitBullets, toHref, wrapItems } from "./templateHelpers";
 
 /**
  * Template18 – "Clean Modern"
@@ -35,9 +36,40 @@ export const Template18 = ({ formData }) => {
       }
     };
 
+    // Bold title on the left, date on the right; returns the lines the title took
+    const drawTitleRow = (title, date, titleSize = 10.5) =>
+      drawLeftRight(doc, {
+        left: hasContent(title) ? title.trim() : "",
+        right: hasContent(date) ? date.trim() : "",
+        x: leftMargin,
+        rightX: pageWidth - leftMargin,
+        y,
+        lineHeight: 5,
+        setLeftFont: () => {
+          doc.setFont("mont_bol");
+          doc.setFontSize(titleSize);
+        },
+        setRightFont: () => {
+          doc.setFont("mont_reg");
+          doc.setFontSize(9);
+        },
+      });
+
+    // Grey sub-line under a title, wrapped to the content width
+    const drawSubLine = (text) => {
+      doc.setFont("mont_reg");
+      doc.setFontSize(9);
+      doc.setTextColor(90, 90, 90);
+      doc.splitTextToSize(text, contentWidth).forEach((line, i) => {
+        if (i > 0) y += 4;
+        doc.text(line, leftMargin, y);
+      });
+      doc.setTextColor(0, 0, 0);
+    };
+
     const addSection = (title) => {
       y += 4;
-      checkPage(14);
+      checkPage(24); // heading plus the first entry below it
       doc.setFont("mont_bol");
       doc.setFontSize(11);
       doc.setTextColor(accentR, accentG, accentB);
@@ -57,12 +89,12 @@ export const Template18 = ({ formData }) => {
       doc.setFont("mont_bol");
       doc.setFontSize(26);
       doc.setTextColor(30, 30, 30);
-      doc.text(
-        `${d.firstName || ""} ${d.lastName || ""}`.trim(),
-        pageWidth / 2,
-        y,
-        { align: "center" }
-      );
+      doc
+        .splitTextToSize(`${d.firstName || ""} ${d.lastName || ""}`.trim(), contentWidth)
+        .forEach((line, i) => {
+          if (i > 0) y += 10;
+          doc.text(line, pageWidth / 2, y, { align: "center" });
+        });
       y += 8;
     }
 
@@ -72,9 +104,10 @@ export const Template18 = ({ formData }) => {
       doc.setFont("mont_reg");
       doc.setFontSize(9);
       doc.setTextColor(80, 80, 80);
-      const line = contacts.join("  |  ");
-      doc.text(line, pageWidth / 2, y, { align: "center" });
-      y += 4;
+      wrapItems(doc, contacts, "  |  ", contentWidth).forEach((line) => {
+        doc.text(line, pageWidth / 2, y, { align: "center" });
+        y += 4;
+      });
     }
 
     // Portfolio / GitHub on second line if present
@@ -83,8 +116,10 @@ export const Template18 = ({ formData }) => {
       doc.setFont("mont_reg");
       doc.setFontSize(9);
       doc.setTextColor(80, 80, 80);
-      doc.text(links.join("  |  "), pageWidth / 2, y, { align: "center" });
-      y += 4;
+      wrapItems(doc, links, "  |  ", contentWidth).forEach((line) => {
+        doc.text(line, pageWidth / 2, y, { align: "center" });
+        y += 4;
+      });
     }
 
     y += 2;
@@ -123,36 +158,20 @@ export const Template18 = ({ formData }) => {
       addSection("Experience");
       validExp.forEach((exp) => {
         checkPage(18);
-        // Role — bold
-        if (hasContent(exp.role)) {
-          doc.setFont("mont_bol");
-          doc.setFontSize(10.5);
-          doc.text(exp.role, leftMargin, y);
-        }
-        // Year — right-aligned
-        if (hasContent(exp.year)) {
-          doc.setFont("mont_reg");
-          doc.setFontSize(9);
-          doc.text(exp.year, pageWidth - leftMargin, y, { align: "right" });
-        }
-        y += 5;
+        // Role (bold) with the year right-aligned
+        y += (drawTitleRow(exp.role, exp.year) - 1) * 5 + 5;
         // Company + location
         const sub = [exp.companyName, exp.location].filter(hasContent).join("  –  ");
         if (sub) {
-          doc.setFont("mont_reg");
-          doc.setFontSize(9);
-          doc.setTextColor(90, 90, 90);
-          doc.text(sub, leftMargin, y);
-          doc.setTextColor(0, 0, 0);
+          drawSubLine(sub);
           y += 5;
         }
         // Description bullets
         if (hasContent(exp.description)) {
           doc.setFont("mont_reg");
           doc.setFontSize(9);
-          const bullets = exp.description.split("•").filter((s) => s.trim().length > 0);
-          bullets.forEach((b) => {
-            const bText = doc.splitTextToSize(`•  ${b.trim()}`, contentWidth - 4);
+          splitBullets(exp.description).forEach((b) => {
+            const bText = doc.splitTextToSize(`•  ${b}`, contentWidth - 4);
             checkPage(bText.length * 4);
             doc.text(bText, leftMargin + 2, y);
             y += bText.length * 4;
@@ -168,25 +187,9 @@ export const Template18 = ({ formData }) => {
       formData.educationDetails.forEach((edu) => {
         if (![edu.collegeName, edu.course, edu.year, edu.location].some(hasContent)) return;
         checkPage(14);
-        if (hasContent(edu.collegeName)) {
-          doc.setFont("mont_bol");
-          doc.setFontSize(10.5);
-          doc.text(edu.collegeName, leftMargin, y);
-        }
-        if (hasContent(edu.year)) {
-          doc.setFont("mont_reg");
-          doc.setFontSize(9);
-          doc.text(edu.year, pageWidth - leftMargin, y, { align: "right" });
-        }
-        y += 5;
+        y += (drawTitleRow(edu.collegeName, edu.year) - 1) * 5 + 5;
         const sub = [edu.course, edu.location].filter(hasContent).join("  –  ");
-        if (sub) {
-          doc.setFont("mont_reg");
-          doc.setFontSize(9);
-          doc.setTextColor(90, 90, 90);
-          doc.text(sub, leftMargin, y);
-          doc.setTextColor(0, 0, 0);
-        }
+        if (sub) drawSubLine(sub);
         y += 6;
       });
     }
@@ -200,23 +203,9 @@ export const Template18 = ({ formData }) => {
       addSection("Projects");
       validProjects.forEach((pro) => {
         checkPage(16);
-        if (hasContent(pro.projectName)) {
-          doc.setFont("mont_bol");
-          doc.setFontSize(10.5);
-          doc.text(pro.projectName, leftMargin, y);
-        }
-        if (hasContent(pro.year)) {
-          doc.setFont("mont_reg");
-          doc.setFontSize(9);
-          doc.text(pro.year, pageWidth - leftMargin, y, { align: "right" });
-        }
-        y += 5;
+        y += (drawTitleRow(pro.projectName, pro.year) - 1) * 5 + 5;
         if (hasContent(pro.techStack)) {
-          doc.setFont("mont_reg");
-          doc.setFontSize(9);
-          doc.setTextColor(90, 90, 90);
-          doc.text(pro.techStack, leftMargin, y);
-          doc.setTextColor(0, 0, 0);
+          drawSubLine(pro.techStack);
           y += 5;
         }
         if (hasContent(pro.description)) {
@@ -231,9 +220,12 @@ export const Template18 = ({ formData }) => {
           doc.setFont("mont_reg");
           doc.setFontSize(8.5);
           doc.setTextColor(accentR, accentG, accentB);
-          doc.textWithLink(pro.projectLink, leftMargin + 2, y, { url: pro.projectLink });
+          const url = toHref(pro.projectLink.trim());
+          doc.splitTextToSize(pro.projectLink.trim(), contentWidth - 2).forEach((line) => {
+            doc.textWithLink(line, leftMargin + 2, y, { url });
+            y += 4;
+          });
           doc.setTextColor(0, 0, 0);
-          y += 4;
         }
         y += 3;
       });
@@ -246,15 +238,7 @@ export const Template18 = ({ formData }) => {
       addSection("Certifications");
       validCerts.forEach((cer) => {
         checkPage(8);
-        doc.setFont("mont_bol");
-        doc.setFontSize(10);
-        if (hasContent(cer.certiName)) doc.text(cer.certiName, leftMargin, y);
-        if (hasContent(cer.year)) {
-          doc.setFont("mont_reg");
-          doc.setFontSize(9);
-          doc.text(cer.year, pageWidth - leftMargin, y, { align: "right" });
-        }
-        y += 6;
+        y += (drawTitleRow(cer.certiName, cer.year, 10) - 1) * 5 + 6;
       });
     }
 

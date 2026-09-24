@@ -1,6 +1,7 @@
 import jsPDF from "jspdf";
 import inter_reg from "../../assets/fonts/inter/InterTight_Regular.ttf";
 import inter_bol from "../../assets/fonts/inter/InterTight_Bold.ttf";
+import { drawLeftRight, splitBullets, toHref } from "./templateHelpers";
 
 /**
  * Template19 – "Elegant Sidebar"
@@ -34,17 +35,69 @@ export const Template19 = ({ formData }) => {
       doc.rect(0, 0, sidebarW, pageHeight, "F");
     };
 
-    const checkRightPage = (need = 0) => {
-      if (rightY + need > pageHeight - bottomMargin) {
+    let leftPage = 1;
+    let rightPage = 1;
+
+    // Moves to page n, adding pages (with the sidebar background) as needed
+    const goToPage = (n) => {
+      while (doc.getNumberOfPages() < n) {
         doc.addPage();
         drawSidebar();
+      }
+      doc.setPage(n);
+    };
+
+    const checkLeftPage = (need = 0) => {
+      if (leftY + need > pageHeight - bottomMargin) {
+        leftPage += 1;
+        goToPage(leftPage);
+        leftY = 22;
+      }
+    };
+
+    const checkRightPage = (need = 0) => {
+      if (rightY + need > pageHeight - bottomMargin) {
+        rightPage += 1;
+        goToPage(rightPage);
         rightY = 22;
       }
     };
 
+    // Bold title on the left, grey date on the right; returns the lines the title took
+    const drawTitleRow = (title, date) =>
+      drawLeftRight(doc, {
+        left: hasContent(title) ? title.trim() : "",
+        right: hasContent(date) ? date.trim() : "",
+        x: rightStart,
+        rightX: rightMargin,
+        y: rightY,
+        lineHeight: 4.5,
+        setLeftFont: () => {
+          doc.setFont("inter_bol");
+          doc.setFontSize(10);
+          doc.setTextColor(30, 30, 30);
+        },
+        setRightFont: () => {
+          doc.setFont("inter_reg");
+          doc.setFontSize(8.5);
+          doc.setTextColor(120, 120, 120);
+        },
+      });
+
+    // Wrapped lines in the right column; leaves rightY on the last line
+    const drawRightLines = (text, lineHeight) => {
+      doc.splitTextToSize(text, rightContentW).forEach((line, i) => {
+        if (i > 0) {
+          rightY += lineHeight;
+          checkRightPage(0);
+        }
+        doc.text(line, rightStart, rightY);
+      });
+    };
+
     const addRightHeader = (title) => {
       rightY += 3;
-      checkRightPage(12);
+      checkRightPage(20); // heading plus the first entry below it
       doc.setFont("inter_bol");
       doc.setFontSize(11);
       doc.setTextColor(42, 42, 50);
@@ -58,6 +111,7 @@ export const Template19 = ({ formData }) => {
 
     const addLeftHeader = (title) => {
       leftY += 4;
+      checkLeftPage(16);
       doc.setFont("inter_bol");
       doc.setFontSize(9.5);
       doc.setTextColor(220, 185, 120); // warm gold
@@ -77,18 +131,25 @@ export const Template19 = ({ formData }) => {
     // ── Name (sidebar top) ──
     if (hasContent(d.firstName) || hasContent(d.lastName)) {
       doc.setFont("inter_bol");
-      doc.setFontSize(18);
       doc.setTextColor(255, 255, 255);
-      const first = d.firstName || "";
-      const last = d.lastName || "";
-      if (hasContent(first)) {
-        doc.text(first.toUpperCase(), 8, leftY);
-        leftY += 7;
+      const nameParts = [d.firstName, d.lastName]
+        .filter(hasContent)
+        .map((part) => part.trim().toUpperCase());
+      const nameWidth = sidebarW - 14;
+      const widestWord = () =>
+        Math.max(...nameParts.join(" ").split(/\s+/).map((w) => doc.getTextWidth(w)));
+      let nameSize = 18;
+      doc.setFontSize(nameSize);
+      while (nameSize > 11 && widestWord() > nameWidth) {
+        nameSize -= 1;
+        doc.setFontSize(nameSize);
       }
-      if (hasContent(last)) {
-        doc.text(last.toUpperCase(), 8, leftY);
-        leftY += 7;
-      }
+      nameParts.forEach((part) => {
+        doc.splitTextToSize(part, nameWidth).forEach((line) => {
+          doc.text(line, 8, leftY);
+          leftY += nameSize * 0.39;
+        });
+      });
     }
 
     // ── Contact (sidebar) ──
@@ -106,11 +167,12 @@ export const Template19 = ({ formData }) => {
       doc.setFont("inter_reg");
       doc.setFontSize(8);
       contactItems.forEach((item) => {
+        const wrapped = doc.splitTextToSize(item.value, sidebarW - 14);
+        checkLeftPage(4 + wrapped.length * 3.5);
         doc.setTextColor(180, 180, 180);
         doc.text(item.label, 8, leftY);
         leftY += 4;
         doc.setTextColor(255, 255, 255);
-        const wrapped = doc.splitTextToSize(item.value, sidebarW - 14);
         doc.text(wrapped, 8, leftY);
         leftY += wrapped.length * 3.5 + 3;
       });
@@ -125,6 +187,7 @@ export const Template19 = ({ formData }) => {
       doc.setTextColor(255, 255, 255);
       validSkills.forEach((skill) => {
         const wrapped = doc.splitTextToSize(skill.skillName.trim(), sidebarW - 14);
+        checkLeftPage(wrapped.length * 3.5);
         doc.text(wrapped, 10, leftY);
         leftY += wrapped.length * 3.5 + 2.5;
       });
@@ -139,6 +202,7 @@ export const Template19 = ({ formData }) => {
       doc.setFontSize(8);
       doc.setTextColor(255, 255, 255);
       validCerts.forEach((cer) => {
+        checkLeftPage(8);
         if (hasContent(cer.certiName)) {
           doc.setFont("inter_bol");
           const wrapped = doc.splitTextToSize(cer.certiName, sidebarW - 14);
@@ -157,6 +221,7 @@ export const Template19 = ({ formData }) => {
     }
 
     // ═══════════════════ RIGHT COLUMN ═══════════════════
+    goToPage(rightPage);
 
     // ── Professional Summary ──
     if (hasContent(d.about)) {
@@ -179,35 +244,21 @@ export const Template19 = ({ formData }) => {
       addRightHeader("Experience");
       validExp.forEach((exp) => {
         checkRightPage(18);
-        // Role
-        if (hasContent(exp.role)) {
-          doc.setFont("inter_bol");
-          doc.setFontSize(10);
-          doc.setTextColor(30, 30, 30);
-          doc.text(exp.role, rightStart, rightY);
-        }
-        if (hasContent(exp.year)) {
-          doc.setFont("inter_reg");
-          doc.setFontSize(8.5);
-          doc.setTextColor(120, 120, 120);
-          doc.text(exp.year, rightMargin, rightY, { align: "right" });
-        }
-        rightY += 5;
+        rightY += (drawTitleRow(exp.role, exp.year) - 1) * 4.5 + 5;
         const sub = [exp.companyName, exp.location].filter(hasContent).join(" – ");
         if (sub) {
           doc.setFont("inter_reg");
           doc.setFontSize(9);
           doc.setTextColor(100, 100, 100);
-          doc.text(sub, rightStart, rightY);
+          drawRightLines(sub, 4);
           rightY += 5;
         }
         if (hasContent(exp.description)) {
           doc.setFont("inter_reg");
           doc.setFontSize(9);
           doc.setTextColor(50, 50, 50);
-          const bullets = exp.description.split("•").filter((s) => s.trim().length > 0);
-          bullets.forEach((b) => {
-            const bt = doc.splitTextToSize(`•  ${b.trim()}`, rightContentW - 4);
+          splitBullets(exp.description).forEach((b) => {
+            const bt = doc.splitTextToSize(`•  ${b}`, rightContentW - 4);
             checkRightPage(bt.length * 4);
             doc.text(bt, rightStart + 2, rightY);
             rightY += bt.length * 4;
@@ -226,25 +277,13 @@ export const Template19 = ({ formData }) => {
       addRightHeader("Education");
       validEdu.forEach((edu) => {
         checkRightPage(14);
-        if (hasContent(edu.collegeName)) {
-          doc.setFont("inter_bol");
-          doc.setFontSize(10);
-          doc.setTextColor(30, 30, 30);
-          doc.text(edu.collegeName, rightStart, rightY);
-        }
-        if (hasContent(edu.year)) {
-          doc.setFont("inter_reg");
-          doc.setFontSize(8.5);
-          doc.setTextColor(120, 120, 120);
-          doc.text(edu.year, rightMargin, rightY, { align: "right" });
-        }
-        rightY += 5;
+        rightY += (drawTitleRow(edu.collegeName, edu.year) - 1) * 4.5 + 5;
         const sub = [edu.course, edu.location].filter(hasContent).join(" – ");
         if (sub) {
           doc.setFont("inter_reg");
           doc.setFontSize(9);
           doc.setTextColor(100, 100, 100);
-          doc.text(sub, rightStart, rightY);
+          drawRightLines(sub, 4);
         }
         rightY += 6;
       });
@@ -259,24 +298,12 @@ export const Template19 = ({ formData }) => {
       addRightHeader("Projects");
       validProjects.forEach((pro) => {
         checkRightPage(16);
-        if (hasContent(pro.projectName)) {
-          doc.setFont("inter_bol");
-          doc.setFontSize(10);
-          doc.setTextColor(30, 30, 30);
-          doc.text(pro.projectName, rightStart, rightY);
-        }
-        if (hasContent(pro.year)) {
-          doc.setFont("inter_reg");
-          doc.setFontSize(8.5);
-          doc.setTextColor(120, 120, 120);
-          doc.text(pro.year, rightMargin, rightY, { align: "right" });
-        }
-        rightY += 5;
+        rightY += (drawTitleRow(pro.projectName, pro.year) - 1) * 4.5 + 5;
         if (hasContent(pro.techStack)) {
           doc.setFont("inter_reg");
           doc.setFontSize(8.5);
           doc.setTextColor(100, 100, 100);
-          doc.text(pro.techStack, rightStart, rightY);
+          drawRightLines(pro.techStack, 4);
           rightY += 5;
         }
         if (hasContent(pro.description)) {
@@ -292,9 +319,12 @@ export const Template19 = ({ formData }) => {
           doc.setFont("inter_reg");
           doc.setFontSize(8);
           doc.setTextColor(70, 130, 180);
-          doc.textWithLink(pro.projectLink, rightStart + 2, rightY, { url: pro.projectLink });
+          const url = toHref(pro.projectLink.trim());
+          doc.splitTextToSize(pro.projectLink.trim(), rightContentW - 2).forEach((line) => {
+            doc.textWithLink(line, rightStart + 2, rightY, { url });
+            rightY += 4;
+          });
           doc.setTextColor(0, 0, 0);
-          rightY += 4;
         }
         rightY += 3;
       });

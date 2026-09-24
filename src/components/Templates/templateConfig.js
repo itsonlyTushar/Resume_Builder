@@ -43,6 +43,21 @@ const TEMPLATE_REGISTRY = {
   121: Template21,
 };
 
+// Templates expect text fields, but AI autofill can return numbers (e.g. a
+// year). Only the developer template renders **bold** markers, so the rest
+// get them stripped.
+const cleanFormData = (value, keepBold) => {
+  if (typeof value === "number") return String(value);
+  if (typeof value === "string") return keepBold ? value : value.replaceAll("**", "");
+  if (Array.isArray(value)) return value.map((item) => cleanFormData(item, keepBold));
+  if (value && typeof value === "object") {
+    return Object.fromEntries(
+      Object.entries(value).map(([key, val]) => [key, cleanFormData(val, keepBold)]),
+    );
+  }
+  return value;
+};
+
 // generates template on selected templates
 export const generatePDF = ({ formData }) => {
   const selected_template = formData.selected_template || 101;
@@ -54,7 +69,9 @@ export const generatePDF = ({ formData }) => {
     throw new Error(`Template ${selected_template} is not implemented`);
   }
 
-  return templateGenerator({ formData });
+  return templateGenerator({
+    formData: cleanFormData(formData, selected_template === devTemplate.id),
+  });
 };
 
 export const devTemplate = {

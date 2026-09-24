@@ -13,6 +13,7 @@ const initialState = {
         about: "",
         github: "",
         portfolio: "",
+        location: "",
         id: 1,
       },
     ],
@@ -52,7 +53,7 @@ const initialState = {
       { certiName: "", year: "", id: 1 },
     ],
     selected_template: null,
-    sectionOrder: ["description", "education", "projects", "experience", "skills"],
+    sectionOrder: ["description", "skills", "experience", "projects", "education"],
   },
   editingResume: null, // { documentId, fileId } when editing an existing resume
 };

@@ -224,6 +224,10 @@ function ProjectDetails() {
                       <i className="mr-1 ri-alert-line"></i>Enter a valid input
                     </p>
                   )}
+                  <p className="text-xs text-gray-500 mt-1">
+                    One bullet per line. Wrap keywords in **double asterisks**
+                    to make them bold
+                  </p>
                 </div>
               </div>
             )}

@@ -18,6 +18,9 @@ function ExperinceDetails() {
   const experienceDetails = useSelector(
     (state) => state.resumeBuilder.form_data.experienceDetails
   );
+  const selectedTemplate = useSelector(
+    (state) => state.resumeBuilder.form_data.selected_template
+  );
   const dispatch = useDispatch();
 
   const handleAddField = useCallback((arrState) => {
@@ -206,6 +209,12 @@ function ExperinceDetails() {
               {errors.experienceDetails?.[index]?.description && (
                 <p className="text-red-400 mt-1">
                   <i className="mr-1 ri-alert-line"></i>Enter a valid input
+                </p>
+              )}
+              {selectedTemplate === 117 && (
+                <p className="text-xs text-gray-500 mt-1">
+                  One bullet per line. Wrap keywords in **double asterisks** to
+                  make them bold
                 </p>
               )}
             </div>

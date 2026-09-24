@@ -19,8 +19,8 @@ const SECTION_LABELS = {
   description: "Summary",
   education: "Education",
   projects: "Projects",
-  experience: "Experience",
-  skills: "Technical Skills",
+  experience: "Work Experience",
+  skills: "Skills",
 };
 
 function SortableSection({ id }) {

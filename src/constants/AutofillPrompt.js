@@ -12,7 +12,8 @@ Structure:
       "about": "",
       "github": "",
       "portfolio": "",
-      "id": 1 
+      "location": "",
+      "id": 1
     }
   ],
   "educationDetails": [

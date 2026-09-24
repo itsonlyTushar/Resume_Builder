@@ -262,11 +262,41 @@ function PersonalDetails() {
                   className="mr-1 ri-alert-line"></i>Enter a Valid Input
                 </p>
               )}
+              {selectedTemplate === 117 && (
+                <p className="text-xs text-gray-500 mt-1">
+                  Wrap keywords in **double asterisks** to make them bold
+                </p>
+              )}
             </div>
           </div>
-          
-          { selectedTemplate === 117 && 
+
+          { selectedTemplate === 117 &&
                     <div className="grid grid-cols-1 sm:grid-cols-2">
+            <div className="p-2 ml-2">
+              <label
+                className="text-black font-bold text-md"
+                htmlFor={`personalDetails.${index}.location`}
+              >
+                Location
+              </label>
+              <input
+                className="outline-none mt-1 p-3 flex items-center bg-white border border-gray-300 hover:border-gray-400 w-min rounded-xl text-black transition-colors"
+                name={`personalDetails.${index}.location`}
+                type="text"
+                placeholder="City, State, Country"
+                {...register(`personalDetails.${index}.location`, {
+                  required: false,
+                  onChange: (e) =>
+                    handleChange(
+                      index,
+                      "location",
+                      e.target.value,
+                      "personalDetails"
+                    ),
+                })}
+              />
+            </div>
+
             <div className="p-2 ml-2">
               <label
                 className="text-black font-bold text-md"

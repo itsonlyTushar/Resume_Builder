@@ -1,6 +1,7 @@
 import jsPDF from "jspdf";
 import Inter_reg from "../../assets/fonts/inter/InterTight_Regular.ttf";
 import Inter_bol from "../../assets/fonts/inter/InterTight_Bold.ttf";
+import { drawLeftRight, splitBullets, toHref, wrapItems } from "./templateHelpers";
 
 export const Template07 = ({ formData }) => {
   const doc = new jsPDF({
@@ -19,6 +20,8 @@ export const Template07 = ({ formData }) => {
     let yPosition = 15;
     const pageWidth = doc.internal.pageSize.width;
     const pageHeight = doc.internal.pageSize.height;
+    const rightX = pageWidth - leftMargin;
+    const contentWidth = rightX - leftMargin;
     const bottomMargin = 20;
 
     // Set mint green background
@@ -56,6 +59,7 @@ export const Template07 = ({ formData }) => {
     // Helper function to add section header
     const addSectionHeader = (title) => {
       yPosition += 5;
+      checkAddPage(20);
       doc.setFont("Inter_bol");
       doc.setFontSize(12);
       doc.setTextColor(27, 77, 62);
@@ -80,7 +84,10 @@ export const Template07 = ({ formData }) => {
         .filter(hasContent)
         .join(" ")
         .toUpperCase();
-      doc.text(fullName, leftMargin, yPosition);
+      doc.splitTextToSize(fullName, contentWidth).forEach((line, i) => {
+        if (i > 0) yPosition += 9;
+        doc.text(line, leftMargin, yPosition);
+      });
 
       // Contact Information - Only show if any contact detail exists
       const contactFields = [
@@ -93,19 +100,26 @@ export const Template07 = ({ formData }) => {
         yPosition += 8;
         doc.setFontSize(9);
         doc.setFont("Inter_reg");
-        doc.text(contactFields.join(" | "), leftMargin, yPosition);
+        wrapItems(doc, contactFields, " | ", contentWidth).forEach((line, i) => {
+          if (i > 0) yPosition += 4;
+          doc.text(line, leftMargin, yPosition);
+        });
       }
     }
 
     // Professional Summary - Only if about text exists
     if (hasContent(details.about)) {
       yPosition += 10;
+      doc.setFont("Inter_reg");
+      doc.setFontSize(9);
       const summary = doc.splitTextToSize(
         details.about,
         pageWidth - 2 * leftMargin
       );
-      doc.text(summary, leftMargin, yPosition);
-      yPosition += summary.length * 3;
+      summary.forEach((line, i) => {
+        doc.text(line, leftMargin, yPosition + i * 4);
+      });
+      yPosition += summary.length * 4 - 1;
       addSectionDivider();
     }
 
@@ -120,7 +134,10 @@ export const Template07 = ({ formData }) => {
           doc.setFont("Inter_bol");
           doc.setFontSize(12);
           if (hasContent(exp.role)) {
-            doc.text(exp.role, leftMargin, yPosition);
+            doc.splitTextToSize(exp.role, contentWidth).forEach((line, i) => {
+              if (i > 0) yPosition += 5;
+              doc.text(line, leftMargin, yPosition);
+            });
           }
 
           const expDetails = [exp.companyName, exp.location, exp.year]
@@ -128,23 +145,28 @@ export const Template07 = ({ formData }) => {
             .join(" | ");
 
           if (expDetails) {
-            yPosition += 5;
             doc.setFont("Inter_reg");
             doc.setFontSize(10);
-            doc.text(expDetails, leftMargin, yPosition);
+            doc.splitTextToSize(expDetails, contentWidth).forEach((line) => {
+              yPosition += 5;
+              doc.text(line, leftMargin, yPosition);
+            });
           }
 
           if (hasContent(exp.description)) {
             yPosition += 8;
-            const bullets = exp.description.split("•").filter(hasContent);
-            bullets.forEach((bullet) => {
-              const bulletPoint = `• ${bullet.trim()}`;
+            doc.setFont("Inter_reg");
+            doc.setFontSize(9);
+            splitBullets(exp.description).forEach((bullet) => {
               const wrappedBullet = doc.splitTextToSize(
-                bulletPoint,
+                `• ${bullet}`,
                 pageWidth - 2 * leftMargin - 5
-              );              checkAddPage(wrappedBullet.length * 3);              doc.setFontSize(9);
-              doc.text(wrappedBullet, leftMargin + 5, yPosition);
-              yPosition += wrappedBullet.length * 3;
+              );
+              checkAddPage(wrappedBullet.length * 4);
+              wrappedBullet.forEach((line, i) => {
+                doc.text(line, leftMargin + 5, yPosition + i * 4);
+              });
+              yPosition += wrappedBullet.length * 4;
             });
           }
         }
@@ -165,18 +187,22 @@ export const Template07 = ({ formData }) => {
       addSectionHeader("Certifications");
       certifications.forEach((cert) => {
         yPosition += 6;
-        doc.setFont("Inter_reg");
-        doc.setFontSize(10);
-
-        if (hasContent(cert.certiName)) {
-          doc.text(cert.certiName, leftMargin, yPosition);
-        }
-
-        if (hasContent(cert.year)) {
-          doc.text(cert.year, pageWidth - leftMargin, yPosition, {
-            align: "right",
-          });
-        }
+        checkAddPage(5);
+        const setCertFont = () => {
+          doc.setFont("Inter_reg");
+          doc.setFontSize(10);
+        };
+        const certLines = drawLeftRight(doc, {
+          left: hasContent(cert.certiName) ? cert.certiName.trim() : "",
+          right: hasContent(cert.year) ? cert.year.trim() : "",
+          x: leftMargin,
+          rightX,
+          y: yPosition,
+          lineHeight: 5,
+          setLeftFont: setCertFont,
+          setRightFont: setCertFont,
+        });
+        yPosition += (certLines - 1) * 5;
       });
       addSectionDivider();
 
@@ -198,7 +224,19 @@ export const Template07 = ({ formData }) => {
             .join(" | ");
 
           if (projectHeader) {
-            doc.text(projectHeader, leftMargin, yPosition);
+            doc.splitTextToSize(projectHeader, contentWidth).forEach((line, i) => {
+              if (i > 0) yPosition += 5;
+              doc.text(line, leftMargin, yPosition);
+            });
+          }
+
+          if (hasContent(pro.techStack)) {
+            doc.setFont("Inter_reg");
+            doc.setFontSize(9.5);
+            doc.splitTextToSize(pro.techStack, contentWidth).forEach((line) => {
+              yPosition += 4.5;
+              doc.text(line, leftMargin, yPosition);
+            });
           }
 
           if (hasContent(pro.projectLink)) {
@@ -210,18 +248,20 @@ export const Template07 = ({ formData }) => {
               yPosition + 3,
               doc.getTextWidth(clickText),
               5,
-              { url: pro.projectLink }
+              { url: toHref(pro.projectLink.trim()) }
             );
           }
 
           if (hasContent(pro.description)) {
-            yPosition += 8;
+            yPosition += hasContent(pro.projectLink) ? 9 : 5;
             doc.setFont("Inter_reg");
             doc.setFontSize(9);
             const descWrapped = doc.splitTextToSize(pro.description, pageWidth - 2 * leftMargin - 10);
-            checkAddPage(descWrapped.length * 3.5);
-            doc.text(descWrapped, leftMargin + 5, yPosition);
-            yPosition += descWrapped.length * 3.5;
+            checkAddPage(descWrapped.length * 4);
+            descWrapped.forEach((line, i) => {
+              doc.text(line, leftMargin + 5, yPosition + i * 4);
+            });
+            yPosition += (descWrapped.length - 1) * 4;
           }
         }
       });
@@ -240,7 +280,10 @@ export const Template07 = ({ formData }) => {
           doc.setFont("Inter_bol");
           doc.setFontSize(12);
           if (hasContent(edu.course)) {
-            doc.text(edu.course, leftMargin, yPosition);
+            doc.splitTextToSize(edu.course, contentWidth).forEach((line, i) => {
+              if (i > 0) yPosition += 5;
+              doc.text(line, leftMargin, yPosition);
+            });
           }
 
           const eduDetails = [edu.collegeName, edu.location, edu.year]
@@ -248,10 +291,12 @@ export const Template07 = ({ formData }) => {
             .join(" | ");
 
           if (eduDetails) {
-            yPosition += 8;
             doc.setFont("Inter_reg");
             doc.setFontSize(10);
-            doc.text(eduDetails, leftMargin, yPosition);
+            doc.splitTextToSize(eduDetails, contentWidth).forEach((line, i) => {
+              yPosition += i === 0 ? 8 : 5;
+              doc.text(line, leftMargin, yPosition);
+            });
           }
         }
       });
@@ -270,19 +315,27 @@ export const Template07 = ({ formData }) => {
       doc.setFont("Inter_reg");
       doc.setFontSize(9);
 
-      // Create three columns for skills
+      // Create three columns for skills, filled top to bottom
       const skillsPerColumn = Math.ceil(skills.length / 3);
       const columnWidth = (pageWidth - 2 * leftMargin) / 3;
-      
-      skills.forEach((skill, index) => {
-        const columnIndex = Math.floor(index / skillsPerColumn);
-        const xPosition = leftMargin + columnWidth * columnIndex;
-        const localY = yPosition + (index % skillsPerColumn) * 8;
 
-        doc.text(`• ${skill.skillName}`, xPosition, localY);
-      });
+      for (let row = 0; row < skillsPerColumn; row++) {
+        const cells = [0, 1, 2]
+          .map((column) => skills[column * skillsPerColumn + row])
+          .map((skill) =>
+            skill ? doc.splitTextToSize(`• ${skill.skillName.trim()}`, columnWidth - 4) : [],
+          );
+        const rowLines = Math.max(...cells.map((lines) => lines.length));
+        checkAddPage(rowLines * 4);
+        cells.forEach((lines, column) => {
+          lines.forEach((line, i) => {
+            doc.text(line, leftMargin + columnWidth * column, yPosition + i * 4);
+          });
+        });
+        yPosition += (rowLines - 1) * 4 + 8;
+      }
 
-      yPosition += skillsPerColumn * 8 + 5;
+      yPosition += 5;
     }
 
     return doc;

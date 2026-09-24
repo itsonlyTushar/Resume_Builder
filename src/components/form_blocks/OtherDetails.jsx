@@ -67,12 +67,16 @@ function OtherDetails() {
   const categories = [
     { name: "Languages" },
     { name: "Frameworks & Runtime" },
+    { name: "AI & Retrieval" },
+    { name: "Libraries & UI" },
     { name: "Libraries & Tools" },
     { name: "UI & Design" },
     { name: "Databases" },
     { name: "Cloud Platforms" },
     { name: "Hosting & Infrastructure" },
+    { name: "DevOps & IaC" },
     { name: "DevOps & CI/CD" },
+    { name: "Testing & Tooling" },
     { name: "Testing & QA" },
     { name: "Mobile Development" },
     { name: "Data Science & ML" },
@@ -85,6 +89,11 @@ function OtherDetails() {
     <>
       {/* skill section */}
       <h1 className="mb-7 text-4xl font-semibold ml-2 mt-3">Skills Details</h1>
+      <datalist id="skill-categories">
+        {categories.map((category) => (
+          <option key={category.name} value={category.name} />
+        ))}
+      </datalist>
       {skills.map((detail, index) => (
         <div key={detail.id}>
           <div className="grid grid-cols-2 sm:grid-cols-1">
@@ -95,10 +104,14 @@ function OtherDetails() {
                     className="text-black font-bold text-md"
                     htmlFor={`skills.${index}.category`}
                   >
-                    Catergories
+                    Category
                   </label>
 
-                  <select
+                  {/* suggestions plus free text, e.g. "Cloud (Azure)" */}
+                  <input
+                    list="skill-categories"
+                    type="text"
+                    placeholder="Pick or type..."
                     {...register(`skills.${index}.category`, {
                       required: true,
                       validate: (value) =>
@@ -113,17 +126,10 @@ function OtherDetails() {
                     })}
                     className="outline-none mt-1 p-3 flex items-center bg-white border border-gray-300 hover:border-gray-400 rounded-xl text-black transition-colors"
                     name={`skills.${index}.category`}
-                  >
-                    <option className="bg-slate-200">Select</option>
-                    {categories.map((category) => (
-                      <option key={category.name} value={category.name}>
-                        {category.name}
-                      </option>
-                    ))}
-                  </select>
+                  />
                   {errors.skills?.[index]?.category && (
                     <p className="text-red-400 mt-1">
-                      <i className="mr-1 ri-alert-line"></i>select one category
+                      <i className="mr-1 ri-alert-line"></i>add a category
                     </p>
                   )}
                 </div>
@@ -257,7 +263,8 @@ function OtherDetails() {
                   placeholder="Enter here..."
                   {...register(`certification.${index}.certiName`, {
                     required: false,
-                    maxLength: 50,
+                    // the developer template fits "**Issuer** || Certification name"
+                    maxLength: selectedTemplate === 117 ? 100 : 50,
                     onChange: (e) =>
                       handleInputChange(
                         index,
@@ -271,6 +278,12 @@ function OtherDetails() {
                   <p className="text-red-400 mt-1">
                     <i className="mr-1 ri-alert-line"></i>Please Add Something
                     here
+                  </p>
+                )}
+                {selectedTemplate === 117 && (
+                  <p className="text-xs text-gray-500 mt-1">
+                    e.g. **AlmaBetter** || Full Stack Development — **text**
+                    is bold
                   </p>
                 )}
               </div>
