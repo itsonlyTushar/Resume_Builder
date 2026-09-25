@@ -23,20 +23,31 @@ export default async function handler(req, res) {
 
     const genAI = new GoogleGenerativeAI(apiKey);
 
-    // Primary fast models followed by fallbacks
+    // Primary model followed by fallbacks. Pinned versions get retired (404) over time,
+    // so the "-latest" alias is kept in the chain as a safety net.
     const modelNames = [
-      "gemini-1.5-flash",
-      "gemini-2.0-flash",
-      "gemini-1.5-pro",
-      "gemini-flash-latest"
+      "gemini-3.5-flash",
+      "gemini-3.5-flash-lite",
+      "gemini-flash-lite-latest",
+      "gemini-3.1-flash-lite",
+      "gemini-2.5-flash"
     ];
 
     const promptText = customPrompt ? `${customPrompt} ${rawText}` : rawText;
 
+    // Stay under the 30s maxDuration in vercel.json so a slow model can't turn into a 504
+    const deadline = Date.now() + 27000;
+    const perModelTimeout = 18000;
+
     let lastError = null;
     for (const modelName of modelNames) {
+      const remaining = deadline - Date.now();
+      if (remaining < 4000) break;
       try {
-        const model = genAI.getGenerativeModel({ model: modelName });
+        const model = genAI.getGenerativeModel(
+          { model: modelName },
+          { timeout: Math.min(perModelTimeout, remaining) }
+        );
         const result = await model.generateContent(promptText);
         const responseText = result.response.text();
         return res.status(200).json({ success: true, text: responseText, model: modelName });
