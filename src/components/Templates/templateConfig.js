@@ -76,7 +76,7 @@ export const generatePDF = ({ formData }) => {
 
 export const devTemplate = {
   id: 117,
-  image: `https://res.cloudinary.com/dartdvch1/image/upload/v1777304303/27-04-2026_page-0001_hugz2g.jpg`,
+  image: `https://res.cloudinary.com/dartdvch1/image/upload/v1790342363/Full_Stack_Developer_-_Tushar_Soni_page-0001_qq66h5.jpg`,
 };
 
 // templates are stored in cloudinary
