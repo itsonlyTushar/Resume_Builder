@@ -113,9 +113,9 @@ const Review = () => {
       <Navbar />
       <Toaster position="top-center" reverseOrder={false} />
 
-      <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24 relative">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-20 relative">
         {/* Header Section */}
-        <div className="relative z-10 text-center mb-16 lg:mb-20 animate-fade-in-up">
+        <div className="relative z-10 text-center mb-12 lg:mb-14 animate-fade-in-up">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-transparent border border-black/10 text-black text-[11px] font-bold mb-8 uppercase tracking-[0.2em]">
             AI Analysis
           </div>
@@ -124,13 +124,15 @@ const Review = () => {
           </h1>
         </div>
 
+        {/* Upload on the left, review output on the right (stacked on mobile) */}
+        <div className="relative z-10 grid grid-cols-1 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] gap-8 lg:gap-10 items-start mb-20">
         {/* Upload Form */}
         <div
-          className="relative z-10 w-full max-w-2xl mx-auto mb-20 animate-fade-in-up"
+          className="w-full lg:sticky lg:top-8 animate-fade-in-up"
           style={{ animationDelay: "100ms" }}
         >
           <form onSubmit={sendResumeToReview}>
-            <div className="bg-white rounded-[2rem] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.05)] border border-black/5 p-8 md:p-12 transition-all duration-500 hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.1)] relative group">
+            <div className="bg-white rounded-[2rem] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.05)] border border-black/5 p-8 md:p-10 transition-all duration-500 hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.1)] relative group">
               <label className="block w-full cursor-pointer">
                 <div
                   className={`w-full border-[1.5px] border-dashed rounded-2xl transition-all duration-300 flex flex-col items-center justify-center gap-6 px-6 py-16
@@ -220,9 +222,9 @@ const Review = () => {
         </div>
 
         {/* Report Section Wrapper */}
-        <div className="relative z-10 w-full mx-auto">
+        <div className="w-full min-w-0">
           {loading ? (
-            <div className="flex flex-col items-center justify-center min-h-[300px] py-16 animate-fade-in-up">
+            <div className="bg-white rounded-[2rem] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.05)] border border-black/5 flex flex-col items-center justify-center min-h-[420px] py-16 animate-fade-in-up">
               <div className="scale-125 mb-8">
                 <AiLoader />
               </div>
@@ -230,39 +232,53 @@ const Review = () => {
                 Analyzing Structure & Content
               </p>
             </div>
-          ) : (
-            answer && (
-              <div className="bg-white rounded-[2rem] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.05)] border border-black/5 p-8 md:p-12 mb-20 animate-fade-in-up delay-100">
-                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5 mb-8 pb-8 border-b border-black/5">
-                  <div className="w-16 h-16 rounded-2xl bg-black text-white flex items-center justify-center shrink-0 shadow-lg shadow-black/10">
-                    <i className="ri-file-search-line text-3xl"></i>
-                  </div>
-                  <div>
-                    <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-[#1D1F24]">
-                      Review Output
-                    </h2>
-                    <p className="text-gray-400 mt-2 font-medium">
-                      Rigorous evaluation against industry standards.
-                    </p>
-                  </div>
+          ) : answer ? (
+            <div className="bg-white rounded-[2rem] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.05)] border border-black/5 p-6 md:p-8 animate-fade-in-up delay-100">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5 mb-8 pb-8 border-b border-black/5">
+                <div className="w-16 h-16 rounded-2xl bg-black text-white flex items-center justify-center shrink-0 shadow-lg shadow-black/10">
+                  <i className="ri-file-search-line text-3xl"></i>
                 </div>
-
-                <div className="grayscale">
-                  <ReviewPrompt
-                    answer={answer}
-                    score={findScore}
-                    pdf={pdfFile}
-                  />
-                </div>
-
-                <div className="mt-8 pt-6 border-t border-black/5 text-center">
-                  <p className="text-[10px] text-black/30 font-bold uppercase tracking-[0.15em]">
-                    AI-generated reviews may vary with each generation.
+                <div>
+                  <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-[#1D1F24]">
+                    Review Output
+                  </h2>
+                  <p className="text-gray-400 mt-2 font-medium">
+                    Rigorous evaluation against industry standards.
                   </p>
                 </div>
               </div>
-            )
+
+              <div className="grayscale">
+                <ReviewPrompt
+                  answer={answer}
+                  score={findScore}
+                  pdf={pdfFile}
+                />
+              </div>
+
+              <div className="mt-8 pt-6 border-t border-black/5 text-center">
+                <p className="text-[10px] text-black/30 font-bold uppercase tracking-[0.15em]">
+                  AI-generated reviews may vary with each generation.
+                </p>
+              </div>
+            </div>
+          ) : (
+            <div
+              className="rounded-[2rem] border-[1.5px] border-dashed border-black/15 bg-white/60 flex flex-col items-center justify-center text-center gap-4 min-h-[420px] px-8 py-16 animate-fade-in-up"
+              style={{ animationDelay: "200ms" }}
+            >
+              <div className="w-14 h-14 rounded-2xl bg-black/5 text-black/40 flex items-center justify-center">
+                <i className="ri-file-search-line text-2xl"></i>
+              </div>
+              <h3 className="text-xl font-bold tracking-tight text-[#1D1F24]">
+                Your review will appear here
+              </h3>
+              <p className="text-sm text-gray-400 font-medium max-w-xs">
+                Upload a PDF or pick a saved resume, then click Generate Review.
+              </p>
+            </div>
           )}
+        </div>
         </div>
       </main>
 

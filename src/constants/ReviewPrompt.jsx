@@ -167,7 +167,7 @@ const ReviewPrompt = ({ answer, score }) => {
           </div>
 
           <div className="bg-white border border-black/10 px-6 py-6 rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.04)]">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-6">
               {/* Grammar Card */}
               <div className="bg-white border border-black/10 rounded-2xl p-5 transition hover:shadow-[0_8px_24px_rgba(0,0,0,0.06)]">
                 <h3 className="text-base font-semibold tracking-tight text-black">
